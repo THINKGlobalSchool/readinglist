@@ -10,7 +10,8 @@
  * 
  * @TODO:
  * - River
- * - Just about everything else.. :D
+ * - Admin area for dev key
+ * - Need a better gallery layout..
  */
 elgg_register_event_handler('init', 'system', 'readinglist_init');
 
@@ -22,13 +23,11 @@ function readinglist_init() {
 	$r_css = elgg_get_simplecache_url('css', 'readinglist/css');
 	elgg_register_simplecache_view('css/readinglist/css');
 	elgg_register_css('elgg.readinglist', $r_css);
-	elgg_load_css('elgg.readinglist');
 
 	// Register JS libraries
 	$r_js = elgg_get_simplecache_url('js', 'readinglist/readinglist');
 	elgg_register_simplecache_view('js/readinglist/readinglist');
 	elgg_register_js('elgg.readinglist', $r_js);
-	elgg_load_js('elgg.readinglist');
 	
 	// Register page handler
 	elgg_register_page_handler('books','reading_list_page_handler');
@@ -49,24 +48,6 @@ function readinglist_init() {
 	// Load google libs
 	elgg_load_library('gapc:apiClient');       // Main client
  	elgg_load_library('gapc:apiBooksService'); // Books service
-
-	/* BOOKS API EXAMPLE
-	$client = new apiClient();
-	$client->setDeveloperKey('AIzaSyCPsvFIGl7b13H_KcJgAopdfHjDqGeR0Rg');
-	$client->setApplicationName("spot_books");
-
-	$service = new apiBooksService($client);
-
-	$volumes = $service->volumes;
-
-	$options = array(
-		'filter' => 'full', // All books
-	);
-
-	$search = 'Book name';
-
-	$results = $volumes->listVolumes($search, $options);
-	*/
 
 	return TRUE;
 }
@@ -89,43 +70,59 @@ function readinglist_init() {
  */
 function reading_list_page_handler($page) {
 	elgg_load_library('elgg:readinglist');
+	elgg_load_css('elgg.readinglist');
+	elgg_load_js('elgg.readinglist');
 
-	elgg_push_breadcrumb(elgg_echo('books'), 'books/all');
+	if (elgg_is_xhr()) {
+		switch($page[0]) {
+			case 'search':
+			 	$term = get_input('term');
+				$results = google_books_title_search($term);
+				echo elgg_view('books/gallery', array('books' => $results));
+				break;
+			default:
+				// ..
+				break;
+		}
+	} else {
+		elgg_push_breadcrumb(elgg_echo('books'), 'books/all');
+		switch($page[0]) {
+			case 'all':
+			default:
+				$params = readinglist_get_page_content_list();
+				break;
+			case 'owner':
+				$user = get_user_by_username($page[1]);
+				$params = readinglist_get_page_content_list($user->guid);
+				break;
+			case 'readinglist':
+				// @TODO - User reading list
+				break;
+			case 'reading':
+				// @TODO - Public: what's tgs reading?
+				break;
+			case 'view':
+				$params = readinglist_get_page_content_view($page[1]);
+			 	break;
+			case 'add':
+				$params = readinglist_get_page_content_edit($page[0], $page[1]);
+				break;
+			case 'edit':
+				$params = readinglist_get_page_content_edit($page[0], $page[1]);
+				break;
+		}
 
-	switch($page[0]) {
-		case 'all':
-		default:
-			$params = readinglist_get_page_content_list();
-			break;
-		case 'owner':
-			$user = get_user_by_username($page[1]);
-			$params = readinglist_get_page_content_list($user->guid);
-			break;
-		case 'readinglist':
-			// @TODO - User reading list
-			break;
-		case 'reading':
-			// @TODO - Public: what's tgs reading?
-			break;
-		case 'view':
-			$params = readinglist_get_page_content_view($page[1]);
-		 	break;
-		case 'add':
-			$params = readinglist_get_page_content_edit($page[0], $page[1]);
-			break;
-		case 'edit':
-			$params = readinglist_get_page_content_edit($page[0], $page[1]);
-			break;
+		$params['filter'] = elgg_view_menu('reading-list-filter', array(
+			'class' => 'elgg-menu-hz elgg-menu-filter elgg-menu-filter-default',
+			'sort_by' => 'priority',
+		));
+
+		$body = elgg_view_layout($params['layout'] ? $params['layout'] : 'content', $params);
+
+		echo elgg_view_page($params['title'], $body);
 	}
 
-	$params['filter'] = elgg_view_menu('reading-list-filter', array(
-		'class' => 'elgg-menu-hz elgg-menu-filter elgg-menu-filter-default',
-		'sort_by' => 'priority',
-	));
-
-	$body = elgg_view_layout($params['layout'] ? $params['layout'] : 'content', $params);
-
-	echo elgg_view_page($params['title'], $body);
+	return TRUE;
 }
 
 /**

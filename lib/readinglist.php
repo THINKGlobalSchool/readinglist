@@ -154,3 +154,38 @@ function readinglist_prepare_form_vars($book = NULL) {
 	return $values;
 }
 
+/**
+ * Helper function to perform a google books search
+ *
+ * @param  string $search - Title of book to search
+ * @return mixed
+ */
+function google_books_title_search($search = '') {
+	if (!is_string($search) || empty($search)) {
+		// Bail out if we don't have a search term
+		return FALSE;
+	}
+
+	// Create client
+	$client = new apiClient();
+
+	// @TODO put this somewhere else
+	$client->setDeveloperKey('AIzaSyCPsvFIGl7b13H_KcJgAopdfHjDqGeR0Rg');
+	$client->setApplicationName("spot_books");
+
+	// Create books service
+	$service = new apiBooksService($client);
+
+	// Set volumes
+	$volumes = $service->volumes;
+
+	// Search options
+	$options = array(
+		'maxResults' => 20,
+	);
+
+	$results = $volumes->listVolumes($search, $options);
+
+	return $results;
+}
+

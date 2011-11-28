@@ -61,17 +61,38 @@ $container_guid_input = elgg_view('input/hidden', array(
 	'value' => $container_guid,
 ));
 
+$search_input = elgg_view('input/submit', array(
+	'id' => 'book-search-submit',
+	'name' => 'book_search_submit',
+	'value' => elgg_echo('search'),
+));
+
 $save_input = elgg_view('input/submit', array(
 	'id' => 'book-save-input',
 	'name' => 'book_save_input',
-	'value' => elgg_echo('readinglist:label:save')
+	'value' => elgg_echo('readinglist:label:save'),
+	'disabled' => 'DISABLED',
+	'class' => 'elgg-state-disabled',
 ));
 
 $content = <<<HTML
 	<div class='book-form'>
 		<div>
 			<label>$title_label</label>
-			$title_input
+			<table class='book-search-table'>
+				<tbody>
+					<tr>
+						<td class='book-search-left'>
+							$title_input
+						</td>
+						<td class='book-search-right'>
+							$search_input
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div><br />
+		<div id='books-search-results'>
 		</div><br />
 		<div>
 			<label>$tags_label</label>
