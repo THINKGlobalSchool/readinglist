@@ -92,7 +92,10 @@ $content = <<<HTML
 				</tbody>
 			</table>
 		</div><br />
-		<div id='books-search-results'>
+		<div style='display:none;'>
+			<a href='#books-search-results' id='trigger-book-results'></a>
+			<div id='books-search-results'>
+			</div>
 		</div><br />
 		<div>
 			<label>$tags_label</label>

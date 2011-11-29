@@ -33,13 +33,23 @@
 }
 
 .book-listing {
-	background: none repeat scroll 0 0 #DDDDDD;
-	border-radius: 16px 16px 16px 16px;
-	float: left;
-	min-height: 85px;
 	margin: 4px;
 	padding: 10px;
-	width: 215px;
+	width: 372px;
+	height: auto;
+}
+
+#books-search-results {
+	width: 400px;
+	overflow: hidden;
+}
+
+.book-listing:nth-child(even) {
+	background: #FFF;
+}
+
+.book-listing:nth-child(odd) {
+	background: #EEE;
 }
 
 .book-listing .book-title {
@@ -61,5 +71,6 @@
 	padding: 3px;
 }
 
-.book-listing .book-thumbnail img {
+.trigger-book-results {
+	display: none;
 }

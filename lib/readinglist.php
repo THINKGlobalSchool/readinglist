@@ -160,7 +160,7 @@ function readinglist_prepare_form_vars($book = NULL) {
  * @param  string $search - Title of book to search
  * @return mixed
  */
-function google_books_title_search($search = '') {
+function google_books_title_search($search = '', $limit = 10, $offset = 0) {
 	if (!is_string($search) || empty($search)) {
 		// Bail out if we don't have a search term
 		return FALSE;
@@ -181,7 +181,8 @@ function google_books_title_search($search = '') {
 
 	// Search options
 	$options = array(
-		'maxResults' => 20,
+		'maxResults' => $limit,
+		'startIndex' => $offset,
 	);
 
 	$results = $volumes->listVolumes($search, $options);

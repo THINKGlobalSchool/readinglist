@@ -77,8 +77,14 @@ function reading_list_page_handler($page) {
 		switch($page[0]) {
 			case 'search':
 			 	$term = get_input('term');
-				$results = google_books_title_search($term);
-				echo elgg_view('books/gallery', array('books' => $results));
+				$limit = get_input('limit');
+				$offset = get_input('offset');
+				$results = google_books_title_search($term, $limit, $offset);
+				echo elgg_view('books/gallery', array(
+					'books' => $results,
+					'limit' => $limit,
+					'offset' => $offset,
+				));
 				break;
 			default:
 				// ..
@@ -105,6 +111,8 @@ function reading_list_page_handler($page) {
 				$params = readinglist_get_page_content_view($page[1]);
 			 	break;
 			case 'add':
+				elgg_load_css('lightbox');
+				elgg_load_js('lightbox');
 				$params = readinglist_get_page_content_edit($page[0], $page[1]);
 				break;
 			case 'edit':
