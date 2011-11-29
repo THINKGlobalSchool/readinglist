@@ -17,6 +17,23 @@ $access 			= get_input('access_id');
 $title 				= get_input('title');
 $container_guid 	= get_input('container_guid', NULL);
 
+// Book info
+$google_id       = get_input('google_id');
+$small_thumbnail = get_input('small_thumbnail', NULL);
+$large_thumbnail = get_input('large_thumbnail', NULL);
+$identifiers     = get_input('identifiers', NULL);
+
+// Preset fields to grab
+$simple_fields = array(
+	'title', 'description', 'authors', 'canonicalVolumeLink', 'pageCount',
+	'categories', 'publisher', 'publishedDate', 'printType'
+);
+
+/*
+$version; // @TODO?
+$place_connection; // @TODO?
+*/
+
 // Sticky form
 elgg_make_sticky_form('book-save-form');
 if (!$title) {
@@ -42,6 +59,16 @@ if ($guid) {
 $book->tags = $tags;
 $book->access_id = $access;
 $book->title = $title;
+$book->google_id = $google_id;
+$book->small_thumbnail = $small_thumbnail;
+$book->large_thumbnail = $large_thumbnail;
+$book->identifiers = $identifiers;
+
+// Set the rest of the book fields
+foreach ($simple_fields as $field) {
+	$book->$field = get_input($field);
+}
+
 
 // If error saving, register error and return
 if (!$book->save()) {

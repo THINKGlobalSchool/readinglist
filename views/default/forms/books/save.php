@@ -72,7 +72,7 @@ $save_input = elgg_view('input/submit', array(
 	'name' => 'book_save_input',
 	'value' => elgg_echo('readinglist:label:save'),
 	'disabled' => 'DISABLED',
-	'class' => 'elgg-state-disabled',
+	'class' => 'elgg-state-disabled elgg-button elgg-button-submit',
 ));
 
 $content = <<<HTML
@@ -92,6 +92,7 @@ $content = <<<HTML
 				</tbody>
 			</table>
 		</div><br />
+		<div id='books-selected-item'></div>
 		<div style='display:none;'>
 			<a href='#books-search-results' id='trigger-book-results'></a>
 			<div id='books-search-results'>

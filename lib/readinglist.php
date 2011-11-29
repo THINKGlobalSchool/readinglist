@@ -183,6 +183,7 @@ function google_books_title_search($search = '', $limit = 10, $offset = 0) {
 	$options = array(
 		'maxResults' => $limit,
 		'startIndex' => $offset,
+		'printType' => 'books',
 	);
 
 	$results = $volumes->listVolumes($search, $options);

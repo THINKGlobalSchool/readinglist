@@ -37,6 +37,9 @@
 	padding: 10px;
 	width: 372px;
 	height: auto;
+	-webkit-box-shadow: 0px 0px 6px #999;
+	-moz-box-shadow: 0px 0px 6px #999;
+	box-shadow: 0px 0px 6px #999;
 }
 
 #books-search-results {
@@ -49,7 +52,7 @@
 }
 
 .book-listing:nth-child(odd) {
-	background: #EEE;
+	background: #FFF;
 }
 
 .book-listing .book-title {
@@ -71,6 +74,18 @@
 	padding: 3px;
 }
 
+.book-select-input {
+	margin-top: 10px;
+}
+
+.book-select-input input {
+	float: right;
+}
+
 .trigger-book-results {
 	display: none;
+}
+
+#fancybox-wrap {
+	top: 100px !important;
 }
