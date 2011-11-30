@@ -66,12 +66,20 @@
 	font-size: 90%;
 }
 
-.book-listing .book-thumbnail {
+.book-thumbnail {
 	background: none repeat scroll 0 0 #FFFFFF;
 	border: 1px solid #999;
+	padding: 3px;
+}
+
+.book-full-view .book-thumbnail {
+	float: left;
+	margin-right: 10px;
+}
+
+.book-listing .book-thumbnail {
 	float: left;
 	margin-right: 6px;
-	padding: 3px;
 }
 
 .book-select-input {

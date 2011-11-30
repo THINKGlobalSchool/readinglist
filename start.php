@@ -11,7 +11,7 @@
  * @TODO:
  * - River
  * - Admin area for dev key
- * - Need a better gallery layout..
+ * - Better listing/full view?
  */
 elgg_register_event_handler('init', 'system', 'readinglist_init');
 
@@ -111,6 +111,7 @@ function reading_list_page_handler($page) {
 				$params = readinglist_get_page_content_view($page[1]);
 			 	break;
 			case 'add':
+				gatekeeper();
 				elgg_load_css('lightbox');
 				elgg_load_js('lightbox');
 				$params = readinglist_get_page_content_edit($page[0], $page[1]);
@@ -149,32 +150,34 @@ function readinglist_url_handler($entity) {
 function reading_list_filter_menu_setup($hook, $type, $return, $params) {
 	$user = elgg_get_logged_in_user_entity();
 
- 	$options = array(
-		'name' => 'books-all',
-		'text' => elgg_echo('all'),
-		'href' => 'books/all',
-		'priority' => 100,
-	);
+	if ($user) {
+	 	$options = array(
+			'name' => 'books-all',
+			'text' => elgg_echo('all'),
+			'href' => 'books/all',
+			'priority' => 100,
+		);
 
-	$return[] = ElggMenuItem::factory($options);
+		$return[] = ElggMenuItem::factory($options);
 
-	$options = array(
-		'name' => 'books-mine',
-		'text' => elgg_echo('mine'),
-		'href' => "books/owner/$user->username",
-		'priority' => 200,
-	);
+		$options = array(
+			'name' => 'books-mine',
+			'text' => elgg_echo('mine'),
+			'href' => "books/owner/$user->username",
+			'priority' => 200,
+		);
 
-	$return[] = ElggMenuItem::factory($options);
+		$return[] = ElggMenuItem::factory($options);
 
-	$options = array(
-		'name' => 'books-readinglist',
-		'text' => elgg_echo('readinglist:label:readinglist'),
-		'href' => "books/readinglist/$user->username",
-		'priority' => 300,
-	);
+		$options = array(
+			'name' => 'books-readinglist',
+			'text' => elgg_echo('readinglist:label:readinglist'),
+			'href' => "books/readinglist/$user->username",
+			'priority' => 300,
+		);
 
-	$return[] = ElggMenuItem::factory($options);
+		$return[] = ElggMenuItem::factory($options);
+	}
 
 	return $return;
 }

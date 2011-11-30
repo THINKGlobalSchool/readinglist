@@ -24,14 +24,15 @@ $english = array(
 	// Labels
 	'readinglist:label:readinglist' => 'Reading List',
 	'readinglist:label:noresults' => 'No Results',
-	'readinglist:error:notfound' => 'Book not found',
 	'readinglist:label:save' => 'Save',
-	'readinglist:error:requiredfields' => 'One or more required fields are missing',
-
+	'readinglist:label:addedby' => 'Added by %s',
+	'readinglist:label:author' => 'By: ',
 
 	// Messages
 	'readinglist:error:savebook' => 'There was an error saving the book',
 	'readinglist:error:deletebook' => 'There was an error deleting the book',
+	'readinglist:error:requiredfields' => 'One or more required fields are missing',
+	'readinglist:error:notfound' => 'Book not found',
 	'readinglist:success:deletebook' => 'Successfully deleted book',
 	'readinglist:success:savebook' => 'Successfully saved book',
 

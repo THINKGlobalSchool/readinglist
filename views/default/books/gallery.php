@@ -23,9 +23,9 @@ foreach ($books['items'] as $book) {
 
 	$google_id = $book['id'];
 
-	echo "<pre>";
-	var_dump($volumeInfo);
-	echo "</pre>";
+	//echo "<pre>";
+	//var_dump($volumeInfo);
+	//echo "</pre>";
 
 	// Preset fields to grab
 	$simple_fields = array(
@@ -89,7 +89,7 @@ foreach ($books['items'] as $book) {
 		}
 	}
 
-	$categories = isset($volumeInfo['categories']) ? $categories = implode(", ", $volumeInfo['categories']) : '';
+	$categories = isset($volumeInfo['categories']) ? $categories = implode(", ", $volumeInfo['categories']) . ' - ': '';
 	
 	$page_count = isset($volumeInfo['pageCount']) ? $volumeInfo['pageCount'] . ' pages' : '';
 

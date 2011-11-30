@@ -18,7 +18,6 @@ if (!$book) {
 
 $owner = $book->getOwnerEntity();
 $container = $book->getContainerEntity();
-$categories = elgg_view('output/categories', $vars);
 $excerpt = $book->excerpt;
 
 $owner_icon = elgg_view_entity_icon($owner, 'tiny');
@@ -26,7 +25,7 @@ $owner_link = elgg_view('output/url', array(
 	'href' => "books/owner/$owner->username",
 	'text' => $owner->name,
 ));
-$author_text = elgg_echo('byline', array($owner_link));
+$added_text = elgg_echo('readinglist:label:addedby', array($owner_link));
 $tags = elgg_view('output/tags', array('tags' => $book->tags));
 $date = elgg_view_friendly_time($book->time_created);
 
@@ -51,16 +50,49 @@ $metadata = elgg_view_menu('entity', array(
 	'class' => 'elgg-menu-hz',
 ));
 
-$subtitle = "<p>$author_text $date $comments_link</p>";
-$subtitle .= $categories;
-
 // do not show the metadata and controls in widget view
 if (elgg_in_context('widgets')) {
 	$metadata = '';
 }
 
+// Authors string
+if ($book->authors) {
+	$author_label = elgg_echo('readinglist:label:author');
+	if (is_array($book->authors)) {
+		$authors = implode(", ", $book->authors);
+	} else {
+		$authors = $book->authors;
+	}
+	$authors = $author_label . "<strong>" . $authors . "</strong><br />";
+}
+
+// Categories string
+if ($book->categories) {
+	if (is_array($book->categories)) {
+		$categories = implode(", ", $book->categories);
+	} else {
+		$categories = $book->categories;
+	}
+}
+
+// Page count string
+$page_count = isset($book->pageCount) ? $book->pageCount . ' pages' : '';
+
 if ($full) {
-	$body = elgg_view('output/longtext', array(
+	$subtitle = "<p>$added_text $date $comments_link</p>";
+
+	// If we have a thumbnail, use it
+	if ($book->large_thumbnail) {
+		$body = "<div class='book-thumbnail'>
+					<img src='{$book->large_thumbnail}' alt='{$book->title}' /></a>
+				</div>";
+	}
+
+	$categories = $categories ? $categories . ' - ' : '';
+
+	$body .= $authors . $categories . $page_count;
+
+	$body .= elgg_view('output/longtext', array(
 		'value' => $book->description,
 		'class' => 'book-description',
 	));
@@ -78,12 +110,18 @@ if ($full) {
 	$book_info = elgg_view_image_block($owner_icon, $list_body);
 
 	echo <<<HTML
-$book_info
-$body
+<div class='clearfix book-full-view'>
+	$book_info
+	$body
+</div>
 HTML;
 
 } else {
 	// brief view
+	$categories = $categories ? '' . $categories : '';
+	$page_count = $page_count ? '' . $page_count . '<br />': '';
+
+	$subtitle = "<p>$authors $categories $page_count $added_text $date $comments_link</p>";
 
 	$params = array(
 		'entity' => $book,
@@ -95,5 +133,14 @@ HTML;
 	$params = $params + $vars;
 	$list_body = elgg_view('object/elements/summary', $params);
 
-	echo elgg_view_image_block($owner_icon, $list_body);
+	// If we have a small thumbnail, use it
+	if ($book->small_thumbnail) {
+		$icon = "<div class='book-thumbnail'>
+					<a href='{$book->getURL()}'><img src='{$book->small_thumbnail}' alt='{$book->title}' /></a>
+				</div>";
+	} else {
+		$icon = $owner_icon;
+	}
+
+	echo elgg_view_image_block($icon, $list_body);
 }
