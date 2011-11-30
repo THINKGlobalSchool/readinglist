@@ -92,7 +92,7 @@ if ($full) {
 		'entity' => $book,
 	));
 
-	$body .= "<br />" . elgg_view('output/bookrating', array(
+	$body .= "<br />" . elgg_view('output/averagebookrating', array(
 		'entity' => $book,
 	));
 

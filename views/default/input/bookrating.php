@@ -28,7 +28,7 @@ if ($user) {
 
 	// Options to grab the current users rating
 	$options = array(
-		'entity_guids' => array($guid),
+		'guid' => $guid,
 		'annotation_names' => array('bookrating'),
 		'annotation_owner_guids' => array($user->guid),
 	);

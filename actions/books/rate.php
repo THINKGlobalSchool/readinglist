@@ -25,7 +25,7 @@ $user = elgg_get_logged_in_user_entity();
 if ($rating > 0 && $rating <= 5) {
 	// Delete existing annotations
 	elgg_delete_annotations(array(
-		'entity_guids' => array($book->guid),
+		'guid' => array($book->guid),
 		'annotation_owner_guids' => array($user->guid),
 		'annotation_names' => array('bookrating'),
 	));
@@ -53,7 +53,7 @@ if ($rating > 0 && $rating <= 5) {
 	// We're here if the cancel button was clicked, we'll consider this 
 	// the equivalent of clearing a users rating all-together
 	elgg_delete_annotations(array(
-		'entity_guids' => array($book->guid),
+		'guid' => $book->guid,
 		'annotation_owner_guids' => array($user->guid),
 		'annotation_names' => 'bookrating',
 	));
