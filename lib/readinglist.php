@@ -112,7 +112,6 @@ function readinglist_get_page_content_view($guid) {
 	elgg_push_breadcrumb($book->title, $book->getURL());
 	$params['title'] = $book->title;
 	$params['content'] .= elgg_view_entity($book, array('full_view' => TRUE));	
-	$params['content'] .= "<a name='comments'></a>" . elgg_view_comments($book);
 	$params['layout'] = 'one_sidebar';
 	return $params;
 }

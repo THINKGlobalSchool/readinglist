@@ -29,20 +29,6 @@ $added_text = elgg_echo('readinglist:label:addedby', array($owner_link));
 $tags = elgg_view('output/tags', array('tags' => $book->tags));
 $date = elgg_view_friendly_time($book->time_created);
 
-$comments_count = $book->countComments();
-
-//only display if there are commments
-if ($comments_count != 0) {
-	$text = elgg_echo("comments") . " ($comments_count)";
-	$comments_link = elgg_view('output/url', array(
-		'href' => $book->getURL() . '#book-comments',
-		'text' => $text,
-	));
-} else {
-	$comments_link = '';
-}
-
-
 $metadata = elgg_view_menu('entity', array(
 	'entity' => $vars['entity'],
 	'handler' => 'books',
@@ -79,7 +65,7 @@ if ($book->categories) {
 $page_count = isset($book->pageCount) ? $book->pageCount . ' pages' : '';
 
 if ($full) {
-	$subtitle = "<p>$added_text $date $comments_link</p>";
+	$subtitle = "<p>$added_text $date</p>";
 
 	// If we have a thumbnail, use it
 	if ($book->large_thumbnail) {
@@ -92,9 +78,22 @@ if ($full) {
 
 	$body .= $authors . $categories . $page_count;
 
+	$body .= "<br />" . elgg_view('output/url', array(
+		'href' => $book->canonicalVolumeLink,
+		'text' => elgg_echo('readinglist:label:googlelink'),
+	));
+
 	$body .= elgg_view('output/longtext', array(
 		'value' => $book->description,
 		'class' => 'book-description',
+	));
+
+	$body .= "<br />" . elgg_view('input/bookrating', array(
+		'entity' => $book,
+	));
+
+	$body .= "<br />" . elgg_view('output/bookrating', array(
+		'entity' => $book,
 	));
 
 	$params = array(
@@ -121,7 +120,7 @@ HTML;
 	$categories = $categories ? '' . $categories : '';
 	$page_count = $page_count ? '' . $page_count . '<br />': '';
 
-	$subtitle = "<p>$authors $categories $page_count $added_text $date $comments_link</p>";
+	$subtitle = "<p>$authors $categories $page_count $added_text $date</p>";
 
 	$params = array(
 		'entity' => $book,

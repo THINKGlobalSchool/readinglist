@@ -27,12 +27,18 @@ $english = array(
 	'readinglist:label:save' => 'Save',
 	'readinglist:label:addedby' => 'Added by %s',
 	'readinglist:label:author' => 'By: ',
+	'readinglist:label:googlelink' => 'View on Google Books',
+	'readinglist:label:yourrating' => 'Your Rating',
+	'readinglist:label:averagerating' => 'Average Rating',
 
 	// Messages
 	'readinglist:error:savebook' => 'There was an error saving the book',
 	'readinglist:error:deletebook' => 'There was an error deleting the book',
 	'readinglist:error:requiredfields' => 'One or more required fields are missing',
 	'readinglist:error:notfound' => 'Book not found',
+	'readinglist:error:rate' => 'Error saving rating',
+	'readinglist:error:invalidrating' => 'Invalid Rating',
+	'readinglist:success:rate' => 'Rating Saved',
 	'readinglist:success:deletebook' => 'Successfully deleted book',
 	'readinglist:success:savebook' => 'Successfully saved book',
 

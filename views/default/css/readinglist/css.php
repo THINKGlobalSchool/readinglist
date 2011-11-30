@@ -97,3 +97,10 @@
 #fancybox-wrap {
 	top: 100px !important;
 }
+
+/** BOOK RATING INPUT/OUTPUT **/
+.bookrating-input, .bookrating-output {
+	margin-top: 5px;
+}
+
+/**  END BOOK RATING  **/
