@@ -30,17 +30,26 @@ $english = array(
 	'readinglist:label:googlelink' => 'View on Google Books',
 	'readinglist:label:yourrating' => 'Your Rating',
 	'readinglist:label:averagerating' => 'Average Rating',
+	'readinglist:label:reviews' => 'Reviews',
+	'readinglist:label:noreviews' => 'No Reviews',
+	'readinglist:label:addreview' => 'Add Review',
+	'readinglist:label:addcomment' => 'Add Comment',
 
 	// Messages
 	'readinglist:error:savebook' => 'There was an error saving the book',
+	'readinglist:error:savereview' => 'There was an error saving the review',
 	'readinglist:error:deletebook' => 'There was an error deleting the book',
+	'readinglist:error:deletereview' => 'There was an error deleting the review',
 	'readinglist:error:requiredfields' => 'One or more required fields are missing',
 	'readinglist:error:notfound' => 'Book not found',
+	'readinglist:error:reviewnotfound' => 'Review not found',
 	'readinglist:error:rate' => 'Error saving rating',
 	'readinglist:error:invalidrating' => 'Invalid Rating',
 	'readinglist:success:rate' => 'Rating Saved',
 	'readinglist:success:deletebook' => 'Successfully deleted book',
+	'readinglist:success:deletereview' => 'Successfully deleted review',
 	'readinglist:success:savebook' => 'Successfully saved book',
+	'readinglist:success:savereview' => 'Successfully saved review',
 
 	// Notifications
 

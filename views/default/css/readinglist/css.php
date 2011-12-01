@@ -98,9 +98,52 @@
 	top: 100px !important;
 }
 
-/** BOOK RATING INPUT/OUTPUT **/
 .bookrating-input, .bookrating-output {
 	margin-top: 5px;
 }
 
-/**  END BOOK RATING  **/
+.book-reviews {
+	margin-top: 25px;
+}
+
+.book-review-add {
+	margin-top: 25px;
+	padding-top: 10px;
+}
+
+.book-review-comments {
+
+}
+
+.book-review-comments h3 {
+	background-color: #EEEEEE;
+	border-radius: 5px 5px 0 0;
+	color: #91131E;
+	display: block;
+	float: right;
+	font-size: 90%;
+	margin-top: 5px;
+	padding: 1px 7px;
+	width: auto;
+	text-transform: none !important;
+}
+
+.book-review-comments .elgg-list {
+	border-top: medium none !important;
+}
+
+.book-review-comments .elgg-list > li {
+	background: #EEEEEE;
+	border-bottom: none !important;
+	padding: 4px;
+	margin-bottom: 2px;
+}
+
+.book-review-comments .elgg-list > li:first-child {
+	border-radius: 5px 0 0 0;
+}
+
+.review-comment-button {
+	font-size: 85%;
+	float: right;
+}

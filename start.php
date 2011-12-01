@@ -50,6 +50,9 @@ function readinglist_init() {
 	// Handler to register reading list filter menu items
 	elgg_register_plugin_hook_handler('register', 'menu:reading-list-filter', 'reading_list_filter_menu_setup');
 
+	// Register menu items for book reviews
+	elgg_register_plugin_hook_handler('register', 'menu:book-review', 'readinglist_book_review_menu_setup');
+
 	// Entity url handler
 	register_entity_url_handler('readinglist_url_handler', 'object', 'book');
 
@@ -58,6 +61,8 @@ function readinglist_init() {
 	elgg_register_action('books/save', "$action_base/books/save.php");
 	elgg_register_action('books/delete', "$action_base/books/delete.php");
 	elgg_register_action('books/rate', "$action_base/books/rate.php");
+	elgg_register_action('books/review/add', "$action_base/books/review/add.php");
+	elgg_register_action('books/review/delete', "$action_base/books/review/delete.php");
 	elgg_register_action('readinglist/add', "$action_base/readinglist/add.php");
 	elgg_register_action('readinglist/remove', "$action_base/readinglist/remove.php");
 
@@ -192,6 +197,30 @@ function reading_list_filter_menu_setup($hook, $type, $return, $params) {
 			'priority' => 300,
 		);
 
+		$return[] = ElggMenuItem::factory($options);
+	}
+
+	return $return;
+}
+
+/**
+ * Adds a delete link to the book review menu
+ */
+function readinglist_book_review_menu_setup($hook, $type, $return, $params) {
+	$review = $params['review'];
+
+	if (elgg_instanceof($review, 'object', 'book_review') && $review->canEdit()) {
+		$url = elgg_http_add_url_query_elements('action/books/review/delete', array(
+			'guid' => $review->guid,
+		));
+
+		$options = array(
+			'name' => 'delete',
+			'href' => $url,
+			'text' => "<span class=\"elgg-icon elgg-icon-delete\"></span>",
+			'confirm' => elgg_echo('deleteconfirm'),
+			'text_encode' => false
+		);
 		$return[] = ElggMenuItem::factory($options);
 	}
 

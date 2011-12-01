@@ -1,6 +1,6 @@
 <?php
 /**
- * Reading List Books Save Form
+ * Reading List Books Object View
  *
  * @package ReadingList
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
@@ -69,7 +69,7 @@ if ($full) {
 
 	// If we have a thumbnail, use it
 	if ($book->large_thumbnail) {
-		$body = "<div class='book-thumbnail'>
+		$thumbnail = "<div class='book-thumbnail'>
 					<img src='{$book->large_thumbnail}' alt='{$book->title}' /></a>
 				</div>";
 	}
@@ -106,12 +106,15 @@ if ($full) {
 	$params = $params + $vars;
 	$list_body = elgg_view('object/elements/summary', $params);
 
-	$book_info = elgg_view_image_block($owner_icon, $list_body);
+	$book_header = elgg_view_image_block($owner_icon, $list_body);
+	$book_body = elgg_view_image_block($thumbnail, $body);
+	$book_reviews = elgg_view('books/reviews', array('entity' => $book));
 
 	echo <<<HTML
 <div class='clearfix book-full-view'>
-	$book_info
-	$body
+	$book_header
+	$book_body
+	$book_reviews
 </div>
 HTML;
 
