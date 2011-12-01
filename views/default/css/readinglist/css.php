@@ -126,6 +126,7 @@
 	padding: 1px 7px;
 	width: auto;
 	text-transform: none !important;
+	font-family: inherit !important;
 }
 
 .book-review-comments .elgg-list {
@@ -146,4 +147,9 @@
 .review-comment-button {
 	font-size: 85%;
 	float: right;
+}
+
+.elgg-menu-item-rating {
+	height: 30px;
+	margin-right: 30px;
 }

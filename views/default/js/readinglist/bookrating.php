@@ -15,19 +15,6 @@ elgg.provide('elgg.readinglist.bookrating');
 
 // Init function
 elgg.readinglist.bookrating.init = function() {
-	// Init input
-	$('input.bookrating-radio-in').rating({
-		callback: elgg.readinglist.bookrating.ratingClick,
-	});
-
-	// Init read-only output
-	$('input.bookrating-radio-out').rating();
-	$('input.bookrating-radio-out').rating('disable');
-
-	// Init average read-only output
-	$('input.bookrating-radio-average-out').rating();
-	$('input.bookrating-radio-average-out').rating('disable');
-
 	// Cancel click handler
 	$('div.rating-cancel > a').live('click', elgg.readinglist.bookrating.cancelClick); 
 }

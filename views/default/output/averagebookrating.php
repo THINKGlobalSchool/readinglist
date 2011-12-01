@@ -8,8 +8,9 @@
  * @copyright THINK Global School 2010
  * @link http://www.thinkglobalschool.com/
  * 
- * @uses $vars['name']
- * @uses $vars['entity']
+ * @uses $vars['name']   Name of inputs
+ * @uses $vars['entity'] Book entity
+ * @uses $vars['class']  Classname of inputs (important!)
  */
 elgg_load_js('jquery.starrating');
 elgg_load_js('elgg.readinglist.bookrating');
@@ -20,6 +21,14 @@ $rating_label = elgg_echo('readinglist:label:averagerating');
 $inputs = '';
 
 $name = $vars['name'];
+
+if (isset($vars['class'])) {
+	$class = $vars['class'] . ' ';
+}
+
+// Make sure theres a unique class
+$unique_class = 'bookrating-radio-avg-out-' . uniqid();
+$class .= $unique_class;
 
 // Grab the average rating
 $options = array(
@@ -38,7 +47,7 @@ for ($i = 1; $i <= 5; $i++) {
 	if ($i == $rating) {
 		$checked = "checked='checked'"; // Checked attr
 	}
-	$inputs .= "<input name='$name' type='radio' value='$i' class='bookrating-radio-average-out' $checked />";
+	$inputs .= "<input name='$name' type='radio' value='$i' class='$class' $checked />";
 }
 
 $content = <<<HTML
@@ -51,3 +60,15 @@ $content = <<<HTML
 HTML;
 
 echo $content;
+
+$script = <<<JAVASCRIPT
+	<script type='text/javascript'>
+		$(document).ready(function() {
+			// Init read-only output
+			$('.$unique_class').rating();
+			$('.$unique_class').rating('disable');
+		})
+	</script>
+JAVASCRIPT;
+
+echo $script;

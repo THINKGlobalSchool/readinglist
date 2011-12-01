@@ -8,9 +8,10 @@
  * @copyright THINK Global School 2010
  * @link http://www.thinkglobalschool.com/
  *
- * @uses $vars['name']
- * @uses $vars['user']
- * @uses $vars['entity']
+ * @uses $vars['name']   Name of inputs
+ * @uses $vars['user']   User to display reviews for
+ * @uses $vars['class']  Classname of inputs (important!)
+ * @uses $vars['entity'] Book entity
  */
 elgg_load_js('jquery.starrating');
 elgg_load_js('elgg.readinglist.bookrating');
@@ -20,7 +21,19 @@ $inputs = '';
 
 $name = $vars['name'];
 
-$user = $vars['user'];
+if (isset($vars['user'])) {
+	$user = $vars['user'];
+} else {
+	$user = elgg_get_logged_in_user_entity();
+}
+
+if (isset($vars['class'])) {
+	$class = $vars['class'] . ' ';
+}
+
+// Make sure theres a unique class
+$unique_class = 'bookrating-radio-out-' . uniqid();
+$class .= $unique_class;
 
 if ($user) {
 	$guid = $vars['entity']->guid;
@@ -47,7 +60,7 @@ if ($user) {
 		if ($i == $rating) {
 			$checked = "checked='checked'"; // Checked attr
 		}
-		$inputs .= "<input name='$name' type='radio' value='$i' class='bookrating-radio-out' $checked />";
+		$inputs .= "<input name='$name' type='radio' value='$i' class='$class' $checked />";
 	}
 
 	$content = <<<HTML
@@ -59,5 +72,16 @@ if ($user) {
 HTML;
 
 	echo $content;
-}
 
+	$script = <<<JAVASCRIPT
+		<script type='text/javascript'>
+			$(document).ready(function() {
+				// Init read-only output
+				$('.$unique_class').rating();
+				$('.$unique_class').rating('disable');
+			})
+		</script>
+JAVASCRIPT;
+
+	echo $script;
+}

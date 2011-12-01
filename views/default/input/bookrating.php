@@ -10,6 +10,7 @@
  * 
  * @uses $vars['name']   Name of input 
  * @uses $vars['entity'] Book entity 
+ * @uses $vars['class']  Classname of inputs (important!)
  *
  */
 
@@ -25,6 +26,14 @@ if ($user) {
 
 	$name = $vars['name'] ? $vars['name'] : 'rating';
 	$guid = $vars['entity']->guid;
+
+	if (isset($vars['class'])) {
+		$class = $vars['class'] . ' ';
+	}
+
+	// Make sure theres a unique class
+	$unique_class = 'bookrating-radio-in-' . uniqid();
+	$class .= $unique_class;
 
 	// Options to grab the current users rating
 	$options = array(
@@ -50,7 +59,7 @@ if ($user) {
 		if ($i == $rating) {
 			$checked = "checked='checked'"; // Checked attr
 		}
-		$inputs .= "<input name='$name' type='radio' value='$i' class='bookrating-radio-in' $checked />";
+		$inputs .= "<input name='$name' type='radio' value='$i' class='$class' $checked />";
 	}
 	
 	// Entity guid input
@@ -70,4 +79,17 @@ if ($user) {
 HTML;
 
 	echo $content;
+
+	$script = <<<JAVASCRIPT
+		<script type='text/javascript'>
+			$(document).ready(function() {
+				// Init input
+				$('.$unique_class').rating({
+					callback: elgg.readinglist.bookrating.ratingClick,
+				});
+			})
+		</script>
+JAVASCRIPT;
+
+	echo $script;
 }

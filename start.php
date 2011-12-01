@@ -209,19 +209,42 @@ function reading_list_filter_menu_setup($hook, $type, $return, $params) {
 function readinglist_book_review_menu_setup($hook, $type, $return, $params) {
 	$review = $params['review'];
 
-	if (elgg_instanceof($review, 'object', 'book_review') && $review->canEdit()) {
-		$url = elgg_http_add_url_query_elements('action/books/review/delete', array(
-			'guid' => $review->guid,
-		));
+	$reviewer = $params['reviewer'];
 
-		$options = array(
-			'name' => 'delete',
-			'href' => $url,
-			'text' => "<span class=\"elgg-icon elgg-icon-delete\"></span>",
-			'confirm' => elgg_echo('deleteconfirm'),
-			'text_encode' => false
-		);
-		$return[] = ElggMenuItem::factory($options);
+	if (elgg_instanceof($review, 'object', 'book_review') && elgg_instanceof($reviewer, 'user')) {
+
+		$book = get_entity($review->book_guid);
+
+		if (elgg_instanceof($book, 'object', 'book')) {
+			$rating = elgg_view('output/bookrating', array(
+				'entity' => $book,
+				'user' => $reviewer,
+			));
+
+			$options = array(
+				'name' => 'rating',
+				'href' => FALSE,
+				'text' => $rating,
+				'priority' => 100,
+			);
+			$return[] = ElggMenuItem::factory($options);
+		}
+
+		if ($review->canEdit()) {
+			$url = elgg_http_add_url_query_elements('action/books/review/delete', array(
+				'guid' => $review->guid,
+			));
+
+			$options = array(
+				'name' => 'delete',
+				'href' => $url,
+				'text' => "<span class=\"elgg-icon elgg-icon-delete\"></span>",
+				'confirm' => elgg_echo('deleteconfirm'),
+				'text_encode' => false,
+				'priority' => 200,
+			);
+			$return[] = ElggMenuItem::factory($options);
+		}
 	}
 
 	return $return;

@@ -16,6 +16,14 @@ if (!$review) {
 	return TRUE;
 }
 
+// Neat trick to redirect to book view if viewing this object via site/view/guid
+if (elgg_in_context('view')) {
+	$book = get_entity($review->book_guid);
+	if (elgg_instanceof($book, 'object', 'book')) {
+		forward($book->getURL());
+	}
+}
+
 $reviewer = get_user($review->owner_guid);
 if (!$reviewer) {
 	return true;
@@ -28,6 +36,7 @@ $reviewer_link = "<a href=\"{$reviewer->getURL()}\">$reviewer->name</a>";
 
 $menu = elgg_view_menu('book-review', array(
 	'review' => $review,
+	'reviewer' => $reviewer,
 	'sort_by' => 'priority',
 	'class' => 'elgg-menu-hz right',
 ));
