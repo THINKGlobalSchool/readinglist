@@ -22,8 +22,6 @@ if ($user) {
 	elgg_load_js('elgg.readinglist.bookrating');
 	elgg_load_css('jquery.starrating');
 
-	$rating_label = elgg_echo('readinglist:label:yourrating');
-
 	$name = $vars['name'] ? $vars['name'] : 'rating';
 	$guid = $vars['entity']->guid;
 
@@ -71,7 +69,6 @@ if ($user) {
 
 	$content = <<<HTML
 		<div class='bookrating-container'>
-			<label>$rating_label</label>
 			<div class='bookrating-input'>
 				$inputs
 			</div>

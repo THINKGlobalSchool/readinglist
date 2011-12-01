@@ -88,11 +88,8 @@ if ($full) {
 		'class' => 'book-description',
 	));
 
-	$body .= "<br />" . elgg_view('input/bookrating', array(
-		'entity' => $book,
-	));
-
-	$body .= "<br />" . elgg_view('output/averagebookrating', array(
+	$body .= "<br /><label>" . elgg_echo('readinglist:label:yourrating') . "</label><br />";
+	$body .= elgg_view('input/bookrating', array(
 		'entity' => $book,
 	));
 

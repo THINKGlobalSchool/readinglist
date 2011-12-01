@@ -53,6 +53,9 @@ function readinglist_init() {
 	// Register menu items for book reviews
 	elgg_register_plugin_hook_handler('register', 'menu:book-review', 'readinglist_book_review_menu_setup');
 
+	// Add stuff to the book entity menu
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'readinglist_book_menu_setup');
+
 	// Entity url handler
 	register_entity_url_handler('readinglist_url_handler', 'object', 'book');
 
@@ -245,6 +248,31 @@ function readinglist_book_review_menu_setup($hook, $type, $return, $params) {
 			);
 			$return[] = ElggMenuItem::factory($options);
 		}
+	}
+
+	return $return;
+}
+
+/**
+ * Modify the entity menu for books
+ */
+function readinglist_book_menu_setup($hook, $type, $return, $params) {
+
+	$entity = $params['entity'];
+
+	if (elgg_instanceof($entity, 'object', 'book') && elgg_is_logged_in()) {
+
+		$rating = elgg_view('output/averagebookrating', array(
+			'entity' => $entity,
+		));
+
+		$options = array(
+			'name' => 'average-rating',
+			'href' => FALSE,
+			'text' => $rating,
+			'priority' => 25,
+		);
+		$return[] = ElggMenuItem::factory($options);
 	}
 
 	return $return;

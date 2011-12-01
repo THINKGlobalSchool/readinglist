@@ -16,8 +16,6 @@ elgg_load_js('jquery.starrating');
 elgg_load_js('elgg.readinglist.bookrating');
 elgg_load_css('jquery.starrating');
 
-$rating_label = elgg_echo('readinglist:label:averagerating');
-
 $inputs = '';
 
 $name = $vars['name'];
@@ -52,7 +50,6 @@ for ($i = 1; $i <= 5; $i++) {
 
 $content = <<<HTML
 	<div class='bookrating-container'>
-		<label>$rating_label</label>
 		<div class='bookrating-output'>
 			$inputs
 		</div>

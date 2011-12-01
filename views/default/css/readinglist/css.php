@@ -153,3 +153,8 @@
 	height: 30px;
 	margin-right: 30px;
 }
+
+.elgg-menu-item-average-rating {
+	height: 25px;
+	margin-right: 5px;
+}
