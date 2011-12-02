@@ -98,9 +98,15 @@ foreach ($books['items'] as $book) {
 		}
 	}
 
-	$categories = isset($volumeInfo['categories']) ? $categories = implode(", ", $volumeInfo['categories']) . ' - ': '';
+	$categories = isset($volumeInfo['categories']) ? $categories = implode(", ", $volumeInfo['categories']) : '';
 	
 	$page_count = isset($volumeInfo['pageCount']) ? $volumeInfo['pageCount'] . ' pages' : '';
+
+	if ($categories && $page_count) {
+		$subtext = $categories . ' - ' . $page_count;
+	} else {
+		$subtext = "$categories $page_count";
+	}
 
 	if ($thumbnail) {
 		$thumbnail = <<<HTML
@@ -124,7 +130,7 @@ HTML;
 			$thumbnail
 			<div class='book-title'><a href='{$link}'>$title</a></div>
 			<div class='book-authors'>$creators</div>
-			<div class='book-subtext elgg-subtext'>$categories $page_count</div>
+			<div class='book-subtext elgg-subtext'>$subtext</div>
 			<div class='book-select-input'>$book_select</div>
 			$hidden_inputs
 		</div>

@@ -14,7 +14,7 @@
 $options = array(
 	'type' => 'object',
 	'subtype' => 'book_review',
-	'relationship' => 'book_review_of',
+	'relationship' => BOOK_REVIEW_RELATIONSHIP,
 	'relationship_guid' => $vars['entity']->guid,
 	'inverse_relationship' => TRUE,
 	'limit' => 10,

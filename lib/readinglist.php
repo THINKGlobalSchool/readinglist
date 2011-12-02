@@ -116,6 +116,40 @@ function readinglist_get_page_content_view($guid) {
 	return $params;
 }
 
+function readinglist_get_page_content_readinglist($guid) {
+	$logged_in_user_guid = elgg_get_logged_in_user_guid();
+
+	$options = array(
+		'type' => 'object',
+		'subtype' => 'book',
+		'full_view' => false,
+		'relationship' => READING_LIST_RELATIONSHIP,
+		'relationship_guid' => $guid,
+		'inverse_relationship' => TRUE,
+	);
+
+	$entity = get_entity($guid);
+
+	$title = elgg_echo('readinglist:title:userreadinglist', array($entity->name));
+
+	elgg_push_breadcrumb($entity->name, "books/owner/" . $entity->username);
+	elgg_push_breadcrumb(elgg_echo('readinglist'));
+
+	elgg_push_context('reading_list');
+	$content = elgg_list_entities_from_relationship($options);
+	elgg_push_context('reading_list');
+
+	$params['title'] = $title;
+
+	// If theres no content, display a nice message
+	if (!$content) {
+		$content = "<h3 class='center'>" . elgg_echo("readinglist:label:noresults") . "</h3>";
+	}
+
+	$params['content'] = $content;
+	return $params;
+}
+
 
 /**
  * Prepare form vars for book save form

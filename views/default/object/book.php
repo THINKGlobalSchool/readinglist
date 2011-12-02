@@ -62,7 +62,7 @@ if ($book->categories) {
 }
 
 // Page count string
-$page_count = isset($book->pageCount) ? $book->pageCount . ' pages' : '';
+$page_count = $book->pageCount ? $book->pageCount . ' pages' : '';
 
 if ($full) {
 	$subtitle = "<p>$added_text $date</p>";
@@ -78,9 +78,10 @@ if ($full) {
 
 	$body .= $authors . $categories . $page_count;
 
-	$body .= "<br />" . elgg_view('output/url', array(
+	$body .= elgg_view('output/url', array(
 		'href' => $book->canonicalVolumeLink,
 		'text' => elgg_echo('readinglist:label:googlelink'),
+		'style' => 'display: block',
 	));
 
 	$body .= elgg_view('output/longtext', array(
@@ -92,6 +93,8 @@ if ($full) {
 	$body .= elgg_view('input/bookrating', array(
 		'entity' => $book,
 	));
+
+	$body .= "<br /><br />" . elgg_view('readinglist/button', array('book' => $book));
 
 	$params = array(
 		'entity' => $book,
@@ -142,4 +145,10 @@ HTML;
 	}
 
 	echo elgg_view_image_block($icon, $list_body);
+
+	if (!elgg_in_context('widgets') && !elgg_in_context('book_existing')) {
+		echo "<div class='readinglist-listing-control'>" .
+			elgg_view('readinglist/button', array('book' => $book))
+		. "</div>";
+	}
 }

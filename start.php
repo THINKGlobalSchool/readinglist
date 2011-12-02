@@ -16,6 +16,10 @@
 elgg_register_event_handler('init', 'system', 'readinglist_init');
 
 function readinglist_init() {
+	// Define relationships
+	define(BOOK_REVIEW_RELATIONSHIP, 'book_review_of');
+	define(READING_LIST_RELATIONSHIP, 'on_reading_list_of');
+
 	// Register and load library
 	elgg_register_library('elgg:readinglist', elgg_get_plugins_path() . 'readinglist/lib/readinglist.php');
 
@@ -125,10 +129,17 @@ function reading_list_page_handler($page) {
 				break;
 			case 'owner':
 				$user = get_user_by_username($page[1]);
+				if (!elgg_instanceof($user, 'user')) {
+					$user = elgg_get_logged_in_user_entity();
+				}
 				$params = readinglist_get_page_content_list($user->guid);
 				break;
 			case 'readinglist':
-				// @TODO - User reading list
+				$user = get_user_by_username($page[1]);
+				if (!elgg_instanceof($user, 'user')) {
+					$user = elgg_get_logged_in_user_entity();
+				}
+				$params = readinglist_get_page_content_readinglist($user->guid);
 				break;
 			case 'reading':
 				// @TODO - Public: what's tgs reading?

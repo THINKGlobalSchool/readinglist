@@ -33,6 +33,12 @@ elgg.readinglist.init = function() {
 
 	// Click handler for cancel search
 	$('#book-search-cancel').live('click', elgg.readinglist.searchCancelClick);
+
+	// Click handler for readinglist add button
+	$('.readinglist-add-button').live('click', elgg.readinglist.readinglistAddClick);
+
+	// Click handler for readinglist remove button
+	$('.readinglist-remove-button').live('click', elgg.readinglist.readinglistRemoveClick);
 }
 
 // Click handler for book search
@@ -202,6 +208,55 @@ elgg.readinglist.loadSearchResults = function(term, container, limit, offset, ca
 			callback();
 		}
 	});
+}
+
+// Click handler for readinglist add button
+elgg.readinglist.readinglistAddClick = function(event) {
+	var guid = $(this).attr('id');
+
+	$_this = $(this);
+
+	// Add to readinglist
+	elgg.action('readinglist/add', {
+		data: {
+			guid: guid,
+		},
+		success: function(data) {
+			if (data.status != -1) {
+				$_this.removeClass('readinglist-add-button').addClass('readinglist-remove-button');
+				$_this.find('.elgg-icon-round-plus').removeClass('elgg-icon-round-plus').addClass('elgg-icon-round-minus');
+			}
+		}
+	});
+
+	event.preventDefault();
+}
+
+// Click handler for readinglist remove button
+elgg.readinglist.readinglistRemoveClick = function(event) {
+	var guid = $(this).attr('id');
+
+	$_this = $(this);
+
+	// Remove from readinglist
+	elgg.action('readinglist/remove', {
+		data: {
+			guid: guid,
+		},
+		success: function(data) {
+			if (data.status != -1) {
+				$_this.removeClass('readinglist-remove-button').addClass('readinglist-add-button');
+				$_this.find('.elgg-icon-round-minus').removeClass('elgg-icon-round-minus').addClass('elgg-icon-round-plus');
+
+				// Remove from entity listing
+				$_this.closest('li.elgg-item').fadeOut('slow', function() {
+					$(this).remove();
+				});
+			}
+		}
+	});
+
+	event.preventDefault();
 }
 
 /**

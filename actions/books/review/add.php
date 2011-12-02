@@ -42,7 +42,7 @@ if (!$review->save()) {
 elgg_clear_sticky_form('book_add_review');
 
 // Add review relationship
-add_entity_relationship($review->guid, 'book_review_of', $book->guid);
+add_entity_relationship($review->guid, BOOK_REVIEW_RELATIONSHIP, $book->guid);
 
 // Forward on
 system_message(elgg_echo('readinglist:success:savereview'));

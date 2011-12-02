@@ -15,11 +15,13 @@ $english = array(
 	'books' => 'Books',
 	'item:object:book' => 'Books',
 	'books:add' => 'Add Book',
+	'readinglist' => 'Reading List',
 	
 	// Page titles 
 	'readinglist:title:ownedbooks' => '%s\'s  Books',
 	'readinglist:title:addbook' => 'Add a Book',
 	'readinglist:title:editbook' => 'Edit Book',
+	'readinglist:title:userreadinglist' => '%s\'s Reading List',
 
 	// Labels
 	'readinglist:label:readinglist' => 'Reading List',
@@ -51,6 +53,8 @@ $english = array(
 	'readinglist:error:rate' => 'Error saving rating',
 	'readinglist:error:invalidrating' => 'Invalid Rating',
 	'readinglist:success:rate' => 'Rating Saved',
+	'readinglist:success:readinglistadd' => 'Book successfully added to your reading list',
+	'readinglist:success:readinglistremove' => 'Book successfully removed from your reading list',
 	'readinglist:success:deletebook' => 'Successfully deleted book',
 	'readinglist:success:deletereview' => 'Successfully deleted review',
 	'readinglist:success:savebook' => 'Successfully saved book',

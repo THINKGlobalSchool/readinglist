@@ -164,3 +164,20 @@
 	height: 25px;
 	margin-right: 5px;
 }
+
+.readinglist-listing-control {
+	float: right;
+	margin-top: -60px;
+}
+
+.readinglist-add-button, .readinglist-remove-button {
+	font-size: 90%;
+	height: 17px;
+	position: relative;
+	width: 100px;
+}
+
+.readinglist-add-button span.readinglist-button-text, .readinglist-remove-button span.readinglist-button-text {
+	position: absolute;
+	right: 8px;
+}
