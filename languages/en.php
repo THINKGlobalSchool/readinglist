@@ -34,6 +34,11 @@ $english = array(
 	'readinglist:label:noreviews' => 'No Reviews',
 	'readinglist:label:addreview' => 'Add Review',
 	'readinglist:label:addcomment' => 'Add Comment',
+	'readinglist:label:titleexists' => 'A book titled \'%s\' already exists:',
+	'readinglist:label:searchanyway' => 'Search Anyway',
+	'readinglist:label:searchresults' => 'Results for \'%s\'',
+	'readinglist:label:duplicate' => 'This book already exists!',
+	'readinglist:label:duplicatedescription' => 'You cannot add a duplicate book',
 
 	// Messages
 	'readinglist:error:savebook' => 'There was an error saving the book',

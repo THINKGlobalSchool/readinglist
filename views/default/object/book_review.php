@@ -1,6 +1,6 @@
 <?php
 /**
- * Reading List Books Save Form
+ * Reading List Books Review Object View
  *
  * @package ReadingList
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2

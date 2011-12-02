@@ -8,14 +8,23 @@
  * @copyright THINK Global School 2010
  * @link http://www.thinkglobalschool.com/
  *
+ * @uses $vars['books']  Book results from google books api
+ * @uses $vars['limit']  # Of books to grab
+ * @uses $vars['offset]  Offset of books to grab
+ * @uses $vars['term']   Search term supplied
  */
 
 $books = elgg_extract('books', $vars);
 $limit = elgg_extract('limit', $vars);
 $offset = elgg_extract('offset', $vars);
+$term = elgg_extract('term', $vars);
 $count = $books['totalItems'];
 
-$content = '';
+if (!$count) {
+	echo "<h3 class='books-no-results'>" . elgg_echo('readinglist:label:noresults') . "</h3>";
+}
+
+$content = '<h3>' . elgg_echo('readinglist:label:searchresults', array($term)) . '</h3>';
 
 foreach ($books['items'] as $book) {
 	$volumeInfo = '';

@@ -94,6 +94,12 @@
 	display: none;
 }
 
+.books-no-results {
+	width: 80px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
 #fancybox-wrap {
 	top: 100px !important;
 }

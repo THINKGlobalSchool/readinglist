@@ -64,6 +64,7 @@ function readinglist_init() {
 	elgg_register_action('books/save', "$action_base/books/save.php");
 	elgg_register_action('books/delete', "$action_base/books/delete.php");
 	elgg_register_action('books/rate', "$action_base/books/rate.php");
+	elgg_register_action('books/check', "$action_base/books/check.php");
 	elgg_register_action('books/review/add', "$action_base/books/review/add.php");
 	elgg_register_action('books/review/delete', "$action_base/books/review/delete.php");
 	elgg_register_action('readinglist/add', "$action_base/readinglist/add.php");
@@ -108,6 +109,7 @@ function reading_list_page_handler($page) {
 					'books' => $results,
 					'limit' => $limit,
 					'offset' => $offset,
+					'term' => $term,
 				));
 				break;
 			default:
@@ -138,6 +140,9 @@ function reading_list_page_handler($page) {
 				gatekeeper();
 				elgg_load_css('lightbox');
 				elgg_load_js('lightbox');
+				elgg_load_js('jquery.starrating');
+				elgg_load_js('elgg.readinglist.bookrating');
+				elgg_load_css('jquery.starrating');
 				$params = readinglist_get_page_content_edit($page[0], $page[1]);
 				break;
 			case 'edit':
