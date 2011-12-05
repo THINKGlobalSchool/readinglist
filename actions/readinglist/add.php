@@ -22,5 +22,15 @@ if (!elgg_instanceof($book, 'object', 'book')) {
 // Add reading list relationship
 add_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, elgg_get_logged_in_user_guid());
 
+// Add status annotation
+$status = create_annotation(
+	$book->guid,
+	'book_reading_status',
+	BOOK_READING_STATUS_QUEUED,
+	"",
+	elgg_get_logged_in_user_guid(),
+	$book->access_id
+);
+
 system_message(elgg_echo('readinglist:success:readinglistadd'));
 forward(REFERER);

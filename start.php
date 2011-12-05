@@ -20,6 +20,15 @@ function readinglist_init() {
 	define(BOOK_REVIEW_RELATIONSHIP, 'book_review_of');
 	define(READING_LIST_RELATIONSHIP, 'on_reading_list_of');
 
+	// Define reading status's
+	define(BOOK_READING_STATUS_QUEUED, -1);
+	define(BOOK_READING_STATUS_READING, 0);
+	define(BOOK_READING_STATUS_COMPLETE, 1);
+
+	// Add a site navigation item
+	$item = new ElggMenuItem('books', elgg_echo('books'), 'books/all');
+	elgg_register_menu_item('site', $item);
+
 	// Register and load library
 	elgg_register_library('elgg:readinglist', elgg_get_plugins_path() . 'readinglist/lib/readinglist.php');
 
@@ -73,6 +82,7 @@ function readinglist_init() {
 	elgg_register_action('books/review/delete', "$action_base/books/review/delete.php");
 	elgg_register_action('readinglist/add', "$action_base/readinglist/add.php");
 	elgg_register_action('readinglist/remove', "$action_base/readinglist/remove.php");
+	elgg_register_action('readinglist/status', "$action_base/readinglist/status.php");
 
 	// Load google libs
 	elgg_load_library('gapc:apiClient');       // Main client

@@ -8,7 +8,7 @@
  * @copyright THINK Global School 2010
  * @link http://www.thinkglobalschool.com/
  *
- * @uses $vars['user']  User to display reviews for
+ * @uses $vars['user']  User (optional)
  * @uses $vars['book']  The Book
  */
 
@@ -20,11 +20,15 @@ if (isset($vars['user'])) {
 	$user = elgg_get_logged_in_user_entity();
 }
 
+// Automatically determine if book is or isn't on users reading list 
 if (!check_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, $user->guid)) {
 	$class = 'readinglist-add-button';
 	$button_icon = elgg_view_icon('round-plus');
 } else {
 	$class = 'readinglist-remove-button';
+	if (elgg_in_context('reading_list')) {
+		$class .= ' readinglist-fade'; // Class to control wether listing is removed from the DOM
+	}
 	$button_icon = elgg_view_icon('round-minus');
 }
 

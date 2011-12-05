@@ -96,6 +96,19 @@ if ($full) {
 
 	$body .= "<br /><br />" . elgg_view('readinglist/button', array('book' => $book));
 
+	$body .= "<div class='book-full-status-container'>";
+
+	// If book is on user's reading list..
+	if (check_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, elgg_get_logged_in_user_guid())) {
+		// Create status input
+		$body .= "<br /><label>" . elgg_echo('readinglist:label:status') . "</label>" . elgg_view('readinglist/status', array(
+			'user_guid' => elgg_get_logged_in_user_guid(),
+			'book_guid' => $book->guid,
+		));
+	}
+
+	$body .= "</div>";
+
 	$params = array(
 		'entity' => $book,
 		'title' => false,
@@ -147,8 +160,12 @@ HTML;
 	echo elgg_view_image_block($icon, $list_body);
 
 	if (!elgg_in_context('widgets') && !elgg_in_context('book_existing')) {
-		echo "<div class='readinglist-listing-control'>" .
-			elgg_view('readinglist/button', array('book' => $book))
-		. "</div>";
+		// Check if we're in the reading list context, if so display additional user controls
+		$control_params = array('book' => $book);
+		if (elgg_in_context('reading_list')) {
+			$control_params['user_controls'] = TRUE;
+		}
+
+		echo elgg_view('readinglist/controls', $control_params);
 	}
 }

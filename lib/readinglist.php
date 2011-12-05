@@ -137,7 +137,7 @@ function readinglist_get_page_content_readinglist($guid) {
 
 	elgg_push_context('reading_list');
 	$content = elgg_list_entities_from_relationship($options);
-	elgg_push_context('reading_list');
+	elgg_pop_context();
 
 	$params['title'] = $title;
 

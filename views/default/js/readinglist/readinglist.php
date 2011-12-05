@@ -16,6 +16,7 @@ elgg.provide('elgg.readinglist');
 elgg.readinglist.loadSearchResultsURL = elgg.get_site_url() + 'books/search';
 elgg.readinglist.loadExistingResultURL = elgg.get_site_url() + 'ajax/view/books/existing';
 elgg.readinglist.loadDuplicateResultURL = elgg.get_site_url() + 'ajax/view/books/duplicate';
+elgg.readinglist.loadStatusURL = elgg.get_site_url() + 'ajax/view/readinglist/status';
 
 // Init function
 elgg.readinglist.init = function() {
@@ -39,6 +40,9 @@ elgg.readinglist.init = function() {
 
 	// Click handler for readinglist remove button
 	$('.readinglist-remove-button').live('click', elgg.readinglist.readinglistRemoveClick);
+
+	// Change handler for book status
+	$('.book-reading-status').live('change', elgg.readinglist.readinglistStatusChange);
 }
 
 // Click handler for book search
@@ -226,6 +230,24 @@ elgg.readinglist.readinglistAddClick = function(event) {
 				$_this.removeClass('readinglist-add-button').addClass('readinglist-remove-button');
 				$_this.find('.elgg-icon-round-plus').removeClass('elgg-icon-round-plus').addClass('elgg-icon-round-minus');
 			}
+
+			// Fill the status container (if its on the page)
+			var url = elgg.readinglist.loadStatusURL + "?user_guid=" + elgg.get_logged_in_user_guid() + "&book_guid=" + guid;
+
+			// Make sure its empty.. don't want any extra loads
+			if ($('.book-full-status-container').is(':empty')) {
+				elgg.get(url, {
+					success: function(data){
+						// Load data to container on success
+						var label = elgg.echo('readinglist:label:status');
+						var html = "<br /><label>" + label + "</label>";
+						$('.book-full-status-container').html(html + data);
+					}
+				});
+			} else {
+				// Just show it
+				$('.book-full-status-container').show();
+			}
 		}
 	});
 
@@ -248,10 +270,38 @@ elgg.readinglist.readinglistRemoveClick = function(event) {
 				$_this.removeClass('readinglist-remove-button').addClass('readinglist-add-button');
 				$_this.find('.elgg-icon-round-minus').removeClass('elgg-icon-round-minus').addClass('elgg-icon-round-plus');
 
-				// Remove from entity listing
-				$_this.closest('li.elgg-item').fadeOut('slow', function() {
-					$(this).remove();
-				});
+				// Nuke listing, check for fade class
+				if ($_this.hasClass('readinglist-fade')) {
+					$_this.closest('li.elgg-item').fadeOut('slow', function() {
+						$(this).remove();
+					});
+				}
+
+				// Hide the status container (if its on the page)
+				$('.book-full-status-container').hide();
+			}
+		}
+	});
+
+	event.preventDefault();
+}
+
+// Change handler for status input
+elgg.readinglist.readinglistStatusChange = function(event) {
+	var guid = $(this).attr('id');
+	var status = $(this).val();
+
+	$_this = $(this);
+
+	// Remove from readinglist
+	elgg.action('readinglist/status', {
+		data: {
+			guid: guid,
+			status: status,
+		},
+		success: function(data) {
+			if (data.status != -1) {
+				// ..
 			}
 		}
 	});

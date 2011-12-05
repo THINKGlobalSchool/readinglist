@@ -150,6 +150,16 @@
 	border-radius: 5px 0 0 0;
 }
 
+.readinglist-listing-control label {
+	position: relative;
+	top: -3px;
+}
+
+.readinglist-listing-control .book-reading-status {
+	position: relative;
+	top: -3px;
+}
+
 .review-comment-button {
 	font-size: 85%;
 	float: right;
