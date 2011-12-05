@@ -223,3 +223,36 @@ function google_books_title_search($search = '', $limit = 10, $offset = 0) {
 
 	return $results;
 }
+
+/**
+ * Helper function to grab a users reading status
+ *
+ * @param int $book_guid The guid of the book
+ * @param int $user_guid The guid of the user
+ * @return array         Status array
+ */
+function readinglist_get_reading_status($book_guid, $user_guid) {
+	// Options to grab the current users reading status
+	$options = array(
+		'guid' => $book_guid,
+		'annotation_names' => array('book_reading_status'),
+		'annotation_owner_guids' => array($user_guid),
+	);
+
+	$status_annotations = elgg_get_annotations($options);
+
+	$annotation = NULL;
+
+	if ($status_annotations[0] && $status_annotations[0]->value !== NULL) {
+		$status = $status_annotations[0]->value;
+		$annotation = $status_annotations[0];
+	} else {
+		// Shouldn't be here, but just in case
+		$status = BOOK_READING_STATUS_QUEUED;
+	}
+
+	return array(
+		'status' => $status,
+		'annotation' => $annotation,
+	);
+}

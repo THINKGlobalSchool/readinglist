@@ -45,6 +45,7 @@ $english = array(
 	'readinglist:label:status:reading' => 'Currently Reading',
 	'readinglist:label:status:complete' => 'Completed',
 	'readinglist:label:status' => 'Status: ',
+	'readinglist:label:completed' => 'Completed: %s',
 
 	// Messages
 	'readinglist:error:savebook' => 'There was an error saving the book',

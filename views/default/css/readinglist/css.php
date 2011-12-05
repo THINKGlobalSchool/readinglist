@@ -150,6 +150,15 @@
 	border-radius: 5px 0 0 0;
 }
 
+.book-completed-container {
+	text-align: right;
+	margin-top: 5px;
+}
+
+.book-full-status-container .book-completed-container {
+	text-align: left;
+}
+
 .readinglist-listing-control label {
 	position: relative;
 	top: -3px;

@@ -105,6 +105,11 @@ if ($full) {
 			'user_guid' => elgg_get_logged_in_user_guid(),
 			'book_guid' => $book->guid,
 		));
+
+		$body .= $completed_info = elgg_view('readinglist/completed', array(
+			'book_guid' => $book->guid,
+			'user_guid' => $user->guid
+		));
 	}
 
 	$body .= "</div>";
@@ -124,7 +129,7 @@ if ($full) {
 	$book_reviews = elgg_view('books/reviews', array('entity' => $book));
 
 	echo <<<HTML
-<div class='clearfix book-full-view'>
+<div class='clearfix book book-full-view'>
 	$book_header
 	$book_body
 	$book_reviews
@@ -133,6 +138,8 @@ HTML;
 
 } else {
 	// brief view
+	echo "<div class='book'>";
+
 	$categories = $categories ? '' . $categories : '';
 	$page_count = $page_count ? '' . $page_count . '<br />': '';
 
@@ -168,4 +175,6 @@ HTML;
 
 		echo elgg_view('readinglist/controls', $control_params);
 	}
+
+	echo "</div>";
 }

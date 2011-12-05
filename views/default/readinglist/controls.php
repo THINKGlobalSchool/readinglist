@@ -30,6 +30,11 @@ if (check_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, $user->gui
 	));
 
 	$status_content = "<label>" . elgg_echo('readinglist:label:status') . "</label>" . $status_input;
+
+	$completed_info = elgg_view('readinglist/completed', array(
+		'book_guid' => $book->guid,
+		'user_guid' => $user->guid
+	));
 }
 
 
@@ -39,6 +44,7 @@ $content = <<<HTML
 	<div class='readinglist-listing-control'>
 		$status_content
 		$button
+		$completed_info
 	</div>
 HTML;
 

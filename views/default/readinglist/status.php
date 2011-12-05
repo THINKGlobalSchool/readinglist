@@ -12,25 +12,14 @@
  * @uses $vars['book_guid']  Book guid
  */
 
+elgg_load_library('elgg:readinglist');
+
 $book = get_entity($vars['book_guid']);
 $user = get_entity($vars['user_guid']);
 
-// Options to grab the current users reading status
-$options = array(
-	'guid' => $book->guid,
-	'annotation_names' => array('book_reading_status'),
-	'annotation_owner_guids' => array($user->guid),
-);
+$status_info = readinglist_get_reading_status($book->guid, $user->guid);
 
-$status = elgg_get_annotations($options);
-
-if ($status[0] && $status[0]->value !== NULL) {
-	$status = $status[0]->value;
-} else {
-	// Shouldn't be here, but just in case
-	$status = BOOK_READING_STATUS_QUEUED;
-}
-
+$status = $status_info['status'];
 
 $input = elgg_view('input/dropdown', array(
 	'name' => 'book_reading_status',

@@ -9,6 +9,7 @@
  * @link http://www.thinkglobalschool.com/
  *
  */
+
 ?>
 //<script>
 elgg.provide('elgg.readinglist');
@@ -17,6 +18,11 @@ elgg.readinglist.loadSearchResultsURL = elgg.get_site_url() + 'books/search';
 elgg.readinglist.loadExistingResultURL = elgg.get_site_url() + 'ajax/view/books/existing';
 elgg.readinglist.loadDuplicateResultURL = elgg.get_site_url() + 'ajax/view/books/duplicate';
 elgg.readinglist.loadStatusURL = elgg.get_site_url() + 'ajax/view/readinglist/status';
+elgg.readinglist.loadCompleteURL = elgg.get_site_url() + 'ajax/view/readinglist/completed';
+
+elgg.readinglist.BOOK_READING_STATUS_QUEUED = <?php echo BOOK_READING_STATUS_QUEUED; ?>;
+elgg.readinglist.BOOK_READING_STATUS_READING = <?php echo BOOK_READING_STATUS_READING; ?>;
+elgg.readinglist.BOOK_READING_STATUS_COMPLETE = <?php echo BOOK_READING_STATUS_COMPLETE; ?>;
 
 // Init function
 elgg.readinglist.init = function() {
@@ -234,20 +240,15 @@ elgg.readinglist.readinglistAddClick = function(event) {
 			// Fill the status container (if its on the page)
 			var url = elgg.readinglist.loadStatusURL + "?user_guid=" + elgg.get_logged_in_user_guid() + "&book_guid=" + guid;
 
-			// Make sure its empty.. don't want any extra loads
-			if ($('.book-full-status-container').is(':empty')) {
-				elgg.get(url, {
-					success: function(data){
-						// Load data to container on success
-						var label = elgg.echo('readinglist:label:status');
-						var html = "<br /><label>" + label + "</label>";
-						$('.book-full-status-container').html(html + data);
-					}
-				});
-			} else {
-				// Just show it
-				$('.book-full-status-container').show();
-			}
+			elgg.get(url, {
+				success: function(data){
+					// Load data to container on success
+					var label_text = elgg.echo('readinglist:label:status');
+					var label = "<br /><label>" + label_text + "</label>";
+					var completed = "<div class='book-completed-container elgg-subtext'></div>";
+					$('.book-full-status-container').html(label + data + completed).show();
+				}
+			});
 		}
 	});
 
@@ -301,7 +302,26 @@ elgg.readinglist.readinglistStatusChange = function(event) {
 		},
 		success: function(data) {
 			if (data.status != -1) {
-				// ..
+				// Grab the completed container
+				$book_completed = $_this.closest('.book').find('.book-completed-container');
+
+				// Hide the complete box if changing status to other than complete
+				if (status != elgg.readinglist.BOOK_READING_STATUS_COMPLETE) {
+					$book_completed.hide();
+				} else {
+					// Complete selected, show or load the complete view
+					var url = elgg.readinglist.loadCompleteURL + "?user_guid=" + elgg.get_logged_in_user_guid() + "&book_guid=" + guid;
+
+					elgg.get(url, {
+						success: function(data){
+							// Load data to container on success
+							$book_completed.replaceWith(data);
+
+							// Make sure its showing
+							$book_completed.show();
+						}
+					});
+				}
 			}
 		}
 	});
