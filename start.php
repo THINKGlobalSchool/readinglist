@@ -69,6 +69,9 @@ function readinglist_init() {
 	// Add stuff to the book entity menu
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'readinglist_book_menu_setup');
 
+	// Add a new tab to the tabbed profile
+	elgg_register_plugin_hook_handler('tabs', 'profile', 'readinglist_profile_tab_hander');
+
 	// Entity url handler
 	register_entity_url_handler('readinglist_url_handler', 'object', 'book');
 
@@ -287,13 +290,59 @@ function readinglist_book_menu_setup($hook, $type, $return, $params) {
 	$entity = $params['entity'];
 
 	if (elgg_instanceof($entity, 'object', 'book') && elgg_is_logged_in()) {
+		if (elgg_in_context('profile_reading_list')) {
+			// Display user rating if viewing a user's reading list
+			$page_owner = elgg_get_page_owner_entity();
+			$rating = elgg_view('output/bookrating', array(
+				'entity' => $entity,
+				'user' => $page_owner,
+			));
 
-		$rating = elgg_view('output/averagebookrating', array(
-			'entity' => $entity,
-		));
+			foreach ($return as $idx => $item) {
+				// Nuke access display and likes
+				if ($item->getName() == 'access' || $item->getName() == 'likes') {
+					unset($return[$idx]);
+				}
+			}
+
+			// Add user's reading status
+			$status_info = readinglist_get_reading_status($entity->guid, $page_owner->guid);
+
+			$status = $status_info['status'];
+
+			switch ($status) {
+				case BOOK_READING_STATUS_COMPLETE:
+					$annotation = $status_info['annotation'];
+					$completed = date('F j, Y', $annotation->time_created);
+					$status_label = elgg_echo('readinglist:label:completed', array($completed));
+					break;
+				case BOOK_READING_STATUS_QUEUED:
+					$status_label = elgg_echo('readinglist:label:status:queued');
+					break;
+				case BOOK_READING_STATUS_READING:
+					$status_label = elgg_echo('readinglist:label:status:reading');
+					break;
+			}
+
+			$options = array(
+				'name' => 'reading-status',
+				'href' => FALSE,
+				'text' => $status_label,
+				'priority' => 15,
+			);
+
+			$return[] = ElggMenuItem::factory($options);
+
+		} else {
+			// Display average rating elsewhere
+			$rating = elgg_view('output/averagebookrating', array(
+				'entity' => $entity,
+			));
+		}
+
 
 		$options = array(
-			'name' => 'average-rating',
+			'name' => 'book-rating',
 			'href' => FALSE,
 			'text' => $rating,
 			'priority' => 25,
@@ -302,4 +351,12 @@ function readinglist_book_menu_setup($hook, $type, $return, $params) {
 	}
 
 	return $return;
+}
+
+/**
+ * Handler to add a reading list tab to the tabbed profile
+ */
+function readinglist_profile_tab_hander($hook, $type, $value, $params) {
+	$value[] = 'readinglist';
+	return $value;
 }

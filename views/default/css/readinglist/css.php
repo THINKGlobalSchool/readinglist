@@ -179,7 +179,7 @@
 	margin-right: 30px;
 }
 
-.elgg-menu-item-average-rating {
+.elgg-menu-item-book-rating {
 	height: 25px;
 	margin-right: 5px;
 }

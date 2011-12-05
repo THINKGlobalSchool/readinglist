@@ -16,12 +16,14 @@ $english = array(
 	'item:object:book' => 'Books',
 	'books:add' => 'Add Book',
 	'readinglist' => 'Reading List',
+	'profile:readinglist' => 'Reading List',
 	
 	// Page titles 
 	'readinglist:title:ownedbooks' => '%s\'s  Books',
 	'readinglist:title:addbook' => 'Add a Book',
 	'readinglist:title:editbook' => 'Edit Book',
 	'readinglist:title:userreadinglist' => '%s\'s Reading List',
+	'readinglist:title:allbooks' => 'All Books',
 
 	// Labels
 	'readinglist:label:readinglist' => 'Reading List',

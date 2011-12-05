@@ -38,7 +38,7 @@ function readinglist_get_page_content_list($container_guid = null) {
 	} else {
 		elgg_register_title_button();
 		$content = elgg_list_entities($options);
-		$params['title'] = elgg_echo('books');
+		$params['title'] = elgg_echo('readinglist:title:allbooks');
 	}
 
 	// If theres no content, display a nice message
@@ -116,8 +116,10 @@ function readinglist_get_page_content_view($guid) {
 	return $params;
 }
 
+/**
+ * View a user's reading list
+ */
 function readinglist_get_page_content_readinglist($guid) {
-	$logged_in_user_guid = elgg_get_logged_in_user_guid();
 
 	$options = array(
 		'type' => 'object',

@@ -166,7 +166,7 @@ HTML;
 
 	echo elgg_view_image_block($icon, $list_body);
 
-	if (!elgg_in_context('widgets') && !elgg_in_context('book_existing')) {
+	if (!elgg_in_context('widgets') && !elgg_in_context('book_existing') && !elgg_in_context('profile_reading_list')) {
 		// Check if we're in the reading list context, if so display additional user controls
 		$control_params = array('book' => $book);
 		if (elgg_in_context('reading_list')) {
