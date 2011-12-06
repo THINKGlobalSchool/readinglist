@@ -18,7 +18,6 @@ if (!$book) {
 
 $owner = $book->getOwnerEntity();
 $container = $book->getContainerEntity();
-$excerpt = $book->excerpt;
 
 $owner_icon = elgg_view_entity_icon($owner, 'tiny');
 $owner_link = elgg_view('output/url', array(
@@ -145,12 +144,36 @@ HTML;
 
 	$subtitle = "<p>$authors $categories $page_count $added_text $date</p>";
 
+	if (!elgg_in_context('widgets') && !elgg_in_context('book_existing') && !elgg_in_context('profile_reading_list')) {
+		// Check if we're in the reading list context, if so display additional user controls
+		$control_params = array('book' => $book);
+		if (elgg_in_context('reading_list')) {
+			$control_params['user_controls'] = TRUE;
+		}
+
+		$controls = elgg_view('readinglist/controls', $control_params);
+	} else if (elgg_in_context('profile_reading_list')) {
+		// We're viewing a book listing in profile mode
+		$subtitle = "<p>$authors $categories $page_count</p>";
+		$subtitle .= "<a href='#readinglist-user-reviews-{$book->guid}' rel='toggle'>" . elgg_echo('readinglist:label:readreviews') . "</a>";
+		$owner_guid = elgg_get_page_owner_guid();
+		$owner = get_entity($owner_guid);
+		$book_reviews = "<div style='display: none;' id='readinglist-user-reviews-{$book->guid}'>" .
+							elgg_view('books/reviews', array(
+								'entity' => $book,
+								'user_guid' => $owner_guid,
+								'show_form' => FALSE,
+								'title' => "<h3>" . elgg_echo('readinglist:label:ownerreviews', array($owner->name)) . "</h3>",
+							)) .
+						"</div>";
+	}
+
 	$params = array(
 		'entity' => $book,
 		'metadata' => $metadata,
 		'subtitle' => $subtitle,
 		'tags' => $tags,
-		'content' => $excerpt,
+		'content' => $book_reviews,
 	);
 	$params = $params + $vars;
 	$list_body = elgg_view('object/elements/summary', $params);
@@ -166,15 +189,7 @@ HTML;
 
 	echo elgg_view_image_block($icon, $list_body);
 
-	if (!elgg_in_context('widgets') && !elgg_in_context('book_existing') && !elgg_in_context('profile_reading_list')) {
-		// Check if we're in the reading list context, if so display additional user controls
-		$control_params = array('book' => $book);
-		if (elgg_in_context('reading_list')) {
-			$control_params['user_controls'] = TRUE;
-		}
-
-		echo elgg_view('readinglist/controls', $control_params);
-	}
+	echo $controls;
 
 	echo "</div>";
 }

@@ -35,6 +35,7 @@ $english = array(
 	'readinglist:label:yourrating' => 'Your Rating',
 	'readinglist:label:averagerating' => 'Average Rating',
 	'readinglist:label:reviews' => 'Reviews',
+	'readinglist:label:ownerreviews' => '%s\'s Reviews',
 	'readinglist:label:noreviews' => 'No Reviews',
 	'readinglist:label:addreview' => 'Add Review',
 	'readinglist:label:addcomment' => 'Add Comment',
@@ -48,6 +49,7 @@ $english = array(
 	'readinglist:label:status:complete' => 'Completed',
 	'readinglist:label:status' => 'Status: ',
 	'readinglist:label:completed' => 'Completed: %s',
+	'readinglist:label:readreviews' => 'Read Reviews',
 
 	// Messages
 	'readinglist:error:savebook' => 'There was an error saving the book',
