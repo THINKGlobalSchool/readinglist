@@ -151,6 +151,11 @@ HTML;
 			$control_params['user_controls'] = TRUE;
 		}
 
+		// Don't display extra subtitle info in public_reading module
+		if (!elgg_is_logged_in() && elgg_get_context() == 'public_reading') {
+			$subtitle = "<p>$authors $categories $page_count</p>";
+		}
+
 		$controls = elgg_view('readinglist/controls', $control_params);
 	} else if (elgg_in_context('profile_reading_list')) {
 		// We're viewing a book listing in profile mode

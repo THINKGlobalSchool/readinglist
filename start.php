@@ -11,7 +11,6 @@
  * @TODO:
  * - River
  * - Admin area for dev key
- * - Better listing/full view?
  */
 elgg_register_event_handler('init', 'system', 'readinglist_init');
 
@@ -74,6 +73,10 @@ function readinglist_init() {
 
 	// Entity url handler
 	register_entity_url_handler('readinglist_url_handler', 'object', 'book');
+
+	// Extend public dashboard sidebar
+	elgg_extend_view('publicdashboard/sidebar', 'readinglist/publicreading', 500);
+
 
 	// Register actions
 	$action_base = elgg_get_plugins_path() . 'readinglist/actions';
@@ -155,7 +158,7 @@ function reading_list_page_handler($page) {
 				$params = readinglist_get_page_content_readinglist($user->guid);
 				break;
 			case 'reading':
-				// @TODO - Public: what's tgs reading?
+				$params = readinglist_get_page_content_public_reading();
 				break;
 			case 'view':
 				$params = readinglist_get_page_content_view($page[1]);
@@ -286,6 +289,10 @@ function readinglist_book_review_menu_setup($hook, $type, $return, $params) {
  * Modify the entity menu for books
  */
 function readinglist_book_menu_setup($hook, $type, $return, $params) {
+
+	if (!elgg_is_logged_in()) {
+		return FALSE;
+	}
 
 	$entity = $params['entity'];
 

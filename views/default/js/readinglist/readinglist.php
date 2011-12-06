@@ -93,7 +93,6 @@ elgg.readinglist.triggerLightbox = function() {
 }
 
 // Click handler for book select submit
-// @TODO Check for dupes
 elgg.readinglist.bookSelectSubmitClick = function(event) {
 	// Grab book listing element
 	$book_listing = $(this).closest('.book-listing ');

@@ -12,6 +12,10 @@
  * @uses $vars['book']  The Book
  */
 
+if (!elgg_is_logged_in()) {
+	return TRUE;
+}
+
 $book = $vars['book'];
 
 if (isset($vars['user'])) {

@@ -107,7 +107,14 @@ function readinglist_get_page_content_edit($page, $guid) {
 function readinglist_get_page_content_view($guid) {
 	$book = get_entity($guid);
 	$container = get_entity($book->container_guid);
-	elgg_set_page_owner_guid($container->getGUID());
+	elgg_set_page_owner_guid($container->guid);
+
+	// No book? Probably permissions related
+	if (!$book) {
+		register_error(elgg_echo('readinglist:error:permission'));
+		forward(REFERER);
+	}
+
 	elgg_push_breadcrumb($container->name, elgg_get_site_url() . 'books/owner/' . $container->username);
 	elgg_push_breadcrumb($book->title, $book->getURL());
 	$params['title'] = $book->title;
@@ -149,6 +156,42 @@ function readinglist_get_page_content_readinglist($guid) {
 	}
 
 	$params['content'] = $content;
+	return $params;
+}
+
+/**
+ * Public 'What's TGS Reading' content
+ */
+function readinglist_get_page_content_public_reading() {
+ 	$title = elgg_echo('readinglist:title:publicreading');
+	elgg_push_breadcrumb($title);
+	$params['title'] = $title;
+
+	/* These options will grab any book that is on a users readinglist
+	and is grouped by the entity guid, to prevent dupes */
+	$options = array(
+		'type' => 'object',
+		'subtype' => 'book',
+		'full_view' => false,
+		'relationship' => READING_LIST_RELATIONSHIP,
+		'relationship_guid' => ELGG_ENTITIES_ANY_VALUE,
+		'inverse_relationship' => TRUE,
+		'group_by' => 'e.guid',
+	);
+
+	// Ignore access so the public can take a peek
+	$ia = elgg_get_ignore_access();
+	elgg_set_ignore_access(TRUE);
+	$content = elgg_list_entities_from_relationship($options);
+	elgg_set_ignore_access($ia);
+
+	// If theres no content, display a nice message
+	if (!$content) {
+		$content = "<h3 class='center'>" . elgg_echo("readinglist:label:noresults") . "</h3>";
+	}
+
+	$params['content'] = $content;
+
 	return $params;
 }
 

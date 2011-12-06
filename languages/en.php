@@ -24,6 +24,7 @@ $english = array(
 	'readinglist:title:editbook' => 'Edit Book',
 	'readinglist:title:userreadinglist' => '%s\'s Reading List',
 	'readinglist:title:allbooks' => 'All Books',
+	'readinglist:title:publicreading' => 'What is TGS Reading?',
 
 	// Labels
 	'readinglist:label:readinglist' => 'Reading List',
@@ -50,6 +51,7 @@ $english = array(
 	'readinglist:label:status' => 'Status: ',
 	'readinglist:label:completed' => 'Completed: %s',
 	'readinglist:label:readreviews' => 'Read Reviews',
+	'readinglist:label:viewall' => 'View All',
 
 	// Messages
 	'readinglist:error:savebook' => 'There was an error saving the book',
@@ -61,6 +63,7 @@ $english = array(
 	'readinglist:error:reviewnotfound' => 'Review not found',
 	'readinglist:error:rate' => 'Error saving rating',
 	'readinglist:error:invalidrating' => 'Invalid Rating',
+	'readinglist:error:permission' => 'You do not have permission to view that item',
 	'readinglist:success:statuschanged' => 'Reading status updated',
 	'readinglist:success:rate' => 'Rating Saved',
 	'readinglist:success:readinglistadd' => 'Book successfully added to your reading list',
