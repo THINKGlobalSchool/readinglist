@@ -19,7 +19,7 @@ $english = array(
 	'profile:readinglist' => 'Reading List',
 	
 	// Page titles 
-	'readinglist:title:ownedbooks' => '%s\'s  Books',
+	'readinglist:title:ownedbooks' => 'Books Added By %s',
 	'readinglist:title:addbook' => 'Add a Book',
 	'readinglist:title:editbook' => 'Edit Book',
 	'readinglist:title:userreadinglist' => '%s\'s Reading List',
@@ -48,10 +48,13 @@ $english = array(
 	'readinglist:label:status:queued' => 'Reading Queue',
 	'readinglist:label:status:reading' => 'Currently Reading',
 	'readinglist:label:status:complete' => 'Completed',
-	'readinglist:label:status' => 'Status: ',
+	'readinglist:label:status' => 'Status',
 	'readinglist:label:completed' => 'Completed: %s',
 	'readinglist:label:readreviews' => 'Read Reviews',
 	'readinglist:label:viewall' => 'View All',
+	'readinglist:label:any' => 'Any',
+	'readinglist:label:category' => 'Category',
+	'readinglist:label:mine' => 'Books I\'ve Added',
 
 	// Messages
 	'readinglist:error:savebook' => 'There was an error saving the book',

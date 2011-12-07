@@ -29,11 +29,6 @@ $simple_fields = array(
 	'categories', 'publisher', 'publishedDate', 'printType'
 );
 
-/*
-$version; // @TODO?
-$place_connection; // @TODO?
-*/
-
 // Sticky form
 elgg_make_sticky_form('book-save-form');
 if (!$title) {
@@ -68,6 +63,9 @@ $book->identifiers = $identifiers;
 foreach ($simple_fields as $field) {
 	$book->$field = get_input($field);
 }
+
+// @TODO REMOVE THIS - FOR TESTING MULTIPLE CATEGORIES
+//$book->categories = array('Reference', 'Art', 'Education');
 
 // If error saving, register error and return
 if (!$book->save()) {

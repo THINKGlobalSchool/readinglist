@@ -29,7 +29,7 @@ if (check_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, $user->gui
 		'book_guid' => $book->guid, 
 	));
 
-	$status_content = "<label>" . elgg_echo('readinglist:label:status') . "</label>" . $status_input;
+	$status_content = "<label>" . elgg_echo('readinglist:label:status') . ": </label>" . $status_input;
 
 	$completed_info = elgg_view('readinglist/completed', array(
 		'book_guid' => $book->guid,

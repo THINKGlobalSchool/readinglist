@@ -1,12 +1,17 @@
 <?php
 /**
- * Reading List Book Gallery View
+ * Reading List Books (Volumes) List View
+ * - This view formats and presents a list of volumes grabbed by the 
+ * google books api
  *
  * @package ReadingList
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
  * @copyright THINK Global School 2010
  * @link http://www.thinkglobalschool.com/
+ * 
+ * Volume resource reference: 
+ *   http://code.google.com/apis/books/docs/v1/reference.html#collection_volumes
  *
  * @uses $vars['books']  Book results from google books api
  * @uses $vars['limit']  # Of books to grab
@@ -31,10 +36,6 @@ foreach ($books['items'] as $book) {
 	$volumeInfo = $book['volumeInfo'];
 
 	$google_id = $book['id'];
-
-	//echo "<pre>";
-	//var_dump($volumeInfo);
-	//echo "</pre>";
 
 	// Preset fields to grab
 	$simple_fields = array(

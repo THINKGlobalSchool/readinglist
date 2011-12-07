@@ -49,6 +49,12 @@ elgg.readinglist.init = function() {
 
 	// Change handler for book status
 	$('.book-reading-status').live('change', elgg.readinglist.readinglistStatusChange);
+
+	// Change handler for book category filter
+	$('#readinglist-filter-category').live('change', elgg.readinglist.filterCategoryChange);
+
+	// Change handler for book status filter
+	$('#readinglist-filter-status').live('change', elgg.readinglist.filterStatusChange);
 }
 
 // Click handler for book search
@@ -242,7 +248,7 @@ elgg.readinglist.readinglistAddClick = function(event) {
 			elgg.get(url, {
 				success: function(data){
 					// Load data to container on success
-					var label_text = elgg.echo('readinglist:label:status');
+					var label_text = elgg.echo('readinglist:label:status') + ': ';
 					var label = "<br /><label>" + label_text + "</label>";
 					var completed = "<div class='book-completed-container elgg-subtext'></div>";
 					$('.book-full-status-container').html(label + data + completed).show();
@@ -325,6 +331,30 @@ elgg.readinglist.readinglistStatusChange = function(event) {
 		}
 	});
 
+	event.preventDefault();
+}
+
+/**
+ * Change handler for category filter change
+ */
+elgg.readinglist.filterCategoryChange = function(event) {
+	$module = $('.readinglist-module');
+	$category_input = $module.find('div.options > input#category');
+	$category_input.val($(this).val());
+
+	elgg.modules.genericmodule.populateContainer($module);
+	event.preventDefault();
+}
+
+/**
+ * Change handler for status filter change
+ */
+elgg.readinglist.filterStatusChange = function(event) {
+	$module = $('.readinglist-module');
+	$status_input = $module.find('div.options > input#status');
+	$status_input.val($(this).val());
+
+	elgg.modules.genericmodule.populateContainer($module);
 	event.preventDefault();
 }
 

@@ -100,7 +100,7 @@ if ($full) {
 	// If book is on user's reading list..
 	if (check_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, elgg_get_logged_in_user_guid())) {
 		// Create status input
-		$body .= "<br /><label>" . elgg_echo('readinglist:label:status') . "</label>" . elgg_view('readinglist/status', array(
+		$body .= "<br /><label>" . elgg_echo('readinglist:label:status') . ": </label>" . elgg_view('readinglist/status', array(
 			'user_guid' => elgg_get_logged_in_user_guid(),
 			'book_guid' => $book->guid,
 		));

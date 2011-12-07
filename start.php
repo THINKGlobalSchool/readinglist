@@ -125,7 +125,7 @@ function reading_list_page_handler($page) {
 				$limit = get_input('limit');
 				$offset = get_input('offset');
 				$results = google_books_title_search($term, $limit, $offset);
-				echo elgg_view('books/gallery', array(
+				echo elgg_view('books/listvolumes', array(
 					'books' => $results,
 					'limit' => $limit,
 					'offset' => $offset,
@@ -137,6 +137,10 @@ function reading_list_page_handler($page) {
 				break;
 		}
 	} else {
+		elgg_load_js('jquery.starrating');
+		elgg_load_js('elgg.readinglist.bookrating');
+		elgg_load_css('jquery.starrating');
+
 		elgg_push_breadcrumb(elgg_echo('books'), 'books/all');
 		switch($page[0]) {
 			case 'all':
@@ -167,9 +171,6 @@ function reading_list_page_handler($page) {
 				gatekeeper();
 				elgg_load_css('lightbox');
 				elgg_load_js('lightbox');
-				elgg_load_js('jquery.starrating');
-				elgg_load_js('elgg.readinglist.bookrating');
-				elgg_load_css('jquery.starrating');
 				$params = readinglist_get_page_content_edit($page[0], $page[1]);
 				break;
 			case 'edit':
@@ -218,7 +219,7 @@ function reading_list_filter_menu_setup($hook, $type, $return, $params) {
 
 		$options = array(
 			'name' => 'books-mine',
-			'text' => elgg_echo('mine'),
+			'text' => elgg_echo('readinglist:label:mine'),
 			'href' => "books/owner/$user->username",
 			'priority' => 200,
 		);

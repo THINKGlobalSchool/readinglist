@@ -16,36 +16,38 @@
 function readinglist_get_page_content_list($container_guid = null) {
 	$logged_in_user_guid = elgg_get_logged_in_user_guid();
 	
-	$options = array(
-		'type' => 'object', 
-		'subtype' => 'book', 
-		'full_view' => false, 
-	);
-	
 	if ($container_guid) {
-		$options['container_guid'] = $container_guid;
 		$entity = get_entity($container_guid);
-		elgg_push_breadcrumb($entity->name);
 
 		// do not show button or select a tab when viewing someone else's posts
 		if ($container_guid == $logged_in_user_guid) {
 			elgg_register_title_button();
 		}
-	
-		$content = elgg_list_entities($options);
+
 		$params['title'] = elgg_echo('readinglist:title:ownedbooks', array($entity->name));
-			
+
+		elgg_push_breadcrumb($params['title']);
 	} else {
 		elgg_register_title_button();
-		$content = elgg_list_entities($options);
 		$params['title'] = elgg_echo('readinglist:title:allbooks');
 	}
 
-	// If theres no content, display a nice message
-	if (!$content) {
-		$content = "<h3 class='center'>" . elgg_echo("readinglist:label:noresults") . "</h3>";
-	}
-	
+	$content = elgg_view('readinglist/filter', array(
+		'status' => FALSE,
+		'category' => TRUE,
+	));
+
+	// Book list Module
+	$content .= elgg_view('modules/genericmodule', array(
+		'view' => 'books/modules/list',
+		'module_id' => 'readinglist-books-list-module',
+		'module_class' => 'readinglist-module',
+		'view_vars' => array(
+			'container_guid' => $container_guid,
+			'category' => '',
+		),
+	));
+
 	$params['content'] = $content;
 	return $params;
 }
@@ -128,15 +130,6 @@ function readinglist_get_page_content_view($guid) {
  */
 function readinglist_get_page_content_readinglist($guid) {
 
-	$options = array(
-		'type' => 'object',
-		'subtype' => 'book',
-		'full_view' => false,
-		'relationship' => READING_LIST_RELATIONSHIP,
-		'relationship_guid' => $guid,
-		'inverse_relationship' => TRUE,
-	);
-
 	$entity = get_entity($guid);
 
 	$title = elgg_echo('readinglist:title:userreadinglist', array($entity->name));
@@ -144,16 +137,24 @@ function readinglist_get_page_content_readinglist($guid) {
 	elgg_push_breadcrumb($entity->name, "books/owner/" . $entity->username);
 	elgg_push_breadcrumb(elgg_echo('readinglist'));
 
-	elgg_push_context('reading_list');
-	$content = elgg_list_entities_from_relationship($options);
-	elgg_pop_context();
-
 	$params['title'] = $title;
 
-	// If theres no content, display a nice message
-	if (!$content) {
-		$content = "<h3 class='center'>" . elgg_echo("readinglist:label:noresults") . "</h3>";
-	}
+	$content = elgg_view('readinglist/filter', array(
+		'status' => TRUE,
+		'category' => TRUE,
+	));
+
+	// Book list Module
+	$content .= elgg_view('modules/genericmodule', array(
+		'view' => 'books/modules/readinglist',
+		'module_id' => 'readinglist-books-readinglist-module',
+		'module_class' => 'readinglist-module',
+		'view_vars' => array(
+			'user_guid' => $guid,
+			'status' => '',
+			'category' => '',
+		),
+	));
 
 	$params['content'] = $content;
 	return $params;
@@ -300,4 +301,41 @@ function readinglist_get_reading_status($book_guid, $user_guid) {
 		'status' => $status,
 		'annotation' => $annotation,
 	);
+}
+
+/**
+ * Helper function to find all available book categories
+ */
+function readinglist_get_available_categories() {
+	// Batch options
+	$options = array(
+		'type' => 'object',
+		'subtype' => 'book',
+		'limit' => 0,
+	);
+
+	$books = new ElggBatch('elgg_get_entities', $options);
+
+	$categories = array();
+
+	foreach ($books as $book) {
+		$categories[] = $book->categories;
+	}
+
+	// Flatten the array (could have multiple categories)
+	// http://php.net/manual/en/function.array-values.php
+	$tmp = (object) array('flattened' => array());
+
+	array_walk_recursive($categories, create_function('&$v, $k, &$t', '$t->flattened[] = $v;'), $tmp);
+
+	$flattened_categories = $tmp->flattened;
+
+	// Remove empty categories
+	$filtered_categories = array_filter($flattened_categories);
+
+	// Unique categories
+	$unique_categories = array_unique($filtered_categories);
+
+	// Re-index the array and return it
+	return array_values($unique_categories);
 }
