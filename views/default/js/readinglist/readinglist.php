@@ -55,6 +55,12 @@ elgg.readinglist.init = function() {
 
 	// Change handler for book status filter
 	$('#readinglist-filter-status').live('change', elgg.readinglist.filterStatusChange);
+
+	// Change handler for book order filter
+	$('#readinglist-filter-orderby').live('change', elgg.readinglist.filterOrderbyChange);
+
+	// Click handler for sort order filter
+	$('#readinglist-filter-sort-order').live('click', elgg.readinglist.filterSortOrderClick);
 }
 
 // Click handler for book search
@@ -353,6 +359,44 @@ elgg.readinglist.filterStatusChange = function(event) {
 	$module = $('.readinglist-module');
 	$status_input = $module.find('div.options > input#status');
 	$status_input.val($(this).val());
+
+	elgg.modules.genericmodule.populateContainer($module);
+	event.preventDefault();
+}
+
+/**
+ * Change handler for order filter change
+ */
+elgg.readinglist.filterOrderbyChange = function(event) {
+	$module = $('.readinglist-module');
+	$orderby_input = $module.find('div.options > input#order_by');
+	$orderby_input.val($(this).val());
+
+	console.log($orderby_input.val());
+
+	elgg.modules.genericmodule.populateContainer($module);
+	event.preventDefault();
+}
+
+/**
+ * Click handler for sort order filter
+ */
+elgg.readinglist.filterSortOrderClick = function(event) {
+	var order = $(this).attr('title');
+
+	$module = $('.readinglist-module');
+	$sortorder_input = $module.find('div.options > input#sort_order');
+	$sortorder_input.val(order);
+
+	if (order == 'desc') {
+		$(this).html(elgg.echo('readinglist:label:sortasc'));
+		$(this).attr('title', 'asc');
+	} else {
+		$(this).html(elgg.echo('readinglist:label:sortdesc'));
+		$(this).attr('title', 'desc');
+	}
+
+	console.log($sortorder_input.val());
 
 	elgg.modules.genericmodule.populateContainer($module);
 	event.preventDefault();

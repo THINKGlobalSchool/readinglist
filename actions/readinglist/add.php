@@ -32,5 +32,11 @@ $status = create_annotation(
 	$book->access_id
 );
 
+// Set popularity
+elgg_load_library('elgg:readinglist');
+elgg_set_ignore_access(TRUE);
+$book->popularity = readinglist_calculate_popularity($book);
+elgg_set_ignore_access(FALSE);
+
 system_message(elgg_echo('readinglist:success:readinglistadd'));
 forward(REFERER);

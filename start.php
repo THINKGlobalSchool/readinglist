@@ -15,6 +15,7 @@
 elgg_register_event_handler('init', 'system', 'readinglist_init');
 
 function readinglist_init() {
+
 	// Define relationships
 	define(BOOK_REVIEW_RELATIONSHIP, 'book_review_of');
 	define(READING_LIST_RELATIONSHIP, 'on_reading_list_of');
@@ -76,7 +77,6 @@ function readinglist_init() {
 
 	// Extend public dashboard sidebar
 	elgg_extend_view('publicdashboard/sidebar', 'readinglist/publicreading', 500);
-
 
 	// Register actions
 	$action_base = elgg_get_plugins_path() . 'readinglist/actions';

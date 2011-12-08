@@ -1,6 +1,6 @@
 <?php
 /**
- * Reading List Filters
+ * Reading List Filter Menu
  *
  * @package ReadingList
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
@@ -12,6 +12,7 @@
  * @uses $vars['book_guid']  Book guid
  * @uses $vars['category]    Display category filter
  * @uses $vars['status']     Display status filter
+ * @uses $vars['order_by']   Display order by control
  */
 
 if ($vars['category']) {
@@ -28,10 +29,14 @@ if ($vars['category']) {
 		'options' => $categories_options,
 	));
 	
-	$category = <<<HTML
-		<label>$category_label</label>
-		$category_input
-HTML;
+	$text = "<label>$category_label:</label>$category_input";
+
+	elgg_register_menu_item('readinglist-filter-menu', array(
+		'name' => 'readinglist_filter_category',
+		'text' => $text,
+		'href' => FALSE,
+		'priority' => 100,
+	));
 }
 
 if ($vars['status']) {
@@ -48,16 +53,55 @@ if ($vars['status']) {
 		)
 	));
 
-	$status = <<<HTML
-			<label>$status_label</label>
-			$status_input
-HTML;
+	$text = "<label>$status_label:</label>$status_input";
+
+	elgg_register_menu_item('readinglist-filter-menu', array(
+		'name' => 'readinglist_filter_status',
+		'text' => $text,
+		'href' => FALSE,
+		'priority' => 200,
+	));
 }
+
+if ($vars['order_by']) {
+	$order_label = elgg_echo('readinglist:label:order');
+
+	$order_input = elgg_view('input/dropdown', array(
+		'id' => 'readinglist-filter-orderby',
+		'class' => 'readinglist-filter',
+		'options_values' => array(
+			'date' => elgg_echo('readinglist:label:date'),
+			'popular' => elgg_echo('readinglist:label:popular'),
+			'rated' => elgg_echo('readinglist:label:rated'),
+		),
+	));
+
+	$text = "<label>$order_label:</label>$order_input";
+
+	elgg_register_menu_item('readinglist-filter-menu', array(
+		'name' => 'readinglist_order_by',
+		'text' => $text,
+		'href' => FALSE,
+		'priority' => 300,
+	));
+
+	elgg_register_menu_item('readinglist-filter-menu', array(
+		'name' => 'readinglist_order',
+		'text' => elgg_echo('readinglist:label:sortasc'),
+		'id' => 'readinglist-filter-sort-order',
+		'title' => 'asc',
+		'priority' => 400,
+	));
+}
+
+$filter_menu = elgg_view_menu('readinglist-filter-menu', array(
+	'class' => 'elgg-menu-hz elgg-menu-readinglist-filter',
+	'sort_by' => 'priority',
+));
 
 $content = <<<HTML
 	<div class='readinglist-filter-container'>
-		$category
-		$status
+		$filter_menu
 	</div>
 HTML;
 

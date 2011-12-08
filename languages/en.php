@@ -14,6 +14,7 @@ $english = array(
 	// Generic
 	'books' => 'Books',
 	'item:object:book' => 'Books',
+	'item:object:book_review' => 'Book Reviews',
 	'books:add' => 'Add Book',
 	'readinglist' => 'Reading List',
 	'profile:readinglist' => 'Reading List',
@@ -55,6 +56,12 @@ $english = array(
 	'readinglist:label:any' => 'Any',
 	'readinglist:label:category' => 'Category',
 	'readinglist:label:mine' => 'Books I\'ve Added',
+	'readinglist:label:order' => 'Order By',
+	'readinglist:label:date' => 'Date Added',
+	'readinglist:label:popular' => 'Popularity',
+	'readinglist:label:rated' => 'Rating',
+	'readinglist:label:sortasc' => 'Sort Ascending &#9650;',
+	'readinglist:label:sortdesc' => 'Sort Descending &#9660;',
 
 	// Messages
 	'readinglist:error:savebook' => 'There was an error saving the book',

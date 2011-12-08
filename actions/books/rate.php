@@ -44,11 +44,6 @@ if ($rating > 0 && $rating <= 5) {
 		register_error(elgg_echo("readinglist:error:rate"));
 		forward(REFERER);
 	}
-
-	// Success, say so
-	system_message(elgg_echo("readinglist:success:rate"));
-	forward(REFERER);
-
 } else if ($rating == 0) {
 	// We're here if the cancel button was clicked, we'll consider this 
 	// the equivalent of clearing a users rating all-together
@@ -57,11 +52,17 @@ if ($rating > 0 && $rating <= 5) {
 		'annotation_owner_guids' => array($user->guid),
 		'annotation_names' => 'bookrating',
 	));
-	
-	// Success, say so
-	system_message(elgg_echo("readinglist:success:rate"));
-	forward(REFERER);
 } else {
 	register_error(elgg_echo('readinglist:error:invalidrating'));
 	forward(REFERER);
 }
+
+// Set average rating
+elgg_load_library('elgg:readinglist');
+elgg_set_ignore_access(TRUE);
+$book->average_rating = readinglist_calculate_average_rating($book);
+elgg_set_ignore_access(FALSE);
+
+// Success, say so
+system_message(elgg_echo("readinglist:success:rate"));
+forward(REFERER);

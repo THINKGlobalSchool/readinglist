@@ -29,5 +29,11 @@ elgg_delete_annotations(array(
 	'annotation_names' => 'book_reading_status',
 ));
 
+// Set popularity
+elgg_load_library('elgg:readinglist');
+elgg_set_ignore_access(TRUE);
+$book->popularity = readinglist_calculate_popularity($book);
+elgg_set_ignore_access(FALSE);
+
 system_message(elgg_echo('readinglist:success:readinglistremove'));
 forward(REFERER);

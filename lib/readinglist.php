@@ -35,6 +35,7 @@ function readinglist_get_page_content_list($container_guid = null) {
 	$content = elgg_view('readinglist/filter', array(
 		'status' => FALSE,
 		'category' => TRUE,
+		'order_by' => TRUE,
 	));
 
 	// Book list Module
@@ -45,6 +46,8 @@ function readinglist_get_page_content_list($container_guid = null) {
 		'view_vars' => array(
 			'container_guid' => $container_guid,
 			'category' => '',
+			'order_by' => '',
+			'sort_order' => '',
 		),
 	));
 
@@ -142,6 +145,7 @@ function readinglist_get_page_content_readinglist($guid) {
 	$content = elgg_view('readinglist/filter', array(
 		'status' => TRUE,
 		'category' => TRUE,
+		'order_by' => TRUE,
 	));
 
 	// Book list Module
@@ -153,6 +157,8 @@ function readinglist_get_page_content_readinglist($guid) {
 			'user_guid' => $guid,
 			'status' => '',
 			'category' => '',
+			'order_by' => '',
+			'sort_order' => '',
 		),
 	));
 
@@ -338,4 +344,55 @@ function readinglist_get_available_categories() {
 
 	// Re-index the array and return it
 	return array_values($unique_categories);
+}
+
+/**
+ * Helper function to calculate the average rating for a book
+ *
+ * @param ElggEntity $book
+ * @return int
+ */
+function readinglist_calculate_average_rating($book) {
+	// Grab the average rating
+	$options = array(
+		'guid' => $book->guid,
+		'annotation_names' => array('bookrating'),
+		'annotation_calculation' => 'avg',
+	);
+
+	$rating = elgg_get_annotations($options);
+
+	$rating = round($rating);
+
+	// Make sure we're at least setting 0 if there no rating
+	if (!$rating) {
+		$rating = 0;
+	}
+
+	return $rating;
+}
+
+/**
+ * Helper function to calculate the popularity of a book
+ *
+ * @param ElggEntity $book
+ * @return int
+ */
+function readinglist_calculate_popularity($book) {
+	$options = array(
+		'type' => 'user',
+		'relationship' => READING_LIST_RELATIONSHIP,
+		'relationship_guid' => $book->guid,
+		'inverse_relationship' => FALSE,
+		'count' => TRUE,
+	);
+
+	$lists = elgg_get_entities_from_relationship($options);
+
+	// Make sure we return at least 0
+	if (!$lists) {
+		$lists = 0;
+	}
+
+	return $lists;
 }

@@ -9,7 +9,7 @@
  * @link http://www.thinkglobalschool.com/
  *
  */
-
+//@TODO Delete reviews as well
 $guid = get_input('guid', null);
 $book = get_entity($guid);
 

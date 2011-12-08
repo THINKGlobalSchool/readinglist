@@ -59,6 +59,10 @@ $book->small_thumbnail = $small_thumbnail;
 $book->large_thumbnail = $large_thumbnail;
 $book->identifiers = $identifiers;
 
+// These two sets of metadata will help to 'de-normalize' the books so to speak..
+$book->average_rating = 0; // Maintain a tally of the average book rating
+$book->popularity = 0;     // Intended to count the number of reading list this book appears in
+
 // Set the rest of the book fields
 foreach ($simple_fields as $field) {
 	$book->$field = get_input($field);

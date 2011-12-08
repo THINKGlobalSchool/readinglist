@@ -200,3 +200,38 @@
 	position: absolute;
 	right: 8px;
 }
+
+/** FILTER/SORT MENU **/
+
+.elgg-menu-readinglist-filter {
+
+}
+
+.elgg-menu-readinglist-filter li label {
+	margin-right: 10px;
+	font-size: 90%;
+	text-transform: uppercase;
+}
+
+.elgg-menu-readinglist-filter li.elgg-menu-item-readinglist-order {
+	margin-right: 10px;
+	font-size: 90%;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+.elgg-menu-readinglist-filter li select {
+	margin-right: 15px;
+}
+
+.elgg-menu-readinglist-filter li a {
+	color: #666;
+}
+
+.elgg-menu-readinglist-filter li.elgg-state-selected a {
+	font-weight: bold;
+	color: inherit;
+}
+
+
+/** END OF SORT MENU **/
