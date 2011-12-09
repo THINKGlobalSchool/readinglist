@@ -37,15 +37,22 @@ if (!$reviews) {
 
 // Set up add review form
 if ($show_form) {
+	$toggle_label = elgg_echo('readinglist:label:togglereviews');
 	$form_vars = array('name' => 'book_add_review');
 	$review_form = elgg_view_form('books/review/add', $form_vars, $vars);
+	$form_container = <<<HTML
+		<br /><br /><a id='review-form-toggle' href='#review-form-container' rel='toggle'>$toggle_label</a>
+		<div id='review-form-container'>
+			$review_form
+		</div>
+HTML;
 }
 
 $content = <<<HTML
 	<div class='book-reviews'>
 		$title
 		$reviews
-		$review_form
+		$form_container
 	</div>
 HTML;
 

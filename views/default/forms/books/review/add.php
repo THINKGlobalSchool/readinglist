@@ -25,8 +25,15 @@ if (isset($vars['entity']) && elgg_is_logged_in()) {
 		'value' => $description,
 	));
 
+	$rating_label = elgg_echo('readinglist:label:rating');
+
+	$rating_input = elgg_view('input/bookrating', array(
+		'entity' => $vars['entity'],
+	));
+
 	$review_submit = elgg_view('input/submit', array(
-		'value' => elgg_echo('submit'),
+		'value' => elgg_echo('readinglist:label:submitreview'),
+		'id' => 'review-submit',
 	));
 
 	$book_hidden = elgg_view('input/hidden', array(
@@ -39,6 +46,12 @@ if (isset($vars['entity']) && elgg_is_logged_in()) {
 			<label>$add_label</label>
 			$review_input
 		</div>
+		<div class='book-rating-add'>
+			<label>$rating_label</label>
+			$rating_input
+			<span id='rating-error'></span>
+		</div>
+		<div style='clear: both;'></div>
 		<div class='elgg-foot'>
 			$review_submit
 		</div>

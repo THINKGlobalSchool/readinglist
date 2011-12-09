@@ -150,6 +150,16 @@
 	border-radius: 5px 0 0 0;
 }
 
+#review-form-container {
+	display: none;
+}
+
+#rating-error {
+	color: red;
+	font-weight: bold;
+	margin-left: 25px;
+}
+
 .book-completed-container {
 	text-align: right;
 	margin-top: 5px;
@@ -199,6 +209,10 @@
 .readinglist-add-button span.readinglist-button-text, .readinglist-remove-button span.readinglist-button-text {
 	position: absolute;
 	right: 8px;
+}
+
+.average-bookrating-tooltip {
+	height: 30px;
 }
 
 /** FILTER/SORT MENU **/

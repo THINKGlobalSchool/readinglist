@@ -61,6 +61,15 @@ elgg.readinglist.init = function() {
 
 	// Click handler for sort order filter
 	$('#readinglist-filter-sort-order').live('click', elgg.readinglist.filterSortOrderClick);
+
+	// Click handler for category link
+	$('.readinglist-category-link').live('click', elgg.readinglist.categoryLinkClick);
+
+	// Click handler for review form toggle link
+	$('#review-form-toggle').live('click', elgg.readinglist.reviewToggleClick);
+
+	// Click handler for review submit button
+	$('#review-submit').live('click', elgg.readinglist.reviewSubmitClick);
 }
 
 // Click handler for book search
@@ -195,40 +204,11 @@ elgg.readinglist.searchAnywayClick = function(event) {
 }
 
 
-// Click handler for search cancel
+/**
+ * Click handler for search cancel
+ */
 elgg.readinglist.searchCancelClick = function(event) {
 	$.fancybox.close();
-}
-
-/**
- * Load search results into container
- *
- * @param {String}   term        search term
- * @param {String}   container   id of container to load
- * @param {Integer}  limit       limit of items to load
- * @param {Integer}  offset      offset of items to load
- * @param {Function} callback    function to call on success
- *
- * @return void
- */
-elgg.readinglist.loadSearchResults = function(term, container, limit, offset, callback) {
-	elgg.get(elgg.readinglist.loadSearchResultsURL, {
-		data: {
-			term: term,
-			limit: limit,
-			offset: offset,
-		},
-		success: function(data){
-			// Load data to container on success
-			$("#" + container).html(data);
-
-			// Replace the loader with the original submit button
-			$('#search-loader').replaceWith($('#search-loader').data('original'));
-
-			// Call the callback (if supplied)
-			callback();
-		}
-	});
 }
 
 // Click handler for readinglist add button
@@ -400,6 +380,83 @@ elgg.readinglist.filterSortOrderClick = function(event) {
 
 	elgg.modules.genericmodule.populateContainer($module);
 	event.preventDefault();
+}
+
+/**
+ * Click handler for category links
+ */
+elgg.readinglist.categoryLinkClick = function(event) {
+	var category = $(this).attr('title');
+
+	$module = $('.readinglist-module');
+	$category_input = $module.find('div.options > input#category');
+	$category_input.val(escape(category));
+
+	// Set the dropdown value as well
+	$('select#readinglist-filter-category').val(category);
+
+	elgg.modules.genericmodule.populateContainer($module);
+	event.preventDefault();
+}
+
+/**
+ * Click handler for review form toggle link
+ */
+elgg.readinglist.reviewToggleClick = function(event) {
+	if ($(this).html() == elgg.echo('readinglist:label:togglereviews')) {
+		$(this).html(elgg.echo('readinglist:label:hidereviewform'));
+	} else {
+		$(this).html(elgg.echo('readinglist:label:togglereviews'));
+	}
+	event.preventDefault();
+}
+
+/**
+ * Click handler for review submit click
+ */
+elgg.readinglist.reviewSubmitClick = function(event) {
+	// Check to see if the user has supplied a rating
+	if (!$('input[name="rating"]:checked').val()) {
+		// If nothing is set, display an error and prevent the form from being submitted
+		$('#rating-error').html(elgg.echo('readinglist:error:ratingrequired'));
+		event.preventDefault();
+	} else {
+		// Clear error and carry on..
+		$('#rating-error').html('');
+		$(this).closest('form').submit();
+		event.preventDefault();
+	}
+}
+
+/**
+ * Load search results into container
+ *
+ * @param {String}   term        search term
+ * @param {String}   container   id of container to load
+ * @param {Integer}  limit       limit of items to load
+ * @param {Integer}  offset      offset of items to load
+ * @param {Function} callback    function to call on success
+ *
+ * @return void
+ */
+elgg.readinglist.loadSearchResults = function(term, container, limit, offset, callback) {
+	elgg.get(elgg.readinglist.loadSearchResultsURL, {
+		data: {
+			term: term,
+			limit: limit,
+			offset: offset,
+		},
+		success: function(data){
+			// Load data to container on success
+			$("#" + container).html(data);
+
+			// Replace the loader with the original submit button
+			$('#search-loader').replaceWith($('#search-loader').data('original'));
+
+			// Call the callback (if supplied)
+			callback();
+		}
+	});
 }
 
 /**

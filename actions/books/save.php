@@ -67,9 +67,6 @@ foreach ($simple_fields as $field) {
 	$book->$field = get_input($field);
 }
 
-// @TODO REMOVE THIS - FOR TESTING MULTIPLE CATEGORIES
-//$book->categories = array('Reference', 'Art', 'Education');
-
 // If error saving, register error and return
 if (!$book->save()) {
 	register_error(elgg_echo('readinglist:error:savebook'));

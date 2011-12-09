@@ -13,6 +13,8 @@
  * @uses $vars['class']  Classname of inputs (important!)
  */
 elgg_load_js('jquery.starrating');
+elgg_load_js('jquery.tiptip');
+elgg_load_css('jquery.tiptip');
 elgg_load_js('elgg.readinglist.bookrating');
 elgg_load_css('jquery.starrating');
 
@@ -36,8 +38,13 @@ $options = array(
 );
 
 $rating = elgg_get_annotations($options);
-
 $rating = round($rating);
+
+unset($options['annotation_calculation']);
+$options['count'] = TRUE;
+$rating_count = elgg_get_annotations($options);
+
+$count_label = elgg_echo('readinglist:label:ratingcount', array($rating_count));
 
 // Create 5 inputs (5 stars)
 for ($i = 1; $i <= 5; $i++) {
@@ -49,7 +56,7 @@ for ($i = 1; $i <= 5; $i++) {
 }
 
 $content = <<<HTML
-	<div class='bookrating-container'>
+	<div class='bookrating-container average-bookrating-tooltip' title='{$count_label}'>
 		<div class='bookrating-output'>
 			$inputs
 		</div>
@@ -65,6 +72,15 @@ $script = <<<JAVASCRIPT
 			$('.$unique_class').rating();
 			$('.$unique_class').rating('disable');
 		})
+
+		// Init tiptips
+		$('.average-bookrating-tooltip').tipTip({
+			delay           : 0,
+			defaultPosition : 'top',
+			fadeIn          : 25,
+			fadeOut         : 300,
+			edgeOffset      : -5
+		});
 	</script>
 JAVASCRIPT;
 

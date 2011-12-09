@@ -42,6 +42,16 @@ function readinglist_init() {
 	elgg_register_js('jquery.starrating', $sr_js);
 	elgg_register_css('jquery.starrating', $sr_css);
 
+	// Register tiptip JS/CSS
+	$t_js = elgg_get_simplecache_url('js', 'tiptip');
+	$t_css = elgg_get_simplecache_url('css', 'tiptip');
+
+	elgg_register_simplecache_view('js/tiptip');
+	elgg_register_simplecache_view('css/tiptip');
+
+	elgg_register_js('jquery.tiptip', $t_js);
+	elgg_register_css('jquery.tiptip', $t_css);
+
 	// Register CSS
 	$r_css = elgg_get_simplecache_url('css', 'readinglist/css');
 	elgg_register_simplecache_view('css/readinglist/css');
@@ -136,6 +146,8 @@ function reading_list_page_handler($page) {
 		}
 	} else {
 		elgg_load_js('jquery.starrating');
+		elgg_load_js('jquery.tiptip');
+		elgg_load_css('jquery.tiptip');
 		elgg_load_js('elgg.readinglist.bookrating');
 		elgg_load_css('jquery.starrating');
 

@@ -51,19 +51,12 @@ if ($book->authors) {
 	$authors = $author_label . "<strong>" . $authors . "</strong><br />";
 }
 
-// Categories string
-if ($book->categories) {
-	if (is_array($book->categories)) {
-		$categories = implode(", ", $book->categories);
-	} else {
-		$categories = $book->categories;
-	}
-}
-
 // Page count string
 $page_count = $book->pageCount ? $book->pageCount . ' pages' : '';
 
 if ($full) {
+	$categories = elgg_view('output/bookcategories', array('book' => $book));
+
 	$subtitle = "<p>$added_text $date</p>";
 
 	// If we have a thumbnail, use it
@@ -89,7 +82,7 @@ if ($full) {
 	));
 
 	$body .= "<br /><label>" . elgg_echo('readinglist:label:yourrating') . "</label><br />";
-	$body .= elgg_view('input/bookrating', array(
+	$body .= elgg_view('output/bookrating', array(
 		'entity' => $book,
 	));
 
@@ -139,6 +132,8 @@ HTML;
 	// brief view
 	echo "<div class='book'>";
 
+	$categories = elgg_view('output/bookcategories', array('book' => $book, 'make_links' => TRUE));
+
 	$categories = $categories ? '' . $categories : '';
 	$page_count = $page_count ? '' . $page_count . '<br />': '';
 
@@ -160,7 +155,7 @@ HTML;
 		}
 	} else if (elgg_in_context('reading_list')) {
 		// We're viewing a book listing in profile mode
-		$subtitle .= "<a href='#readinglist-user-reviews-{$book->guid}' rel='toggle'>" . elgg_echo('readinglist:label:readreviews') . "</a>";
+		$subtitle .= "<a href='#readinglist-user-reviews-{$book->guid}' rel='toggle'>" . elgg_echo('readinglist:label:readreviews', array(elgg_get_page_owner_entity()->name)) . "</a>";
 		$owner_guid = elgg_get_page_owner_guid();
 		$owner = get_entity($owner_guid);
 		$book_reviews = "<div style='display: none;' id='readinglist-user-reviews-{$book->guid}'>" .
