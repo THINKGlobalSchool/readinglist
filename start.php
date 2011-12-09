@@ -81,7 +81,7 @@ function readinglist_init() {
 	// Register actions
 	$action_base = elgg_get_plugins_path() . 'readinglist/actions';
 	elgg_register_action('books/save', "$action_base/books/save.php");
-	elgg_register_action('books/delete', "$action_base/books/delete.php");
+	elgg_register_action('books/delete', "$action_base/books/delete.php", 'admin');
 	elgg_register_action('books/rate', "$action_base/books/rate.php");
 	elgg_register_action('books/check', "$action_base/books/check.php");
 	elgg_register_action('books/review/add', "$action_base/books/review/add.php");
@@ -103,11 +103,9 @@ function readinglist_init() {
  * URLs take the form of
  *  All books:       books/all
  *  User's books:    books/owner/<username>
- *  Reading list:    books/readinglist/<username>
  *  Public List		 books/reading
  *  View book:       books/view/<guid>/<title>
  *  New book:        books/add/<guid> (container: user, group, parent)
- *  Edit book:       books/edit/<guid>
  *
  * Title is ignored
  *
@@ -154,13 +152,6 @@ function reading_list_page_handler($page) {
 				}
 				$params = readinglist_get_page_content_list($user->guid);
 				break;
-			case 'readinglist':
-				$user = get_user_by_username($page[1]);
-				if (!elgg_instanceof($user, 'user')) {
-					$user = elgg_get_logged_in_user_entity();
-				}
-				$params = readinglist_get_page_content_readinglist($user->guid);
-				break;
 			case 'reading':
 				$params = readinglist_get_page_content_public_reading();
 				break;
@@ -171,9 +162,6 @@ function reading_list_page_handler($page) {
 				gatekeeper();
 				elgg_load_css('lightbox');
 				elgg_load_js('lightbox');
-				$params = readinglist_get_page_content_edit($page[0], $page[1]);
-				break;
-			case 'edit':
 				$params = readinglist_get_page_content_edit($page[0], $page[1]);
 				break;
 		}
@@ -229,7 +217,7 @@ function reading_list_filter_menu_setup($hook, $type, $return, $params) {
 		$options = array(
 			'name' => 'books-readinglist',
 			'text' => elgg_echo('readinglist:label:readinglist'),
-			'href' => "books/readinglist/$user->username",
+			'href' => "profile/$user->username/readinglist",
 			'priority' => 300,
 		);
 
@@ -298,7 +286,31 @@ function readinglist_book_menu_setup($hook, $type, $return, $params) {
 	$entity = $params['entity'];
 
 	if (elgg_instanceof($entity, 'object', 'book') && elgg_is_logged_in()) {
-		if (elgg_in_context('profile_reading_list')) {
+		// Will remove these items
+		$remove = array('access', 'likes', 'edit', 'delete');
+
+		// Remove items from entity menu
+		foreach ($return as $idx => $item) {
+			// Nuke access display and likes
+			if (in_array($item->getName(), $remove)) {
+				unset($return[$idx]);
+			}
+		}
+
+		// Admin only delete
+		if (elgg_is_admin_logged_in()) {
+			$options = array(
+				'name' => 'delete',
+				'text' => elgg_view_icon('delete'),
+				'title' => elgg_echo('delete:this'),
+				'href' => "action/books/delete?guid={$entity->getGUID()}",
+				'confirm' => elgg_echo('readinglist:label:deleteconfirm'),
+				'priority' => 300,
+			);
+			$return[] = ElggMenuItem::factory($options);
+		}
+
+		if (elgg_in_context('reading_list')) {
 			// Display user rating if viewing a user's reading list
 			$page_owner = elgg_get_page_owner_entity();
 			$rating = elgg_view('output/bookrating', array(
@@ -306,40 +318,37 @@ function readinglist_book_menu_setup($hook, $type, $return, $params) {
 				'user' => $page_owner,
 			));
 
-			foreach ($return as $idx => $item) {
-				// Nuke access display and likes
-				if ($item->getName() == 'access' || $item->getName() == 'likes') {
-					unset($return[$idx]);
+			if (elgg_get_logged_in_user_guid() != $page_owner->guid) {
+				elgg_load_library('elgg:readinglist');
+
+				// Add user's reading status
+				$status_info = readinglist_get_reading_status($entity->guid, $page_owner->guid);
+
+				$status = $status_info['status'];
+
+				switch ($status) {
+					case BOOK_READING_STATUS_COMPLETE:
+						$annotation = $status_info['annotation'];
+						$completed = date('F j, Y', $annotation->time_created);
+						$status_label = elgg_echo('readinglist:label:completed', array($completed));
+						break;
+					case BOOK_READING_STATUS_QUEUED:
+						$status_label = elgg_echo('readinglist:label:status:queued');
+						break;
+					case BOOK_READING_STATUS_READING:
+						$status_label = elgg_echo('readinglist:label:status:reading');
+						break;
 				}
+
+				$options = array(
+					'name' => 'reading-status',
+					'href' => FALSE,
+					'text' => $status_label,
+					'priority' => 15,
+				);
+
+				$return[] = ElggMenuItem::factory($options);
 			}
-
-			// Add user's reading status
-			$status_info = readinglist_get_reading_status($entity->guid, $page_owner->guid);
-
-			$status = $status_info['status'];
-
-			switch ($status) {
-				case BOOK_READING_STATUS_COMPLETE:
-					$annotation = $status_info['annotation'];
-					$completed = date('F j, Y', $annotation->time_created);
-					$status_label = elgg_echo('readinglist:label:completed', array($completed));
-					break;
-				case BOOK_READING_STATUS_QUEUED:
-					$status_label = elgg_echo('readinglist:label:status:queued');
-					break;
-				case BOOK_READING_STATUS_READING:
-					$status_label = elgg_echo('readinglist:label:status:reading');
-					break;
-			}
-
-			$options = array(
-				'name' => 'reading-status',
-				'href' => FALSE,
-				'text' => $status_label,
-				'priority' => 15,
-			);
-
-			$return[] = ElggMenuItem::factory($options);
 
 		} else {
 			// Display average rating elsewhere
@@ -365,6 +374,8 @@ function readinglist_book_menu_setup($hook, $type, $return, $params) {
  * Handler to add a reading list tab to the tabbed profile
  */
 function readinglist_profile_tab_hander($hook, $type, $value, $params) {
-	$value[] = 'readinglist';
-	return $value;
+	if (elgg_is_logged_in()) {
+		$value[] = 'readinglist';
+		return $value;
+	}
 }

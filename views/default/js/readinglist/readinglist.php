@@ -346,7 +346,7 @@ elgg.readinglist.readinglistStatusChange = function(event) {
 elgg.readinglist.filterCategoryChange = function(event) {
 	$module = $('.readinglist-module');
 	$category_input = $module.find('div.options > input#category');
-	$category_input.val($(this).val());
+	$category_input.val(escape($(this).val()));
 
 	elgg.modules.genericmodule.populateContainer($module);
 	event.preventDefault();

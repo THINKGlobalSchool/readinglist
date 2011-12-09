@@ -144,22 +144,22 @@ HTML;
 
 	$subtitle = "<p>$authors $categories $page_count $added_text $date</p>";
 
-	if (!elgg_in_context('widgets') && !elgg_in_context('book_existing') && !elgg_in_context('profile_reading_list')) {
-		// Check if we're in the reading list context, if so display additional user controls
-		$control_params = array('book' => $book);
-		if (elgg_in_context('reading_list')) {
-			$control_params['user_controls'] = TRUE;
-		}
+	// Set up controls
+	$control_params = array('book' => $book);
+	if (elgg_in_context('reading_list')) {
+		$control_params['user_controls'] = TRUE;
+	}
+
+	$controls = elgg_view('readinglist/controls', $control_params);
+
+	if (!elgg_in_context('widgets') && !elgg_in_context('book_existing') && !elgg_in_context('reading_list')) {
 
 		// Don't display extra subtitle info in public_reading module
 		if (!elgg_is_logged_in() && elgg_get_context() == 'public_reading') {
 			$subtitle = "<p>$authors $categories $page_count</p>";
 		}
-
-		$controls = elgg_view('readinglist/controls', $control_params);
-	} else if (elgg_in_context('profile_reading_list')) {
+	} else if (elgg_in_context('reading_list')) {
 		// We're viewing a book listing in profile mode
-		$subtitle = "<p>$authors $categories $page_count</p>";
 		$subtitle .= "<a href='#readinglist-user-reviews-{$book->guid}' rel='toggle'>" . elgg_echo('readinglist:label:readreviews') . "</a>";
 		$owner_guid = elgg_get_page_owner_guid();
 		$owner = get_entity($owner_guid);
@@ -171,6 +171,13 @@ HTML;
 								'title' => "<h3>" . elgg_echo('readinglist:label:ownerreviews', array($owner->name)) . "</h3>",
 							)) .
 						"</div>";
+
+		// No controls if not viewing our own list
+		if (elgg_get_logged_in_user_guid() != elgg_get_page_owner_guid()) {
+			$controls = '';
+		}
+	} else if (elgg_in_context('book_existing')) {
+		$controls = '';
 	}
 
 	$params = array(

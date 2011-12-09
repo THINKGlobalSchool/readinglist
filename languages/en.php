@@ -15,13 +15,13 @@ $english = array(
 	'books' => 'Books',
 	'item:object:book' => 'Books',
 	'item:object:book_review' => 'Book Reviews',
-	'books:add' => 'Add Book',
+	'books:add' => 'Find Book',
 	'readinglist' => 'Reading List',
 	'profile:readinglist' => 'Reading List',
 	
 	// Page titles 
 	'readinglist:title:ownedbooks' => 'Books Added By %s',
-	'readinglist:title:addbook' => 'Add a Book',
+	'readinglist:title:findbook' => 'Find a Book',
 	'readinglist:title:editbook' => 'Edit Book',
 	'readinglist:title:userreadinglist' => '%s\'s Reading List',
 	'readinglist:title:allbooks' => 'All Books',
@@ -62,6 +62,7 @@ $english = array(
 	'readinglist:label:rated' => 'Rating',
 	'readinglist:label:sortasc' => 'Sort Ascending &#9650;',
 	'readinglist:label:sortdesc' => 'Sort Descending &#9660;',
+	'readinglist:label:deleteconfirm' => '!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!! Deleting this book will remove it from all reading lists! Proceed?',
 
 	// Messages
 	'readinglist:error:savebook' => 'There was an error saving the book',

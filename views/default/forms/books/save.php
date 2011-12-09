@@ -35,7 +35,6 @@ if ($guid) {
 	$access_id = ACCESS_LOGGED_IN;	
 }
 
-$title_label = elgg_echo('title');
 $title_input = elgg_view('input/text', array(
 	'id' => 'book-search-title',
 	'name' => 'title',
@@ -47,13 +46,6 @@ $tags_input = elgg_view('input/tags', array(
 	'id' => 'video-tags',
 	'name' => 'tags',
 	'value' => $tags
-));
-
-$access_label =  elgg_echo('access');
-$access_input = elgg_view('input/access', array(
-	'id' => 'video-access',
-	'name' => 'access_id',
-	'value' => $access_id
 ));
 
 $container_guid_input = elgg_view('input/hidden', array(
@@ -78,7 +70,6 @@ $save_input = elgg_view('input/submit', array(
 $content = <<<HTML
 	<div class='book-form'>
 		<div>
-			<label>$title_label</label>
 			<table class='book-search-table'>
 				<tbody>
 					<tr>
@@ -101,10 +92,6 @@ $content = <<<HTML
 		<div>
 			<label>$tags_label</label>
 			$tags_input
-		</div><br />
-		<div>
-			<label>$access_label</label>
-			$access_input
 		</div><br />
 		<div class="elgg-foot">
 			$save_input

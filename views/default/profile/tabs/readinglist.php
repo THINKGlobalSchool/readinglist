@@ -9,6 +9,10 @@
  * @link http://www.thinkglobalschool.com/
  */
 
+if (!elgg_is_logged_in()) {
+	forward(REFERER);
+}
+
 // Load Libraries
 elgg_load_library('elgg:readinglist');
 elgg_load_css('elgg.readinglist');
@@ -19,6 +23,18 @@ elgg_load_css('jquery.starrating');
 
 $page_owner = elgg_get_page_owner_entity();
 
+elgg_push_context('reading_list');
+
+$content_info = readinglist_get_page_content_readinglist($page_owner->guid);
+
+echo $content_info['content'];
+
+elgg_pop_context();
+
+return;
+
+
+
 $options = array(
 	'type' => 'object',
 	'subtype' => 'book',
@@ -26,10 +42,10 @@ $options = array(
 	'relationship' => READING_LIST_RELATIONSHIP,
 	'relationship_guid' => $page_owner->guid,
 	'inverse_relationship' => TRUE,
-	'profile_reading_list' => TRUE,
+	'reading_list' => TRUE,
 );
 
-elgg_push_context('profile_reading_list');
+elgg_push_context('reading_list');
 $readinglist = elgg_list_entities_from_relationship($options);
 elgg_pop_context();
 

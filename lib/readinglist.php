@@ -97,7 +97,7 @@ function readinglist_get_page_content_edit($page, $guid) {
 		
 		elgg_push_breadcrumb(elgg_echo('add'));
 		
-		$params['title'] = elgg_echo('readinglist:title:addbook');
+		$params['title'] = elgg_echo('readinglist:title:findbook');
 		
 		$body_vars = readinglist_prepare_form_vars();
 
@@ -186,11 +186,13 @@ function readinglist_get_page_content_public_reading() {
 		'group_by' => 'e.guid',
 	);
 
+	elgg_push_context('public_reading');
 	// Ignore access so the public can take a peek
 	$ia = elgg_get_ignore_access();
 	elgg_set_ignore_access(TRUE);
 	$content = elgg_list_entities_from_relationship($options);
 	elgg_set_ignore_access($ia);
+	elgg_pop_context();
 
 	// If theres no content, display a nice message
 	if (!$content) {
@@ -213,7 +215,6 @@ function readinglist_prepare_form_vars($book = NULL) {
 	// input names => defaults
 	$values = array(
 		'tags' => NULL,
-		'access_id' => NULL,
 		'container_guid' => NULL,
 		'guid' => NULL,
 		'title' => NULL,

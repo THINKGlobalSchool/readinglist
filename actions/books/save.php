@@ -13,7 +13,6 @@
 // Get inputs
 $guid 				= get_input('guid');
 $tags 				= string_to_tag_array(get_input('tags'));
-$access 			= get_input('access_id');
 $title 				= get_input('title');
 $container_guid 	= get_input('container_guid', NULL);
 
@@ -52,7 +51,7 @@ if ($guid) {
 }
 
 $book->tags = $tags;
-$book->access_id = $access;
+$book->access_id = ACCESS_LOGGED_IN; // All books are set to logged in users
 $book->title = $title;
 $book->google_id = $google_id;
 $book->small_thumbnail = $small_thumbnail;

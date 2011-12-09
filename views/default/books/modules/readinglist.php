@@ -14,8 +14,11 @@
  * @uses $vars['order_by']       Change how we're ordering this list
  * @uses $vars['sort_order']     Change the sort order
  * 
- * Note: This is a ton of logic for a view.. Not sure if its necessary here but we'll see
+ * Note: This is HORRIBLE!!!! :'(
+ * @TODO Make it less horrible..
  */
+global $CONFIG;
+elgg_set_page_owner_guid($vars['user_guid']);
 
 $status = $vars['status'];
 $category = strtolower($vars['category']);
@@ -60,21 +63,20 @@ switch ($order_by) {
 	case 'popular':
 		$order_by_metadata = array('name' => 'popularity', 'direction' => $sort_order, 'as' => 'integer');
 		break;
-	case 'rated':
-		$order_by_metadata = array('name' => 'average_rating', 'direction' => $sort_order, 'as' => 'integer');
-		break;
 }
 
 elgg_push_context('reading_list');
 
+// Check for category
 if ($category != 'any') {
-	
-	// Not setting these in options
+	// We have a category!
+
+	// Not setting these in options, because we'll cause ANOTHER massive table name collision
 	$metadata_names = array('categories');
 	$metadata_values = array($category);
 	
 	// Because elgg does a horrible job of managing table name collisions, I'm 
-	// manually setting up the metadata clauses
+	// manually setting up the metadata clauses to order by
 	$clauses = elgg_get_entity_metadata_where_sql('e', 'metadata', $metadata_names,
 		$metadata_values, $options["metadata_name_value_pairs"],
 		$options["metadata_name_value_pairs_operator"], FALSE,
@@ -89,12 +91,12 @@ if ($category != 'any') {
 	$options['joins'] = array_merge($options['joins'], $clauses['joins']);
 	
 	// If we're ordering by metadata, set a special order_by option here, matching the new unique tables
-	if ($order_by != 'date') {
+	if ($order_by == 'popular') {
 		$options['order_by'] = "CAST(msvm1.string AS SIGNED) $sort_order";
 	}
 } else {
 	// Category is any
-	if ($order_by != 'date') {
+	if ($order_by == 'popular') {
 		// We're ordering by metadata, so set up clauses manually (arghhhh)
 		$clauses = elgg_get_entity_metadata_where_sql('e', 'metadata', NULL,
 			NULL, $options["metadata_name_value_pairs"],
@@ -112,6 +114,17 @@ if ($category != 'any') {
 		// Set order by
 		$options['order_by'] = "CAST(msvm1.string AS SIGNED) $sort_order";
 	}
+}
+
+// Manual SQL for sorting by given user's rating
+if ($order_by == 'rated') {
+	//$options['order_by_annotation'] = array('name' => 'bookrating', 'direction' => $sort_order, 'as' => 'integer');
+	$suffix = get_access_sql_suffix("rating_table");
+	$options['joins'][] = "JOIN {$CONFIG->dbprefix}annotations rating_table on e.guid = rating_table.entity_guid";
+	$options['joins'][] = "JOIN {$CONFIG->dbprefix}metastrings rating_name on rating_table.name_id = rating_name.id";
+	$options['joins'][] = "JOIN {$CONFIG->dbprefix}metastrings rating_value on rating_table.value_id = rating_value.id";
+	$options['wheres'][] = "(rating_name.string = 'bookrating' AND (rating_table.owner_guid IN ({$vars['user_guid']})) AND ($suffix))";
+	$options['order_by'] = "CAST(rating_value.string AS SIGNED) $sort_order";
 }
 
 if ($status != 'Any' && in_array($status, $valid_status, TRUE)) {
@@ -136,7 +149,7 @@ if ($status != 'Any' && in_array($status, $valid_status, TRUE)) {
 	// Phew..
 	$content = elgg_list_entities_from_annotations($options);
 } else {
-	// Don't nother with any fancy status stuff, just grab related
+	// Don't bother with any fancy status stuff, just grab related
 	$content = elgg_list_entities_from_relationship($options);
 }
 
