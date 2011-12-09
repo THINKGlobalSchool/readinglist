@@ -18,11 +18,18 @@ if (!elgg_instanceof($book, 'object', 'book')) {
 	return TRUE;
 }
 
-$title_label = elgg_echo('readinglist:label:titleexists', array($book->title));
+$title_label = elgg_echo('readinglist:label:titleexists', array(get_entity($book->owner_guid)->name));
 
 elgg_push_context('book_existing');
 $book_info = elgg_view_entity($book, array('full_view' => FALSE));
 elgg_pop_context();
+
+$readinglist_input = elgg_view('input/submit', array(
+	'name' => 'add_to_reading_list',
+	'class' => 'book-add-to-readinglist elgg-button elgg-button-submit',
+	'id' => $book->guid,
+	'value' => elgg_echo('readinglist:label:addtoreadinglist'),
+));
 
 $search_input = elgg_view('input/submit', array(
 	'name' => 'search_anyway',
@@ -42,7 +49,7 @@ $content = <<<HTML
 		$book_info
 	</div><br />
 	<div class='center'>
-		$search_input $cancel_input
+		$readinglist_input $search_input $cancel_input
 	</div>
 HTML;
 

@@ -10,6 +10,8 @@
  *
  */
 
+elgg_load_library('elgg:readinglist');
+
 // Get inputs
 $guid 				= get_input('guid');
 $tags 				= string_to_tag_array(get_input('tags'));
@@ -22,9 +24,9 @@ $small_thumbnail = get_input('small_thumbnail', NULL);
 $large_thumbnail = get_input('large_thumbnail', NULL);
 $identifiers     = get_input('identifiers', NULL);
 
-// Preset fields to grab
+// Preset fields to grab (leaving out description)
 $simple_fields = array(
-	'title', 'description', 'authors', 'canonicalVolumeLink', 'pageCount',
+	'title', 'authors', 'canonicalVolumeLink', 'pageCount',
 	'categories', 'publisher', 'publishedDate', 'printType'
 );
 
@@ -67,6 +69,17 @@ foreach ($simple_fields as $field) {
 	$book->$field = get_input($field);
 }
 
+// Try and set full description (need a seperate api call for this, boooo)
+$description = google_books_get_volume_full_description($book->google_id);
+
+// If we've got it, set it
+if ($description) {
+	$book->description = $description;
+} else {
+	// Otherwise use whatever was passed in from the volume info list
+	$book->description = get_input('description', '');
+}
+
 // If error saving, register error and return
 if (!$book->save()) {
 	register_error(elgg_echo('readinglist:error:savebook'));
@@ -79,7 +92,6 @@ elgg_clear_sticky_form('book-save-form');
 // Add to river
 add_to_river('river/object/book/create', 'create', get_loggedin_userid(), $book->getGUID());
 
-// Forward on
+// Forward to book view
 system_message(elgg_echo('readinglist:success:savebook'));
-
-forward("books/all");
+forward("books/view/{$book->guid}");

@@ -30,7 +30,7 @@ $english = array(
 	// Labels
 	'readinglist:label:readinglist' => 'Reading List',
 	'readinglist:label:noresults' => 'No Results',
-	'readinglist:label:save' => 'Save',
+	'readinglist:label:save' => 'Add Book to Spot',
 	'readinglist:label:addedby' => 'Added by %s',
 	'readinglist:label:author' => 'By: ',
 	'readinglist:label:googlelink' => 'View on Google Books',
@@ -41,7 +41,7 @@ $english = array(
 	'readinglist:label:noreviews' => 'No Reviews',
 	'readinglist:label:addreview' => 'Add Review',
 	'readinglist:label:addcomment' => 'Add Comment',
-	'readinglist:label:titleexists' => 'A book titled \'%s\' already exists:',
+	'readinglist:label:titleexists' => '%s has already added this book!',
 	'readinglist:label:searchanyway' => 'Search Anyway',
 	'readinglist:label:searchresults' => 'Results for \'%s\'',
 	'readinglist:label:duplicate' => 'This book already exists!',
@@ -67,6 +67,10 @@ $english = array(
 	'readinglist:label:submitreview' => 'Submit Review',
 	'readinglist:label:togglereviews' => 'Add a Review',
 	'readinglist:label:hidereviewform' => 'Hide Review Form',
+	'readinglist:label:showless' => '« Less',
+	'readinglist:label:showmore' => 'More »',
+	'readinglist:label:findanother' => 'Find Another Book',
+	'readinglist:label:addtoreadinglist' => 'Add to Reading List',
 	'readinglist:label:deleteconfirm' => '!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!! Deleting this book will remove it from all reading lists! Proceed?',
 
 	// Messages

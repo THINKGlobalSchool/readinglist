@@ -76,10 +76,41 @@ if ($full) {
 		'style' => 'display: block',
 	));
 
-	$body .= elgg_view('output/longtext', array(
-		'value' => $book->description,
+	// If the book description is quite a bit longer than an excerpt, display both
+	if (strlen($book->description) > 350) {
+		// Show more link for description excerpt
+		$show_more = "<br />" . elgg_view('output/url', array(
+			'text' => elgg_echo('readinglist:label:showmore'),
+			'href' => '#book-description-full',
+			'id' => 'book-description-showmore' ,
+		));
+
+		// Excerpt
+		$description_excerpt = elgg_view('output/longtext', array(
+			'value' => readinglist_get_excerpt($book->description) . $show_more,
+			'class' => 'book-description',
+			'id' => 'book-description-excerpt',
+		));
+
+		// Show less link for description full
+		$show_less = "<br />" . elgg_view('output/url', array(
+			'text' => elgg_echo('readinglist:label:showless'),
+			'href' => '#book-description-excerpt',
+			'id' => 'book-description-showless' ,
+		));
+
+		$hide = 'display: none;';
+	}
+
+	// Full description
+	$description_full = elgg_view('output/longtext', array(
+		'value' => $book->description . $show_less,
 		'class' => 'book-description',
+		'id' => 'book-description-full',
+		'style' => $hide,
 	));
+
+	$body .= $description_excerpt . $description_full;
 
 	$body .= "<br /><label>" . elgg_echo('readinglist:label:yourrating') . "</label><br />";
 	$body .= elgg_view('output/bookrating', array(

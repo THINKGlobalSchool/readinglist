@@ -89,12 +89,14 @@ $content = <<<HTML
 			<div id='books-search-results'>
 			</div>
 		</div><br />
-		<div>
-			<label>$tags_label</label>
-			$tags_input
-		</div><br />
-		<div class="elgg-foot">
-			$save_input
+		<div id='book-form-hidden'>
+			<div>
+				<label>$tags_label</label>
+				$tags_input
+			</div><br />
+			<div class="elgg-foot">
+				$save_input
+			</div>
 		</div>
 		$container_guid_input
 		$book_guid

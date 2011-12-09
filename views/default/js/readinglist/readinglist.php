@@ -47,6 +47,9 @@ elgg.readinglist.init = function() {
 	// Click handler for readinglist remove button
 	$('.readinglist-remove-button').live('click', elgg.readinglist.readinglistRemoveClick);
 
+	// Click handler for add to reading list button (on the book existing form)
+	$('.book-add-to-readinglist').live('click', elgg.readinglist.readinglistExistingAddClick);
+
 	// Change handler for book status
 	$('.book-reading-status').live('change', elgg.readinglist.readinglistStatusChange);
 
@@ -70,6 +73,12 @@ elgg.readinglist.init = function() {
 
 	// Click handler for review submit button
 	$('#review-submit').live('click', elgg.readinglist.reviewSubmitClick);
+
+	// Click handler for description show less link
+	$('#book-description-showless').live('click', elgg.readinglist.showLessClick);
+
+	// Click handler for description show more link
+	$('#book-description-showmore').live('click', elgg.readinglist.showMoreClick);
 }
 
 // Click handler for book search
@@ -153,6 +162,9 @@ elgg.readinglist.bookSelectSubmitClick = function(event) {
 
 					// Close lightbox
 					$.fancybox.close();
+
+					// Show the rest of the save form
+					$('#book-form-hidden').fadeIn();
 				}
 			}
 		}
@@ -244,6 +256,30 @@ elgg.readinglist.readinglistAddClick = function(event) {
 	});
 
 	event.preventDefault();
+}
+
+/**
+ * Click handler for add to readinglist (on the existing form)
+ */
+elgg.readinglist.readinglistExistingAddClick = function() {
+	var guid = $(this).attr('id');
+
+	var user = elgg.get_logged_in_user_entity();
+
+	var fwd_url = elgg.get_site_url() + "profile/" + user.username + "/readinglist";
+
+	// Add to readinglist
+	elgg.action('readinglist/add', {
+		data: {
+			guid: guid,
+		},
+		success: function(data) {
+			if (data.status != -1) {
+				// Forward to reading list
+				window.location = fwd_url;
+			}
+		}
+	});
 }
 
 // Click handler for readinglist remove button
@@ -426,6 +462,24 @@ elgg.readinglist.reviewSubmitClick = function(event) {
 		$(this).closest('form').submit();
 		event.preventDefault();
 	}
+}
+
+/**
+ * Click handler for description show less link
+ */
+elgg.readinglist.showLessClick = function(event) {
+	$('#book-description-full').hide();
+	$('#book-description-excerpt').show();
+	event.preventDefault();
+}
+
+/**
+ * Click handler for description show more link
+ */
+elgg.readinglist.showMoreClick = function(event) {
+	$('#book-description-excerpt').hide();
+	$('#book-description-full').show();
+	event.preventDefault();
 }
 
 /**

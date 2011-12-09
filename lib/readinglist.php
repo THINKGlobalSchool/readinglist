@@ -125,6 +125,14 @@ function readinglist_get_page_content_view($guid) {
 	$params['title'] = $book->title;
 	$params['content'] .= elgg_view_entity($book, array('full_view' => TRUE));	
 	$params['layout'] = 'one_sidebar';
+
+	// Add a sidebar button to add a new book
+	$params['sidebar'] = elgg_view('output/url', array(
+		'text' => elgg_echo('readinglist:label:findanother'),
+		'class' => 'elgg-button elgg-button-submit',
+		'href' => 'books/add/' . elgg_get_logged_in_user_guid(),
+	));
+
 	return $params;
 }
 
@@ -278,6 +286,41 @@ function google_books_title_search($search = '', $limit = 10, $offset = 0) {
 }
 
 /**
+ * Helper function to get a given volume's full descriptio
+ *
+ * @param  string $volume_id - The google volume id
+ * @return string
+ */
+function google_books_get_volume_full_description($volume_id) {
+	if (!is_string($volume_id) || empty($volume_id)) {
+		// Bail out if we don't have a volume id
+		return FALSE;
+	}
+
+	// Create client
+	$client = new apiClient();
+
+	// @TODO put this somewhere else
+	$client->setDeveloperKey('AIzaSyCPsvFIGl7b13H_KcJgAopdfHjDqGeR0Rg');
+	$client->setApplicationName("spot_books");
+
+	// Create books service
+	$service = new apiBooksService($client);
+
+	// Set volumes
+	$volumes = $service->volumes;
+
+	// Get the specified volume
+	$result = $volumes->get($volume_id);
+
+	$volumeInfo = $result['volumeInfo'];
+
+	$description = $volumeInfo['description'];
+
+	return $description;
+}
+
+/**
  * Helper function to grab a users reading status
  *
  * @param int $book_guid The guid of the book
@@ -396,4 +439,38 @@ function readinglist_calculate_popularity($book) {
 	}
 
 	return $lists;
+}
+
+/**
+ * Modified version of the elgg get excerpt function
+ * that doesn't butcher tags
+ *
+ * @param string $text      The full text to excerpt
+ * @param int    $num_chars Return a string up to $num_chars long
+ *
+ * @return string
+ */
+function readinglist_get_excerpt($text, $num_chars = 250) {
+	$text = trim($text);
+	$string_length = elgg_strlen($text);
+
+	if ($string_length <= $num_chars) {
+		return $text;
+	}
+
+	// handle cases
+	$excerpt = elgg_substr($text, 0, $num_chars);
+	$space = elgg_strrpos($excerpt, ' ', 0);
+
+	// don't crop if can't find a space.
+	if ($space === FALSE) {
+		$space = $num_chars;
+	}
+	$excerpt = trim(elgg_substr($excerpt, 0, $space));
+
+	if ($string_length != elgg_strlen($excerpt)) {
+		$excerpt .= '...';
+	}
+
+	return $excerpt;
 }

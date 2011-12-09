@@ -32,6 +32,10 @@
 
 }
 
+#book-form-hidden {
+	display: none;
+}
+
 .book-listing {
 	margin: 4px;
 	padding: 10px;
