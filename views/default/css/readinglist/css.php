@@ -192,6 +192,12 @@
 	float: right;
 }
 
+.whos-reading-show {
+	color: #555555;
+	font-size: 90%;
+	font-style: italic;
+}
+
 .elgg-menu-item-rating {
 	height: 30px;
 	margin-right: 30px;

@@ -19,8 +19,17 @@ if (!elgg_instanceof($book, 'object', 'book')) {
 	forward(REFERER);
 }
 
-// Remove reading list relationship
-remove_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, elgg_get_logged_in_user_guid());
+// Remove reading list relationship(s)
+$relationships = array(
+	READING_LIST_RELATIONSHIP,
+	READING_LIST_RELATIONSHIP_QUEUED,
+	READING_LIST_RELATIONSHIP_READING,
+	READING_LIST_RELATIONSHIP_COMPLETE,
+);
+
+foreach ($relationships as $relationship) {
+	remove_entity_relationship($book->guid, $relationship, elgg_get_logged_in_user_guid());
+}
 
 // Remove any reading status
 elgg_delete_annotations(array(

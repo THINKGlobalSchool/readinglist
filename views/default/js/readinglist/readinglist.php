@@ -65,6 +65,9 @@ elgg.readinglist.init = function() {
 	// Click handler for sort order filter
 	$('#readinglist-filter-sort-order').live('click', elgg.readinglist.filterSortOrderClick);
 
+	// Change handler for whos reading status filter (uses the same handler as the regular status change)
+	$('#readinglist-filter-user-status').live('change', elgg.readinglist.filterStatusChange);
+
 	// Click handler for category link
 	$('.readinglist-category-link').live('click', elgg.readinglist.categoryLinkClick);
 

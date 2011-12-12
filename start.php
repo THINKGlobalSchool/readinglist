@@ -19,6 +19,9 @@ function readinglist_init() {
 	// Define relationships
 	define(BOOK_REVIEW_RELATIONSHIP, 'book_review_of');
 	define(READING_LIST_RELATIONSHIP, 'on_reading_list_of');
+	define(READING_LIST_RELATIONSHIP_QUEUED, 'reading_list_queued');
+	define(READING_LIST_RELATIONSHIP_COMPLETE, 'reading_list_complete');
+	define(READING_LIST_RELATIONSHIP_READING, 'reading_list_reading');
 
 	// Define reading status's
 	define(BOOK_READING_STATUS_QUEUED, -1);
@@ -303,14 +306,13 @@ function readinglist_book_menu_setup($hook, $type, $return, $params) {
 
 		// Remove items from entity menu
 		foreach ($return as $idx => $item) {
-			// Nuke access display and likes
 			if (in_array($item->getName(), $remove)) {
 				unset($return[$idx]);
 			}
 		}
 
 		// Admin only delete
-		if (elgg_is_admin_logged_in()) {
+		if (elgg_is_admin_logged_in() && !elgg_in_context('book_sidebar')) {
 			$options = array(
 				'name' => 'delete',
 				'text' => elgg_view_icon('delete'),
@@ -363,10 +365,12 @@ function readinglist_book_menu_setup($hook, $type, $return, $params) {
 			}
 
 		} else {
-			// Display average rating elsewhere
-			$rating = elgg_view('output/averagebookrating', array(
-				'entity' => $entity,
-			));
+			if (!elgg_in_context('book_sidebar')) {
+				// Display average rating elsewhere
+				$rating = elgg_view('output/averagebookrating', array(
+					'entity' => $entity,
+				));
+			}
 		}
 
 

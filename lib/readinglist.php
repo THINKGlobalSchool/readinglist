@@ -52,6 +52,31 @@ function readinglist_get_page_content_list($container_guid = null) {
 	));
 
 	$params['content'] = $content;
+
+	$options = array(
+		'type' => 'object',
+		'subtype' => 'book',
+		'full_view' => FALSE,
+		'limit' => 5,
+		'pagination' => FALSE,
+	);
+
+	$pop_options = array(
+		'order_by_metadata' => array('name' => 'popularity', 'direction' => 'desc', 'as' => 'integer'),
+	);
+
+	$rated_options = array(
+		'order_by_metadata' => array('name' => 'average_rating', 'direction' => 'desc', 'as' => 'integer'),
+	);
+
+	elgg_set_context('book_sidebar');
+	$popular_books = elgg_list_entities_from_relationship($options + $pop_options);
+	$rated_books = elgg_list_entities_from_relationship($options + $rated_options);
+	elgg_pop_context();
+
+	$params['sidebar'] = elgg_view_module('aside', elgg_echo('readinglist:label:mostpopular'), $popular_books);
+	$params['sidebar'] .= elgg_view_module('aside', elgg_echo('readinglist:label:highestrated'), $rated_books);
+
 	return $params;
 }
 
@@ -131,6 +156,31 @@ function readinglist_get_page_content_view($guid) {
 		'text' => elgg_echo('readinglist:label:findanother'),
 		'class' => 'elgg-button elgg-button-submit',
 		'href' => 'books/add/' . elgg_get_logged_in_user_guid(),
+	)) . "<br /><br />";
+
+
+	$params['sidebar'] .= "<h3>" . elgg_echo('readinglist:label:whoreading') . "</h3>";
+	$params['sidebar'] .= "<span class='whos-reading-show'>" . elgg_echo('readinglist:label:show') . ": </span>";
+
+	$params['sidebar'] .= elgg_view('input/dropdown', array(
+		'id' => 'readinglist-filter-user-status',
+		'class' => 'readinglist-filter',
+		'options_values' => array(
+			'any' => elgg_echo('readinglist:label:all'),
+			BOOK_READING_STATUS_QUEUED => elgg_echo('readinglist:label:status:queued'),
+			BOOK_READING_STATUS_READING => elgg_echo('readinglist:label:status:reading'),
+			BOOK_READING_STATUS_COMPLETE => elgg_echo('readinglist:label:status:complete'),
+		)
+	));
+
+	$params['sidebar'] .= elgg_view('modules/genericmodule', array(
+		'view' => 'books/modules/reading',
+		'module_id' => 'readinglist-whos-reading-module',
+		'module_class' => 'readinglist-module',
+		'view_vars' => array(
+			'book_guid' => $guid,
+			'status' => 'any',
+		),
 	));
 
 	return $params;

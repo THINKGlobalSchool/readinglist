@@ -22,6 +22,9 @@ if (!elgg_instanceof($book, 'object', 'book')) {
 // Add reading list relationship
 add_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, elgg_get_logged_in_user_guid());
 
+// Add queued relationship
+add_entity_relationship($book->guid, READING_LIST_RELATIONSHIP_QUEUED, elgg_get_logged_in_user_guid());
+
 // Add status annotation
 $status = create_annotation(
 	$book->guid,

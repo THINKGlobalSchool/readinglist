@@ -178,7 +178,7 @@ HTML;
 
 	$controls = elgg_view('readinglist/controls', $control_params);
 
-	if (!elgg_in_context('widgets') && !elgg_in_context('book_existing') && !elgg_in_context('reading_list')) {
+	if (!elgg_in_context('widgets') && !elgg_in_context('book_existing') && !elgg_in_context('reading_list') && !elgg_in_context('book_sidebar')) {
 
 		// Don't display extra subtitle info in public_reading module
 		if (!elgg_is_logged_in() && elgg_get_context() == 'public_reading') {
@@ -204,6 +204,12 @@ HTML;
 		}
 	} else if (elgg_in_context('book_existing')) {
 		$controls = '';
+	} else if (elgg_in_context('book_sidebar')) {
+		$controls = '';
+		$subtitle = "<p>$authors $page_count</p>";
+		$avg_rating = elgg_view('output/averagebookrating', array(
+			'entity' => $book,
+		));
 	}
 
 	$params = array(
@@ -211,7 +217,7 @@ HTML;
 		'metadata' => $metadata,
 		'subtitle' => $subtitle,
 		'tags' => $tags,
-		'content' => $book_reviews,
+		'content' => $book_reviews . $avg_rating,
 	);
 	$params = $params + $vars;
 	$list_body = elgg_view('object/elements/summary', $params);
