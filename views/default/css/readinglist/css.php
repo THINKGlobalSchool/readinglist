@@ -173,6 +173,10 @@
 	text-align: left;
 }
 
+.book-date-complete {
+	width: 225px;
+}
+
 .readinglist-listing-control label {
 	position: relative;
 	top: -3px;

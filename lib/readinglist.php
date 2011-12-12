@@ -354,6 +354,30 @@ function readinglist_get_reading_status($book_guid, $user_guid) {
 }
 
 /**
+ * Helper function to grab a user's complete date annotation
+ *
+ * @param int $book_guid The guid of the book
+ * @param int $user_guid The guid of the user
+ * @return int|null      Complete date
+ */
+function readinglist_get_complete_date($book_guid, $user_guid) {
+	// Options to grab the current users complete date
+	$options = array(
+		'guid' => $book_guid,
+		'annotation_names' => array('book_complete_date'),
+		'annotation_owner_guids' => array($user_guid),
+	);
+
+	$complete_annotations = elgg_get_annotations($options);
+
+	if ($complete_annotations[0]) {
+		return $complete_annotations[0]->value;
+	} else {
+		return NULL;
+	}
+}
+
+/**
  * Helper function to find all available book categories
  */
 function readinglist_get_available_categories() {
@@ -473,4 +497,16 @@ function readinglist_get_excerpt($text, $num_chars = 250) {
 	}
 
 	return $excerpt;
+}
+
+/**
+ * Helper function to determine if string is a valid timestamp
+ *
+ * @param string $timestamp
+ * @return bool
+ */
+function readinglist_is_valid_timestamp($timestamp) {
+    return ((string) (int) $timestamp === $timestamp)
+        && ($timestamp <= PHP_INT_MAX)
+        && ($timestamp >= ~PHP_INT_MAX);
 }

@@ -10,11 +10,15 @@
  *
  */
 
+elgg_load_library('elgg:readinglist');
+
 $guid = get_input('guid');
 
 $book = get_entity($guid);
 
 $status = get_input('status', BOOK_READING_STATUS_QUEUED);
+
+$complete = get_input('complete_date', FALSE);
 
 if (!elgg_instanceof($book, 'object', 'book')) {
 	register_error(elgg_echo('readinglist:error:notfound'));
@@ -25,11 +29,11 @@ if (!elgg_instanceof($book, 'object', 'book')) {
 elgg_delete_annotations(array(
 	'guid' => $book->guid,
 	'annotation_owner_guids' => array(elgg_get_logged_in_user_guid()),
-	'annotation_names' => 'book_reading_status',
+	'annotation_names' => array('book_reading_status', 'book_complete_date'),
 ));
 
 // Set status
-$status = create_annotation(
+$status_annotation = create_annotation(
 	$book->guid,
 	'book_reading_status',
 	$status,
@@ -37,6 +41,18 @@ $status = create_annotation(
 	elgg_get_logged_in_user_guid(),
 	$book->access_id
 );
+
+// If we have a complete status and a date, set the complete annotation
+if ($status == BOOK_READING_STATUS_COMPLETE && readinglist_is_valid_timestamp($complete)) {
+	$complete_annotation = create_annotation(
+		$book->guid,
+		'book_complete_date',
+		$complete,
+		"",
+		elgg_get_logged_in_user_guid(),
+		$book->access_id
+	);
+}
 
 system_message(elgg_echo('readinglist:success:statuschanged'));
 forward(REFERER);

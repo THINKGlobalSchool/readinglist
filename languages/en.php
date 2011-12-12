@@ -71,6 +71,7 @@ $english = array(
 	'readinglist:label:showmore' => 'More »',
 	'readinglist:label:findanother' => 'Find Another Book',
 	'readinglist:label:addtoreadinglist' => 'Add to Reading List',
+	'readinglist:label:completedate' => 'When was this book completed?',
 	'readinglist:label:deleteconfirm' => '!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!! Deleting this book will remove it from all reading lists! Proceed?',
 
 	// Messages

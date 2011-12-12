@@ -514,6 +514,58 @@ elgg.readinglist.loadSearchResults = function(term, container, limit, offset, ca
 }
 
 /**
+ * Modified version of the elgg initDatePicker function
+ *
+ * Uses the class .elgg-input-date as the selector.
+ *
+ * @return void
+ */
+elgg.readinglist.initDatePicker = function() {
+	$('.elgg-input-date').datepicker({
+		// ISO-8601
+		dateFormat: 'yy-mm-dd',
+		onSelect: function(dateText) {
+			// convert to unix timestamp
+			var date = $.datepicker.parseDate('yy-mm-dd', dateText);
+			var timestamp = $.datepicker.formatDate('@', date);
+			timestamp = timestamp / 1000;
+
+			var $_this = $($.datepicker._lastInput);
+
+			// Find the book guid
+			var guid = $_this.closest('.book-completed-container').find('.book-guid-hidden').val();
+
+			// Set complete date
+			elgg.action('readinglist/status', {
+				data: {
+					guid: guid,
+					status: elgg.readinglist.BOOK_READING_STATUS_COMPLETE,
+					complete_date: timestamp,
+				},
+				success: function(data) {
+					if (data.status != -1) {
+						// Grab the completed container
+						$book_completed = $_this.closest('.book').find('.book-completed-container');
+
+						// Complete selected, show or load the complete view
+						var url = elgg.readinglist.loadCompleteURL + "?user_guid=" + elgg.get_logged_in_user_guid() + "&book_guid=" + guid;
+						elgg.get(url, {
+							success: function(data){
+								// Load data to container on success
+								$book_completed.replaceWith(data);
+
+								// Make sure its showing
+								$book_completed.show();
+							}
+						});
+					}
+				}
+			});
+		}
+	});
+}
+
+/**
  * Load content for existing book match
  *
  * @param {String}   guid        book guid
