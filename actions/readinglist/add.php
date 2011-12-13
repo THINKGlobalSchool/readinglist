@@ -35,6 +35,44 @@ $status = create_annotation(
 	$book->access_id
 );
 
+// Check if the user has already rated this book
+$options = array(
+	'guid' => $book->guid,
+	'annotation_names' => array('bookrating'),
+	'annotation_owner_guids' => array(elgg_get_logged_in_user_guid()),
+	'count' => TRUE,
+);
+
+$ratings = elgg_get_annotations($options);
+
+// If we have a rating, we'll set the user rating to the existing value
+if ($ratings) {
+	unset($options['count']);
+	$ratings = elgg_get_annotations($options);
+	$rating = $ratings[0];
+	$value = $rating->value;
+} else {
+	// Set it to 0 otherwise
+	$value = 0;
+}
+
+// Delete existing user_bookratings
+elgg_delete_annotations(array(
+	'guid' => $book->guid,
+	'annotation_owner_guids' => array(elgg_get_logged_in_user_guid()),
+	'annotation_names' => 'user_bookrating',
+));
+
+// Create a new user_bookrating
+$user_rating = create_annotation(
+	$book->guid,
+	'user_bookrating',
+	$value,
+	"",
+	elgg_get_logged_in_user_guid(),
+	$book->access_id
+);
+
 // Set popularity
 elgg_load_library('elgg:readinglist');
 elgg_set_ignore_access(TRUE);

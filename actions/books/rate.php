@@ -22,36 +22,45 @@ if (!elgg_instanceof($book, 'object', 'book')) {
 
 $user = elgg_get_logged_in_user_entity();
 
-if ($rating > 0 && $rating <= 5) {
-	// Delete existing annotations
-	elgg_delete_annotations(array(
-		'guid' => array($book->guid),
-		'annotation_owner_guids' => array($user->guid),
-		'annotation_names' => array('bookrating'),
-	));
+// Delete existing annotations
+elgg_delete_annotations(array(
+	'guid' => array($book->guid),
+	'annotation_owner_guids' => array($user->guid),
+	'annotation_names' => array('bookrating', 'user_bookrating'),
+));
 
-	$rating = create_annotation(
+if ($rating >= 0 && $rating <= 5) {
+	// If we're passed a 0, don't do anything, someone removed their rating
+	if ($rating != 0) {
+		$rating_annotation = create_annotation(
+			$book->guid,
+			'bookrating',
+			$rating,
+			"",
+			$user->guid,
+			$book->access_id
+		);
+	}
+
+	// We'll set this either way
+	$user_rating_annotation = create_annotation(
 		$book->guid,
-		'bookrating',
+		'user_bookrating',
 		$rating,
 		"",
 		$user->guid,
 		$book->access_id
 	);
 
-	// Check annotations
-	if (!$rating) {
-		register_error(elgg_echo("readinglist:error:rate"));
-		forward(REFERER);
-	}
-} else if ($rating == 0) {
-	// We're here if the cancel button was clicked, we'll consider this 
-	// the equivalent of clearing a users rating all-together
-	elgg_delete_annotations(array(
+	// Check if the user has already rated this book
+	$options = array(
 		'guid' => $book->guid,
-		'annotation_owner_guids' => array($user->guid),
-		'annotation_names' => 'bookrating',
-	));
+		'annotation_names' => array('user_bookrating'),
+		'annotation_owner_guids' => array(elgg_get_logged_in_user_guid()),
+	);
+
+	$ratings = elgg_get_annotations($options);
+
 } else {
 	register_error(elgg_echo('readinglist:error:invalidrating'));
 	forward(REFERER);

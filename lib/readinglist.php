@@ -213,8 +213,8 @@ function readinglist_get_page_content_readinglist($guid) {
 		'module_class' => 'readinglist-module',
 		'view_vars' => array(
 			'user_guid' => $guid,
-			'status' => '',
-			'category' => '',
+			'status' => 'any',
+			'category' => 'any',
 			'order_by' => '',
 			'sort_order' => '',
 		),
