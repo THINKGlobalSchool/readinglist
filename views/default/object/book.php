@@ -174,6 +174,8 @@ HTML;
 	$control_params = array('book' => $book);
 	if (elgg_in_context('reading_list')) {
 		$control_params['user_controls'] = TRUE;
+	} else {
+		$control_params['class'] = 'book-regular-listing';
 	}
 
 	$controls = elgg_view('readinglist/controls', $control_params);

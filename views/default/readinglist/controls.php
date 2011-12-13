@@ -11,9 +11,11 @@
  * @uses $vars['user']           User (optional)
  * @uses $vars['user_controls']  Display all user controls (true/false)
  * @uses $vars['book']           The Book
+ * @uses $vars['class']          Optional class
  */
 
 $book = $vars['book'];
+$class = $vars['class'];
 
 if (isset($vars['user'])) {
 	$user = $vars['user'];
@@ -41,7 +43,7 @@ if (check_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, $user->gui
 $button = elgg_view('readinglist/button', array('book' => $book));
 
 $content = <<<HTML
-	<div class='readinglist-listing-control'>
+	<div class='readinglist-listing-control {$class}'>
 		$status_content
 		$button
 		$completed_info

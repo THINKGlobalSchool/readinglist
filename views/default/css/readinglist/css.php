@@ -46,6 +46,10 @@
 	box-shadow: 0px 0px 6px #999;
 }
 
+.book > .elgg-image-block > .elgg-body > .elgg-subtext {
+	width: 50%;
+}
+
 #books-search-results {
 	width: 400px;
 	overflow: hidden;
@@ -211,6 +215,10 @@
 .readinglist-listing-control {
 	float: right;
 	margin-top: -60px;
+}
+
+.book-regular-listing.readinglist-listing-control {
+	margin-top: -50px;
 }
 
 .readinglist-add-button, .readinglist-remove-button {
