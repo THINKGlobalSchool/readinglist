@@ -221,14 +221,14 @@
 	margin-top: -50px;
 }
 
-.readinglist-add-button, .readinglist-remove-button {
+.readinglist-button {
 	font-size: 90%;
 	height: 17px;
 	position: relative;
-	width: 100px;
+	width: 104px;
 }
 
-.readinglist-add-button span.readinglist-button-text, .readinglist-remove-button span.readinglist-button-text {
+.readinglist-button span.readinglist-button-text {
 	position: absolute;
 	right: 8px;
 }

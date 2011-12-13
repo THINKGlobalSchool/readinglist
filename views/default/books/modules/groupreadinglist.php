@@ -8,7 +8,6 @@
  * @copyright THINK Global School 2010
  * @link http://www.thinkglobalschool.com/
  *
- * @uses $vars['container_guid'] Container guid of user/group
  * @uses $vars['category']       Category of books to display
  * @uses $vars['order_by']       Change how we're ordering this list
  * @uses $vars['sort_order']     Change the sort order
@@ -18,9 +17,8 @@
 $group = get_entity($vars['group_guid']);
 
 // Check for a group, set page owner
-if (elgg_instanceof($group, 'group')) {
-	elgg_set_page_owner_guid($group->guid);
-}
+elgg_set_page_owner_guid($group->guid);
+
 
 $category = strtolower($vars['category']);
 $order_by = strtolower($vars['order_by']);
@@ -42,7 +40,9 @@ $options = array(
 	'type' => 'object', 
 	'subtype' => 'book', 
 	'full_view' => false, 
-	'container_guid' => $vars['container_guid'],
+	'relationship' => READING_LIST_RELATIONSHIP,
+	'relationship_guid' => $group->guid,
+	'inverse_relationship' => TRUE,
 );
 
 switch ($order_by) {
@@ -64,7 +64,9 @@ if ($category != 'any') {
 	$options['metadata_case_sensitive'] = FALSE;
 }
 
+elgg_set_context('group_reading_list');
 $content = elgg_list_entities_from_relationship($options);
+elgg_pop_context();
 
 // If theres no content, display a nice message
 if (!$content) {

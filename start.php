@@ -85,6 +85,12 @@ function readinglist_init() {
 	// Add a new tab to the tabbed profile
 	elgg_register_plugin_hook_handler('tabs', 'profile', 'readinglist_profile_tab_hander');
 
+	// Handler to a group books link the owner block
+	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'readinglist_owner_block_menu');
+
+	// Add the group books tool option
+	add_group_tool_option('books', elgg_echo('groups:enablebooks'), TRUE);
+
 	// Entity url handler
 	register_entity_url_handler('readinglist_url_handler', 'object', 'book');
 
@@ -100,7 +106,9 @@ function readinglist_init() {
 	elgg_register_action('books/review/add', "$action_base/books/review/add.php");
 	elgg_register_action('books/review/delete', "$action_base/books/review/delete.php");
 	elgg_register_action('readinglist/add', "$action_base/readinglist/add.php");
+	elgg_register_action('readinglist/addgroup', "$action_base/readinglist/addgroup.php");
 	elgg_register_action('readinglist/remove', "$action_base/readinglist/remove.php");
+	elgg_register_action('readinglist/removegroup', "$action_base/readinglist/removegroup.php");
 	elgg_register_action('readinglist/status', "$action_base/readinglist/status.php");
 
 	// Load google libs
@@ -119,6 +127,8 @@ function readinglist_init() {
  *  Public List		 books/reading
  *  View book:       books/view/<guid>/<title>
  *  New book:        books/add/<guid> (container: user, group, parent)
+ *  Group books      books/group/<guid>/all
+ *  Group browse     books/group/<guid>/browse
  *
  * Title is ignored
  *
@@ -158,9 +168,11 @@ function reading_list_page_handler($page) {
 		switch($page[0]) {
 			case 'all':
 			default:
+				gatekeeper();
 				$params = readinglist_get_page_content_list();
 				break;
 			case 'owner':
+				gatekeeper();
 				$user = get_user_by_username($page[1]);
 				if (!elgg_instanceof($user, 'user')) {
 					$user = elgg_get_logged_in_user_entity();
@@ -171,6 +183,7 @@ function reading_list_page_handler($page) {
 				$params = readinglist_get_page_content_public_reading();
 				break;
 			case 'view':
+				gatekeeper();
 				$params = readinglist_get_page_content_view($page[1]);
 			 	break;
 			case 'add':
@@ -179,12 +192,33 @@ function reading_list_page_handler($page) {
 				elgg_load_js('lightbox');
 				$params = readinglist_get_page_content_edit($page[0], $page[1]);
 				break;
+			case 'group':
+				group_gatekeeper();
+				if ($page[2] == 'all') {
+					$params = readinglist_get_page_content_group_list($page[1]);
+				} else if ($page[2] == 'browse') {
+					// Browse mode, allows group owners/admins to add books to group list
+					$group = get_entity($page[1]);
+					if ($group->canEdit()) {
+						elgg_set_page_owner_guid($page[1]);
+						$title = elgg_echo('readinglist:title:groupbooks', array($group->name));
+						elgg_push_breadcrumb($title);
+						$params = readinglist_get_page_content_list();
+						$params['title'] = $title;
+						elgg_push_breadcrumb(elgg_echo('readinglist:label:browse'));
+					} else {
+						forward();
+					}
+				}
+				break;
 		}
 
-		$params['filter'] = elgg_view_menu('reading-list-filter', array(
-			'class' => 'elgg-menu-hz elgg-menu-filter elgg-menu-filter-default',
-			'sort_by' => 'priority',
-		));
+		if (!$params['filter']) {
+			$params['filter'] = elgg_view_menu('reading-list-filter', array(
+				'class' => 'elgg-menu-hz elgg-menu-filter elgg-menu-filter-default',
+				'sort_by' => 'priority',
+			));
+		}
 
 		$body = elgg_view_layout($params['layout'] ? $params['layout'] : 'content', $params);
 
@@ -210,33 +244,59 @@ function readinglist_url_handler($entity) {
 function reading_list_filter_menu_setup($hook, $type, $return, $params) {
 	$user = elgg_get_logged_in_user_entity();
 
+	$page_owner = elgg_get_page_owner_entity();
+
 	if ($user) {
-	 	$options = array(
-			'name' => 'books-all',
-			'text' => elgg_echo('all'),
-			'href' => 'books/all',
-			'priority' => 100,
-		);
+		if (elgg_instanceof($page_owner, 'group')) {
+			// Group owners/admins can add books to the group list
+			if ($page_owner->canEdit()) {
+				$options = array(
+					'name' => 'books-browse',
+					'text' => elgg_echo('readinglist:label:browsebooks'),
+					'href' => 'books/group/' . $page_owner->guid . '/browse',
+					'priority' => 200,
+				);
 
-		$return[] = ElggMenuItem::factory($options);
+				$return[] = ElggMenuItem::factory($options);
+			} 
 
-		$options = array(
-			'name' => 'books-mine',
-			'text' => elgg_echo('readinglist:label:mine'),
-			'href' => "books/owner/$user->username",
-			'priority' => 200,
-		);
+			// Group readinglist tab
+			$options = array(
+				'name' => 'books-group',
+				'text' => elgg_echo('readinglist:label:booklist'),
+				'href' => 'books/group/' . $page_owner->guid . '/all',
+				'priority' => 100,
+			);
 
-		$return[] = ElggMenuItem::factory($options);
+			$return[] = ElggMenuItem::factory($options);
+		} else {
+			$options = array(
+				'name' => 'books-all',
+				'text' => elgg_echo('all'),
+				'href' => 'books/all',
+				'priority' => 100,
+			);
 
-		$options = array(
-			'name' => 'books-readinglist',
-			'text' => elgg_echo('readinglist:label:readinglist'),
-			'href' => "profile/$user->username/readinglist",
-			'priority' => 300,
-		);
+			$return[] = ElggMenuItem::factory($options);
 
-		$return[] = ElggMenuItem::factory($options);
+			$options = array(
+				'name' => 'books-mine',
+				'text' => elgg_echo('readinglist:label:mine'),
+				'href' => "books/owner/$user->username",
+				'priority' => 200,
+			);
+
+			$return[] = ElggMenuItem::factory($options);
+
+			$options = array(
+				'name' => 'books-readinglist',
+				'text' => elgg_echo('readinglist:label:readinglist'),
+				'href' => "profile/$user->username/readinglist",
+				'priority' => 300,
+			);
+
+			$return[] = ElggMenuItem::factory($options);
+		}
 	}
 
 	return $return;
@@ -394,4 +454,25 @@ function readinglist_profile_tab_hander($hook, $type, $value, $params) {
 		$value[] = 'readinglist';
 		return $value;
 	}
+}
+
+
+/**
+ * Plugin hook to add books to the group profile block
+ *
+ * @param unknown_type $hook
+ * @param unknown_type $type
+ * @param unknown_type $value
+ * @param unknown_type $params
+ * @return unknown
+ */
+function readinglist_owner_block_menu($hook, $type, $value, $params) {
+	if (elgg_instanceof($params['entity'], 'group')) {
+		if ($params['entity']->books_enable == 'yes') {
+			$url = "books/group/{$params['entity']->guid}/all";
+			$item = new ElggMenuItem('books', elgg_echo('readinglist:label:groupbooks'), $url);
+			$value[] = $item;
+		}
+	}
+	return $value;
 }

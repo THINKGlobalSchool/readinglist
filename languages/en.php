@@ -26,6 +26,7 @@ $english = array(
 	'readinglist:title:userreadinglist' => '%s\'s Reading List',
 	'readinglist:title:allbooks' => 'All Books',
 	'readinglist:title:publicreading' => 'What is TGS Reading?',
+	'readinglist:title:groupbooks' => '%s\'s Book List',
 
 	// Labels
 	'readinglist:label:readinglist' => 'Reading List',
@@ -77,6 +78,10 @@ $english = array(
 	'readinglist:label:whoreading' => 'Who\'s reading this?',
 	'readinglist:label:show' => 'Show',
 	'readinglist:label:all' => 'All',
+	'readinglist:label:groupbooks' => 'Group books',
+	'readinglist:label:browse' => 'Browse',
+	'readinglist:label:browsebooks' => 'Browse Books',
+	'readinglist:label:booklist' => 'Book List',
 	'readinglist:label:deleteconfirm' => '!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!! Deleting this book will remove it from all reading lists! Proceed?',
 
 	// Messages
@@ -95,6 +100,8 @@ $english = array(
 	'readinglist:success:rate' => 'Rating Saved',
 	'readinglist:success:readinglistadd' => 'Book successfully added to your reading list',
 	'readinglist:success:readinglistremove' => 'Book successfully removed from your reading list',
+	'readinglist:success:groupreadinglistadd' => 'Book successfully added to the group reading list',
+	'readinglist:success:groupreadinglistremove' => 'Book successfully removed from the group reading list',
 	'readinglist:success:deletebook' => 'Successfully deleted book',
 	'readinglist:success:deletereview' => 'Successfully deleted review',
 	'readinglist:success:savebook' => 'Successfully saved book',
@@ -103,6 +110,7 @@ $english = array(
 	// Notifications
 
 	// Other content
+	'groups:enablebooks' => 'Enable group books',
 );
 
 add_translation('en',$english);

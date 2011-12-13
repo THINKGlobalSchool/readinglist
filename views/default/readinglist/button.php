@@ -18,30 +18,40 @@ if (!elgg_is_logged_in()) {
 
 $book = $vars['book'];
 
-if (isset($vars['user'])) {
-	$user = $vars['user'];
+// Check for a group
+$entity = get_entity(elgg_get_page_owner_guid());
+if (!elgg_instanceof($entity, 'group') || !$entity->canEdit()) {
+	if (isset($vars['user'])) {
+		$entity = $vars['user'];
+	} else {
+		$entity = elgg_get_logged_in_user_entity();
+	}
+	$button_text = elgg_echo('readinglist');
 } else {
-	$user = elgg_get_logged_in_user_entity();
+	$button_text = elgg_echo('readinglist:label:groupbooks');
+	$class = 'group-';
+	$group_data = "<span class='readinglist-group-data' style='display: none;'>{$entity->guid}</span>";
 }
 
-// Automatically determine if book is or isn't on users reading list 
-if (!check_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, $user->guid)) {
-	$class = 'readinglist-add-button';
+// Automatically determine if book is or isn't on user/groups reading list 
+if (!check_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, $entity->guid)) {
+	$class .= 'readinglist-add-button';
 	$button_icon = elgg_view_icon('round-plus');
 } else {
-	$class = 'readinglist-remove-button';
-	if (elgg_in_context('reading_list')) {
+	$class .= 'readinglist-remove-button';
+	if (elgg_in_context('reading_list') || elgg_in_context('group_reading_list')) {
 		$class .= ' readinglist-fade'; // Class to control wether listing is removed from the DOM
 	}
 	$button_icon = elgg_view_icon('round-minus');
 }
 
-$button_text = elgg_echo('readinglist');
+$class .= " readinglist-button";
 
 $content = <<<HTML
 	<div id='{$book->guid}' class='$class elgg-button elgg-button-delete'>
 		$button_icon
 		<span class='readinglist-button-text'>$button_text</span>
+		$group_data
 	</div>
 HTML;
 

@@ -38,6 +38,12 @@ function readinglist_get_page_content_list($container_guid = null) {
 		'order_by' => TRUE,
 	));
 
+	// See if we have a group page owner
+	$page_owner = elgg_get_page_owner_entity();
+	if (elgg_instanceof($page_owner, 'group')) {
+		$group_guid = $page_owner->guid;
+	}
+
 	// Book list Module
 	$content .= elgg_view('modules/genericmodule', array(
 		'view' => 'books/modules/list',
@@ -48,6 +54,7 @@ function readinglist_get_page_content_list($container_guid = null) {
 			'category' => '',
 			'order_by' => '',
 			'sort_order' => '',
+			'group_guid' => $group_guid,
 		),
 	));
 
@@ -262,6 +269,57 @@ function readinglist_get_page_content_public_reading() {
 	return $params;
 }
 
+/**
+ * Get group books list content
+ */
+function readinglist_get_page_content_group_list($container_guid = null) {
+	$logged_in_user_guid = elgg_get_logged_in_user_guid();
+	$group = get_entity($container_guid);
+
+	if (!elgg_instanceof($group, 'group')) {
+		forward();
+	}
+
+	// do not show button or select a tab when viewing someone else's posts
+	if ($container_guid == $logged_in_user_guid) {
+		elgg_register_title_button();
+	}
+
+	$params['title'] = elgg_echo('readinglist:title:groupbooks', array($group->name));
+
+	elgg_push_breadcrumb($params['title']);
+
+	$content = elgg_view('readinglist/filter', array(
+		'status' => FALSE,
+		'category' => TRUE,
+		'order_by' => TRUE,
+	));
+
+	// Book list Module
+	$content .= elgg_view('modules/genericmodule', array(
+		'view' => 'books/modules/groupreadinglist',
+		'module_id' => 'readinglist-books-list-module',
+		'module_class' => 'readinglist-module',
+		'view_vars' => array(
+			'category' => '',
+			'order_by' => '',
+			'sort_order' => '',
+			'group_guid' => elgg_get_page_owner_guid(),
+		),
+	));
+
+	$params['content'] = $content;
+
+	$options = array(
+		'type' => 'object',
+		'subtype' => 'book',
+		'full_view' => FALSE,
+		'limit' => 5,
+		'pagination' => FALSE,
+	);
+
+	return $params;
+}
 
 /**
  * Prepare form vars for book save form

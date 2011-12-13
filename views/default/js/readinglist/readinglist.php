@@ -47,6 +47,13 @@ elgg.readinglist.init = function() {
 	// Click handler for readinglist remove button
 	$('.readinglist-remove-button').live('click', elgg.readinglist.readinglistRemoveClick);
 
+	// Click handler for group readinglist add button
+	$('.group-readinglist-add-button').live('click', elgg.readinglist.groupReadinglistAddClick);
+
+	// Click handler for group readinglist remove button
+	$('.group-readinglist-remove-button').live('click', elgg.readinglist.groupReadinglistRemoveClick);
+
+
 	// Click handler for add to reading list button (on the book existing form)
 	$('.book-add-to-readinglist').live('click', elgg.readinglist.readinglistExistingAddClick);
 
@@ -310,6 +317,61 @@ elgg.readinglist.readinglistRemoveClick = function(event) {
 
 				// Hide the status container (if its on the page)
 				$('.book-full-status-container').hide();
+			}
+		}
+	});
+
+	event.preventDefault();
+}
+
+// Click handler for group readinglist add button
+elgg.readinglist.groupReadinglistAddClick = function(event) {
+	var group_guid = $(this).find('.readinglist-group-data').html();
+	var book_guid = $(this).attr('id');
+
+	$_this = $(this);
+
+	// Add to readinglist
+	elgg.action('readinglist/addgroup', {
+		data: {
+			book_guid: book_guid,
+			group_guid: group_guid,
+		},
+		success: function(data) {
+			if (data.status != -1) {
+				$_this.removeClass('group-readinglist-add-button').addClass('group-readinglist-remove-button');
+				$_this.find('.elgg-icon-round-plus').removeClass('elgg-icon-round-plus').addClass('elgg-icon-round-minus');
+			}
+		}
+	});
+
+	event.preventDefault();
+}
+
+// Click handler for group readinglist remove button
+elgg.readinglist.groupReadinglistRemoveClick = function(event) {
+	var group_guid = $(this).find('.readinglist-group-data').html();
+	var book_guid = $(this).attr('id');
+
+	$_this = $(this);
+
+	// Remove from readinglist
+	elgg.action('readinglist/removegroup', {
+		data: {
+			book_guid: book_guid,
+			group_guid: group_guid,
+		},
+		success: function(data) {
+			if (data.status != -1) {
+				$_this.removeClass('group-readinglist-remove-button').addClass('group-readinglist-add-button');
+				$_this.find('.elgg-icon-round-minus').removeClass('elgg-icon-round-minus').addClass('elgg-icon-round-plus');
+
+				// Nuke listing, check for fade class
+				if ($_this.hasClass('readinglist-fade')) {
+					$_this.closest('li.elgg-item').fadeOut('slow', function() {
+						$(this).remove();
+					});
+				}
 			}
 		}
 	});
