@@ -42,8 +42,11 @@ $options = array(
 	'type' => 'object', 
 	'subtype' => 'book', 
 	'full_view' => false, 
-	'container_guid' => $vars['container_guid'],
 );
+
+if (!empty($vars['container_guid'])) {
+	$options['container_guid'] = $vars['container_guid'];
+}
 
 switch ($order_by) {
 	case 'date':
