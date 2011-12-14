@@ -38,6 +38,13 @@ elgg_delete_annotations(array(
 	'annotation_names' => 'book_reading_status',
 ));
 
+// Remove river entry
+elgg_delete_river(array(
+	'object_guid' => $book->guid,
+	'subject_guid' => elgg_get_logged_in_user_guid(),
+	'action_type' => 'readinglist',
+));
+
 // Set popularity
 elgg_load_library('elgg:readinglist');
 elgg_set_ignore_access(TRUE);

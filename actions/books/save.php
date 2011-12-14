@@ -86,11 +86,13 @@ if (!$book->save()) {
 	forward(REFERER);
 }
 
+// Add a river entry
+if (!$guid) {
+	add_to_river('river/object/book/create', 'create', get_loggedin_userid(), $book->getGUID());
+}
+
 // Clear sticky form
 elgg_clear_sticky_form('book-save-form');
-
-// Add to river
-add_to_river('river/object/book/create', 'create', get_loggedin_userid(), $book->getGUID());
 
 // Forward to book view
 system_message(elgg_echo('readinglist:success:savebook'));

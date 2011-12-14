@@ -73,6 +73,9 @@ $user_rating = create_annotation(
 	$book->access_id
 );
 
+// Add a river entry (not sure what action type to go with here, so using a new one called 'readinglist')
+add_to_river('river/relationship/readinglist/add', 'readinglist', elgg_get_logged_in_user_guid(), $book->guid);
+
 // Set popularity
 elgg_load_library('elgg:readinglist');
 elgg_set_ignore_access(TRUE);

@@ -32,6 +32,7 @@ $review->subtype = 'book_review';
 $review->access_id = $book->access_id;
 $review->description = $description;
 $review->book_guid = $book->guid;
+$review->title = $book->title; // Set to the books title
 
 // If error saving, register error and return
 if (!$review->save()) {
@@ -43,6 +44,9 @@ elgg_clear_sticky_form('book_add_review');
 
 // Add review relationship
 add_entity_relationship($review->guid, BOOK_REVIEW_RELATIONSHIP, $book->guid);
+
+// Add river
+add_to_river('river/object/book_review/create', 'create', get_loggedin_userid(), $review->getGUID());
 
 // Forward on
 system_message(elgg_echo('readinglist:success:savereview'));

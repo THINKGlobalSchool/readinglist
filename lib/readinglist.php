@@ -28,7 +28,13 @@ function readinglist_get_page_content_list($container_guid = null) {
 
 		elgg_push_breadcrumb($params['title']);
 	} else {
-		elgg_register_title_button();
+		elgg_register_menu_item('title', array(
+			'name' => 'add',
+			'href' => "books/add/" . elgg_get_logged_in_user_guid(),
+			'text' => elgg_echo("books:add"),
+			'link_class' => 'elgg-button elgg-button-action',
+		));
+
 		$params['title'] = elgg_echo('readinglist:title:allbooks');
 	}
 
@@ -81,8 +87,13 @@ function readinglist_get_page_content_list($container_guid = null) {
 	$rated_books = elgg_list_entities_from_relationship($options + $rated_options);
 	elgg_pop_context();
 
-	$params['sidebar'] = elgg_view_module('aside', elgg_echo('readinglist:label:mostpopular'), $popular_books);
-	$params['sidebar'] .= elgg_view_module('aside', elgg_echo('readinglist:label:highestrated'), $rated_books);
+	$params['sidebar'] = elgg_view_module('aside', elgg_echo('readinglist:label:mostpopular'), $popular_books, array(
+		'class' => 'book-sidebar-module'
+	));
+
+	$params['sidebar'] .= elgg_view_module('aside', elgg_echo('readinglist:label:highestrated'), $rated_books, array(
+		'class' => 'book-sidebar-module'
+	));
 
 	return $params;
 }
@@ -165,30 +176,7 @@ function readinglist_get_page_content_view($guid) {
 		'href' => 'books/add/' . elgg_get_logged_in_user_guid(),
 	)) . "<br /><br />";
 
-
-	$params['sidebar'] .= "<h3>" . elgg_echo('readinglist:label:whoreading') . "</h3>";
-	$params['sidebar'] .= "<span class='whos-reading-show'>" . elgg_echo('readinglist:label:show') . ": </span>";
-
-	$params['sidebar'] .= elgg_view('input/dropdown', array(
-		'id' => 'readinglist-filter-user-status',
-		'class' => 'readinglist-filter',
-		'options_values' => array(
-			'any' => elgg_echo('readinglist:label:all'),
-			BOOK_READING_STATUS_QUEUED => elgg_echo('readinglist:label:status:queued'),
-			BOOK_READING_STATUS_READING => elgg_echo('readinglist:label:status:reading'),
-			BOOK_READING_STATUS_COMPLETE => elgg_echo('readinglist:label:status:complete'),
-		)
-	));
-
-	$params['sidebar'] .= elgg_view('modules/genericmodule', array(
-		'view' => 'books/modules/reading',
-		'module_id' => 'readinglist-whos-reading-module',
-		'module_class' => 'readinglist-module',
-		'view_vars' => array(
-			'book_guid' => $guid,
-			'status' => 'any',
-		),
-	));
+	$params['sidebar'] .= elgg_view('readinglist/whosreading', array('guid' => $guid));
 
 	return $params;
 }
@@ -280,11 +268,6 @@ function readinglist_get_page_content_group_list($container_guid = null) {
 		forward();
 	}
 
-	// do not show button or select a tab when viewing someone else's posts
-	if ($container_guid == $logged_in_user_guid) {
-		elgg_register_title_button();
-	}
-
 	$params['title'] = elgg_echo('readinglist:title:groupbooks', array($group->name));
 
 	elgg_push_breadcrumb($params['title']);
@@ -370,10 +353,8 @@ function google_books_title_search($search = '', $limit = 10, $offset = 0) {
 
 	// Create client
 	$client = new apiClient();
-
-	// @TODO put this somewhere else
-	$client->setDeveloperKey('AIzaSyCPsvFIGl7b13H_KcJgAopdfHjDqGeR0Rg');
-	$client->setApplicationName("spot_books");
+	$client->setDeveloperKey(GOOGLE_DEV_KEY);
+	$client->setApplicationName(GOOGLE_APP_NAME);
 
 	// Create books service
 	$service = new apiBooksService($client);
@@ -407,10 +388,8 @@ function google_books_get_volume_full_description($volume_id) {
 
 	// Create client
 	$client = new apiClient();
-
-	// @TODO put this somewhere else
-	$client->setDeveloperKey('AIzaSyCPsvFIGl7b13H_KcJgAopdfHjDqGeR0Rg');
-	$client->setApplicationName("spot_books");
+	$client->setDeveloperKey(GOOGLE_DEV_KEY);
+	$client->setApplicationName(GOOGLE_APP_NAME);
 
 	// Create books service
 	$service = new apiBooksService($client);

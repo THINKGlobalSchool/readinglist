@@ -78,6 +78,50 @@
 	background: none repeat scroll 0 0 #FFFFFF;
 	border: 1px solid #999;
 	padding: 3px;
+	display: inline-block;
+}
+
+.book-river-thumbnail {
+	float: left;
+	margin-right: 5px;
+}
+
+.book-sidebar {
+	border-radius: 10px;
+	background: #FEFEFE;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	padding-top: 4px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	-webkit-box-shadow: inset 0px 0px 2px 1px #999999;
+	-moz-box-shadow: inset 0px 0px 2px 1px #999999;
+	box-shadow: inset 0px 0px 2px 1px #999999;
+}
+
+.book-sidebar-title {
+	display: block;
+	text-transform: uppercase;
+	margin-bottom: 4px;
+}
+
+.book-sidebar-module .elgg-list {
+	border-top: 0;
+}
+
+.book-sidebar img {
+	max-height: 45px;
+}
+
+.book-sidebar-module .elgg-list > li {
+	border-bottom: 0;
+}
+
+.author-subtext {
+	color: #999999;
+	font-style: italic;
+	line-height: 1.2em;
 }
 
 .book-full-view .book-thumbnail {

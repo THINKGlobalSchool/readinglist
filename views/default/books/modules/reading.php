@@ -43,7 +43,7 @@ elgg_pop_context();
 
 // If theres no content, display a nice message
 if (!$content) {
-	$content = "<h3 class='center'>" . elgg_echo("readinglist:label:noresults") . "</h3>";
+	$content = "<br /><h3 class='center'>" . elgg_echo("readinglist:label:noresults") . "</h3>";
 }
 
 echo $content . "<br />";

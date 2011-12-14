@@ -8,13 +8,14 @@
  * @copyright THINK Global School 2010
  * @link http://www.thinkglobalschool.com/
  * 
- * @TODO:
- * - River
- * - Admin area for dev key
  */
 elgg_register_event_handler('init', 'system', 'readinglist_init');
 
 function readinglist_init() {
+
+	// Define Google Application Info
+	define(GOOGLE_DEV_KEY, elgg_get_plugin_setting('devkey', 'readinglist'));
+	define(GOOGLE_APP_NAME, elgg_get_plugin_setting('appname', 'readinglist'));
 
 	// Define relationships
 	define(BOOK_REVIEW_RELATIONSHIP, 'book_review_of');
@@ -88,11 +89,17 @@ function readinglist_init() {
 	// Handler to a group books link the owner block
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'readinglist_owner_block_menu');
 
+	// Remove comments/likes from book related river entries
+	elgg_register_plugin_hook_handler('register', 'menu:river', 'readinglist_river_menu_setup');
+
 	// Add the group books tool option
 	add_group_tool_option('books', elgg_echo('groups:enablebooks'), TRUE);
 
-	// Entity url handler
-	register_entity_url_handler('readinglist_url_handler', 'object', 'book');
+	// Entity url handler for books
+	register_entity_url_handler('readinglist_book_url_handler', 'object', 'book');
+
+	// Entiry url handler for book reviews
+	register_entity_url_handler('readinglist_review_url_handler', 'object', 'book_review');
 
 	// Extend public dashboard sidebar
 	elgg_extend_view('publicdashboard/sidebar', 'readinglist/publicreading', 500);
@@ -228,15 +235,62 @@ function reading_list_page_handler($page) {
 	return TRUE;
 }
 
+
+/**
+ * Remove comment or likes button from book objects
+ *
+ * @param unknown_type $hook
+ * @param unknown_type $type
+ * @param unknown_type $value
+ * @param unknown_type $params
+ * @return unknown
+ */
+function readinglist_river_menu_setup($hook, $type, $value, $params) {
+	if (elgg_is_logged_in()) {
+		$item = $params['item'];
+		$object = $item->getObjectEntity();
+
+		$remove = array();
+
+		switch ($object->getSubtype()) {
+			case 'book':
+				$remove[] = 'likes';
+				$remove[] = 'comment';
+				break;
+			case 'book_review':
+				$remove[] = 'likes';
+				break;
+		}
+
+		foreach ($value as $idx => $item) {
+			if (in_array($item->getName(), $remove)) {
+				unset($value[$idx]);
+			}
+		}
+	}
+	return $value;
+}
+
 /**
  * Populates the ->getUrl() method for a book
  *
  * @param ElggEntity entity
  * @return string request url
  */
-function readinglist_url_handler($entity) {
+function readinglist_book_url_handler($entity) {
 	return elgg_get_site_url() . "books/view/{$entity->guid}/";
 }
+
+/**
+ * Populates the ->getUrl() method for a book
+ *
+ * @param ElggEntity entity
+ * @return string request url
+ */
+function readinglist_review_url_handler($entity) {
+	return elgg_get_site_url() . "books/view/{$entity->book_guid}/";
+}
+
 
 /**
  * Reading list filter menu setup

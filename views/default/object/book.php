@@ -180,13 +180,14 @@ HTML;
 
 	$controls = elgg_view('readinglist/controls', $control_params);
 
-	if (!elgg_in_context('widgets') && !elgg_in_context('book_existing') && !elgg_in_context('reading_list') && !elgg_in_context('book_sidebar')) {
+	// If we have a small thumbnail, use it
+	if ($book->small_thumbnail) {
+		$icon = "<span class='book-thumbnail'>
+					<a href='{$book->getURL()}'><img src='{$book->small_thumbnail}' alt='{$book->title}' /></a>
+				</span>";
+	}
 
-		// Don't display extra subtitle info in public_reading module
-		if (!elgg_is_logged_in() && elgg_get_context() == 'public_reading') {
-			$subtitle = "<p>$authors $categories $page_count</p>";
-		}
-	} else if (elgg_in_context('reading_list')) {
+	if (elgg_in_context('reading_list')) {
 		// We're viewing a book listing in profile mode
 		$subtitle .= "<a href='#readinglist-user-reviews-{$book->guid}' rel='toggle'>" . elgg_echo('readinglist:label:readreviews', array(elgg_get_page_owner_entity()->name)) . "</a>";
 		$owner_guid = elgg_get_page_owner_guid();
@@ -206,36 +207,37 @@ HTML;
 		}
 	} else if (elgg_in_context('book_existing')) {
 		$controls = '';
-	} else if (elgg_in_context('book_sidebar')) {
-		$controls = '';
-		$subtitle = "<p>$authors $page_count</p>";
-		$avg_rating = elgg_view('output/averagebookrating', array(
+	}
+
+	// Determine if in sidebar view
+	if (elgg_in_context('book_sidebar') || elgg_in_context('public_reading')) {
+		$params = array(
 			'entity' => $book,
-		));
-	}
+			'metadata' => FALSE,
+			'subtitle' => "<p>$authors</p>",
+			'tags' => FALSE,
+		);
 
-	$params = array(
-		'entity' => $book,
-		'metadata' => $metadata,
-		'subtitle' => $subtitle,
-		'tags' => $tags,
-		'content' => $book_reviews . $avg_rating,
-	);
-	$params = $params + $vars;
-	$list_body = elgg_view('object/elements/summary', $params);
+		$params = $params + $vars;
+		$list_body = elgg_view('object/elements/summary', $params);
 
-	// If we have a small thumbnail, use it
-	if ($book->small_thumbnail) {
-		$icon = "<div class='book-thumbnail'>
-					<a href='{$book->getURL()}'><img src='{$book->small_thumbnail}' alt='{$book->title}' /></a>
-				</div>";
+		$title = "<a href='{$book->getURL()}'><span class='book-sidebar-title'>{$book->title}</span></a>";
+		echo "<div class='book-sidebar'>" . elgg_view_image_block($icon, $list_body) . "</div>";
 	} else {
-		$icon = $owner_icon;
+		$params = array(
+			'title' => $title,
+			'entity' => $book,
+			'metadata' => $metadata,
+			'subtitle' => $subtitle,
+			'tags' => $tags,
+			'content' => $book_reviews . $avg_rating,
+		);
+		$params = $params + $vars;
+		$list_body = elgg_view('object/elements/summary', $params);
+
+		echo elgg_view_image_block($icon, $list_body);
+		echo $controls;
 	}
-
-	echo elgg_view_image_block($icon, $list_body);
-
-	echo $controls;
 
 	echo "</div>";
 }

@@ -9,12 +9,33 @@
  * @link http://www.thinkglobalschool.com/
  *
  */
-//@TODO Delete reviews as well
 $guid = get_input('guid', null);
 $book = get_entity($guid);
 
 if (elgg_instanceof($book, 'object', 'book') && $book->canEdit()) {
-	if ($book->delete()) {
+	// Grab reviews and delete them as well
+	$options = array(
+		'type' => 'object',
+		'subtype' => 'book_review',
+		'relationship' => BOOK_REVIEW_RELATIONSHIP,
+		'relationship_guid' => $guid,
+		'inverse_relationship' => TRUE,
+		'limit' => 0,
+	);
+
+	$reviews = new ElggBatch('elgg_get_entities_from_relationship', $options);
+
+	$success = 1;
+
+	// Only admins can delete books, but ignore access anyway
+	$ia = elgg_get_ignore_access();
+	elgg_set_ignore_access(TRUE);
+	foreach ($reviews as $review) {
+		$success &= $review->delete();
+	}
+	elgg_set_ignore_access($ia);
+
+	if ($success && $book->delete()) {
 		system_message(elgg_echo('readinglist:success:deletebook'));
 		forward("books/all");
 	} else {

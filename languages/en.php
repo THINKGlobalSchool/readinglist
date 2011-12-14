@@ -82,6 +82,8 @@ $english = array(
 	'readinglist:label:browse' => 'Browse',
 	'readinglist:label:browsebooks' => 'Browse Books',
 	'readinglist:label:booklist' => 'Book List',
+	'readinglist:label:devkey' => 'Google Developer Key',
+	'readinglist:label:appname' => 'Application Name',
 	'readinglist:label:deleteconfirm' => '!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!! Deleting this book will remove it from all reading lists! Proceed?',
 
 	// Messages
@@ -106,6 +108,13 @@ $english = array(
 	'readinglist:success:deletereview' => 'Successfully deleted review',
 	'readinglist:success:savebook' => 'Successfully saved book',
 	'readinglist:success:savereview' => 'Successfully saved review',
+
+	// River
+	'river:create:object:book' => '%s added a new book titled %s',
+	'river:create:object:book_review' => '%s added a review for the book %s',
+	'river:comment:object:book_review' => '%s commented on a review for the book %s',
+	'river:readinglist:object:book' => '%s added the book %s to their reading list',
+
 
 	// Notifications
 
