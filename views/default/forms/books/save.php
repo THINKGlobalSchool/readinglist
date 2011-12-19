@@ -59,6 +59,14 @@ $search_input = elgg_view('input/submit', array(
 	'value' => elgg_echo('search'),
 ));
 
+$readinglist_label = elgg_echo('readinglist:label:addtoreadinglist');
+
+$readinglist_input = elgg_view('input/checkbox', array(
+	'id' => 'readinglist-add-checkbox',
+	'name' => 'readinglist_add',
+	'class' => 'left',
+));
+
 $save_input = elgg_view('input/submit', array(
 	'id' => 'book-save-input',
 	'name' => 'book_save_input',
@@ -93,6 +101,10 @@ $content = <<<HTML
 			<div>
 				<label>$tags_label</label>
 				$tags_input
+			</div><br />
+			<div>
+				<label>$readinglist_label</label>
+				$readinglist_input
 			</div><br />
 			<div class="elgg-foot">
 				$save_input

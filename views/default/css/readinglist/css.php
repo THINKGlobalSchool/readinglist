@@ -219,6 +219,25 @@
 
 .book-full-status-container .book-completed-container {
 	text-align: left;
+	display: inline;
+}
+
+.book-full-status-container {
+	float: left;
+	margin-left: 10px;
+}
+
+.book-full-status-container .complete-date {
+	padding-top: 6px;
+	padding-left: 6px;
+}
+
+.book-full-status-container .book-reading-status {
+	display: inline;
+}
+
+.book-full-button-container {
+	float: left;
 }
 
 .book-date-complete {

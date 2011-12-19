@@ -340,6 +340,72 @@ function readinglist_prepare_form_vars($book = NULL) {
 }
 
 /**
+ * Helper function to add a book to a user's readinglist
+ *
+ * @param $book_guid  Guid of the book
+ * @param $user_guid  Guid of the user
+ * @return void
+ */
+function add_to_user_readinglist($book_guid, $user_guid) {
+	// Add reading list relationship
+	add_entity_relationship($book_guid, READING_LIST_RELATIONSHIP, $user_guid);
+
+	// Add queued relationship
+	add_entity_relationship($book_guid, READING_LIST_RELATIONSHIP_QUEUED, $user_guid);
+
+	// Add status annotation
+	$status = create_annotation(
+		$book_guid,
+		'book_reading_status',
+		BOOK_READING_STATUS_QUEUED,
+		"",
+		$user_guid,
+		ACCESS_LOGGED_IN
+	);
+
+	// Check if the user has already rated this book
+	$options = array(
+		'guid' => $book_guid,
+		'annotation_names' => array('bookrating'),
+		'annotation_owner_guids' => array($user_guid),
+		'count' => TRUE,
+	);
+
+	$ratings = elgg_get_annotations($options);
+
+	// If we have a rating, we'll set the user rating to the existing value
+	if ($ratings) {
+		unset($options['count']);
+		$ratings = elgg_get_annotations($options);
+		$rating = $ratings[0];
+		$value = $rating->value;
+	} else {
+		// Set it to 0 otherwise
+		$value = 0;
+	}
+
+	// Delete existing user_bookratings
+	elgg_delete_annotations(array(
+		'guid' => $book_guid,
+		'annotation_owner_guids' => array($user_guid),
+		'annotation_names' => 'user_bookrating',
+	));
+
+	// Create a new user_bookrating
+	$user_rating = create_annotation(
+		$book_guid,
+		'user_bookrating',
+		$value,
+		"",
+		$user_guid,
+		ACCESS_LOGGED_IN
+	);
+
+	// Add a river entry (not sure what action type to go with here, so using a new one called 'readinglist')
+	add_to_river('river/relationship/readinglist/add', 'readinglist', $user_guid, $book_guid);
+}
+
+/**
  * Helper function to perform a google books search
  *
  * @param  string $search - Title of book to search

@@ -24,7 +24,7 @@ if ($status == BOOK_READING_STATUS_COMPLETE) {
 	if ($date = readinglist_get_complete_date($vars['book_guid'], $vars['user_guid'])) {
 		$completed = date('F j, Y', $date);
 
-		$completed = elgg_echo('readinglist:label:completed', array($completed));
+		$completed = "<div class='complete-date'>" . elgg_echo('readinglist:label:completed', array($completed)) . "</div>";
 
 		$content .= $completed;
 	} else {

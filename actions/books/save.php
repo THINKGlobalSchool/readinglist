@@ -17,6 +17,7 @@ $guid 				= get_input('guid');
 $tags 				= string_to_tag_array(get_input('tags'));
 $title 				= get_input('title');
 $container_guid 	= get_input('container_guid', NULL);
+$readinglist_add    = get_input('readinglist_add', FALSE);
 
 // Book info
 $google_id       = get_input('google_id');
@@ -88,11 +89,16 @@ if (!$book->save()) {
 
 // Add a river entry
 if (!$guid) {
-	add_to_river('river/object/book/create', 'create', get_loggedin_userid(), $book->getGUID());
+	add_to_river('river/object/book/create', 'create', elgg_get_logged_in_user_guid(), $book->getGUID());
 }
 
 // Clear sticky form
 elgg_clear_sticky_form('book-save-form');
+
+// Add to user's book list if option is set
+if (!empty($readinglist_add)) {
+	add_to_user_readinglist($book->guid, elgg_get_logged_in_user_guid());
+}
 
 // Forward to book view
 system_message(elgg_echo('readinglist:success:savebook'));

@@ -112,30 +112,27 @@ if ($full) {
 
 	$body .= $description_excerpt . $description_full;
 
-	$body .= "<br /><label>" . elgg_echo('readinglist:label:yourrating') . "</label><br />";
-	$body .= elgg_view('output/bookrating', array(
-		'entity' => $book,
-	));
-
-	$body .= "<br /><br />" . elgg_view('readinglist/button', array('book' => $book));
+	$body .= "<br /><div class='book-full-button-container'>" . elgg_view('readinglist/button', array('book' => $book)) . '</div>';
 
 	$body .= "<div class='book-full-status-container'>";
 
 	// If book is on user's reading list..
 	if (check_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, elgg_get_logged_in_user_guid())) {
+		$body .= "<table><tr>";
+
 		// Create status input
-		$body .= "<br /><label>" . elgg_echo('readinglist:label:status') . ": </label>" . elgg_view('readinglist/status', array(
+		$body .= "<td style='padding-top: 2px;'><label>" . elgg_echo('readinglist:label:status') . ": </label>" . elgg_view('readinglist/status', array(
 			'user_guid' => elgg_get_logged_in_user_guid(),
 			'book_guid' => $book->guid,
-		));
+		)) . "</td><td style=''>";
 
 		$body .= $completed_info = elgg_view('readinglist/completed', array(
 			'book_guid' => $book->guid,
-			'user_guid' => $user->guid
-		));
+			'user_guid' => elgg_get_logged_in_user_guid()
+		)) . "</td></tr></table>";
 	}
 
-	$body .= "</div>";
+	$body .= "</div><div class='clearfix'></div>";
 
 	$params = array(
 		'entity' => $book,
