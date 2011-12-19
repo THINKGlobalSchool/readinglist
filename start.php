@@ -306,7 +306,7 @@ function reading_list_filter_menu_setup($hook, $type, $return, $params) {
 			if ($page_owner->canEdit()) {
 				$options = array(
 					'name' => 'books-browse',
-					'text' => elgg_echo('readinglist:label:browsebooks'),
+					'text' => elgg_echo('readinglist:label:addbooks'),
 					'href' => 'books/group/' . $page_owner->guid . '/browse',
 					'priority' => 200,
 				);
