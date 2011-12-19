@@ -291,6 +291,21 @@
 	width: 104px;
 }
 
+.readinglist-remove-button, .group-readinglist-remove-button {
+	color: white;
+	text-decoration: none;
+	border:1px solid #85161D;
+	background:url(<?php echo elgg_get_site_url(); ?>mod/tgstheme/_graphics/button-red.png) repeat-x bottom left #E72139;
+}
+
+.readinglist-remove-button:hover, .group-readinglist-remove-button:hover {
+	border:1px solid #85161D;
+	text-decoration: none;
+	color: #CCCCCC;
+	background:url(<?php echo elgg_get_site_url(); ?>mod/tgstheme/_graphics/button-red.png) repeat-x bottom left #BD1429;
+}
+
+
 .readinglist-button span.readinglist-button-text {
 	position: absolute;
 	right: 8px;
