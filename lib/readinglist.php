@@ -433,6 +433,7 @@ function google_books_title_search($search = '', $limit = 10, $offset = 0) {
 		'maxResults' => $limit,
 		'startIndex' => $offset,
 		'printType' => 'books',
+		'country' => 'us', // override IP location
 	);
 
 	$results = $volumes->listVolumes($search, $options);
@@ -463,8 +464,13 @@ function google_books_get_volume_full_description($volume_id) {
 	// Set volumes
 	$volumes = $service->volumes;
 
+	// Get params (override IP location)
+	$options = array(
+		'country' => 'us',
+	);
+
 	// Get the specified volume
-	$result = $volumes->get($volume_id);
+	$result = $volumes->get($volume_id, $options);
 
 	$volumeInfo = $result['volumeInfo'];
 
