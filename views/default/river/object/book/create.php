@@ -25,8 +25,8 @@ if ($object->small_thumbnail) {
 // Authors string
 if ($object->authors) {
 	$author_label = elgg_echo('readinglist:label:author');
-	if (is_array($book->authors)) {
-		$authors = implode(", ", $book->authors);
+	if (is_array($object->authors)) {
+		$authors = implode(", ", $object->authors);
 	} else {
 		$authors = $object->authors;
 	}
