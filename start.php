@@ -262,9 +262,11 @@ function readinglist_river_menu_setup($hook, $type, $value, $params) {
 				break;
 		}
 
-		foreach ($value as $idx => $item) {
-			if (in_array($item->getName(), $remove)) {
-				unset($value[$idx]);
+		if (is_array($value)) {
+			foreach ($value as $idx => $item) {
+				if (in_array($item->getName(), $remove)) {
+					unset($value[$idx]);
+				}
 			}
 		}
 	}
