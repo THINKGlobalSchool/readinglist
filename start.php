@@ -92,6 +92,9 @@ function readinglist_init() {
 	// Remove comments/likes from book related river entries
 	elgg_register_plugin_hook_handler('register', 'menu:river', 'readinglist_river_menu_setup');
 
+	// EXPERIMENTAL: Register readinglist achievement class path
+	elgg_register_plugin_hook_handler('get_achievement_class_paths', 'achievement', 'readinglist_achievement_hook');
+
 	// Add the group books tool option
 	add_group_tool_option('books', elgg_echo('groups:enablebooks'), TRUE);
 
@@ -528,5 +531,19 @@ function readinglist_owner_block_menu($hook, $type, $value, $params) {
 			$value[] = $item;
 		}
 	}
+	return $value;
+}
+
+/**
+ * Register the readinglist achievements class path
+ *
+ * @param unknown_type $hook
+ * @param unknown_type $type
+ * @param unknown_type $value
+ * @param unknown_type $params
+ * @return unknown
+ */
+function readinglist_achievement_hook($hook, $type, $value, $params) {
+	$value[] = elgg_get_plugins_path() . 'readinglist/classes/';
 	return $value;
 }

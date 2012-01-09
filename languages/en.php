@@ -121,6 +121,22 @@ $english = array(
 
 	// Other content
 	'groups:enablebooks' => 'Enable group books',
+
+	// Achievements
+	'achievements:book_pages_500:title' => 'Read 500 Pages!',
+	'achievements:book_pages_500:description' => 'You have read 500 pages! WOW!',
+
+	'achievements:book_pages_2000:title' => 'Read 2000 Pages!',
+	'achievements:book_pages_2000:description' => 'You have read 2000 pages! WOW!',
+
+	'achievements:book_pages_5000:title' => 'Read 5000 Pages!',
+	'achievements:book_pages_5000:description' => 'You have read 5000 pages! WOW!',
+
+	'achievements:book_pages_15000:title' => 'Read 15000 Pages!',
+	'achievements:book_pages_15000:description' => 'You have read 15000 pages! WOW!',
+
+	'achievements:book_pages_30000:title' => 'Read 30000 Pages!',
+	'achievements:book_pages_30000:description' => 'You have read 30000 pages! WOW!',
 );
 
 add_translation('en',$english);
