@@ -411,7 +411,7 @@ function readinglist_book_review_menu_setup($hook, $type, $return, $params) {
 function readinglist_book_menu_setup($hook, $type, $return, $params) {
 
 	if (!elgg_is_logged_in()) {
-		return FALSE;
+		return array();
 	}
 
 	$entity = $params['entity'];
