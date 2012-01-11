@@ -16,7 +16,7 @@
     <label><?php echo elgg_echo('readinglist:label:devkey'); ?></label><br />
     <?php 
 		echo elgg_view('input/text', array(
-			'internalname' => 'params[devkey]', 
+			'name' => 'params[devkey]', 
 			'value' => $vars['entity']->devkey)
 		); 
 	?>
@@ -25,7 +25,7 @@
     <label><?php echo elgg_echo('readinglist:label:appname'); ?></label><br />
     <?php 
 		echo elgg_view('input/text', array(
-			'internalname' => 'params[appname]', 
+			'name' => 'params[appname]', 
 			'value' => $vars['entity']->appname)
 		); 
 	?>
