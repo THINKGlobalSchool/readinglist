@@ -46,7 +46,7 @@ elgg_clear_sticky_form('book_add_review');
 add_entity_relationship($review->guid, BOOK_REVIEW_RELATIONSHIP, $book->guid);
 
 // Add river
-add_to_river('river/object/book_review/create', 'create', get_loggedin_userid(), $review->getGUID());
+add_to_river('river/object/book_review/create', 'create', elgg_get_logged_in_user_guid(), $review->getGUID());
 
 // Forward on
 system_message(elgg_echo('readinglist:success:savereview'));

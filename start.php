@@ -96,10 +96,10 @@ function readinglist_init() {
 	add_group_tool_option('books', elgg_echo('groups:enablebooks'), TRUE);
 
 	// Entity url handler for books
-	register_entity_url_handler('readinglist_book_url_handler', 'object', 'book');
+	elgg_register_entity_url_handler('object', 'book', 'readinglist_book_url_handler');
 
 	// Entiry url handler for book reviews
-	register_entity_url_handler('readinglist_review_url_handler', 'object', 'book_review');
+	elgg_register_entity_url_handler('object', 'book_review', 'readinglist_review_url_handler');
 
 	// Extend public dashboard sidebar
 	elgg_extend_view('publicdashboard/sidebar', 'readinglist/publicreading', 500);
