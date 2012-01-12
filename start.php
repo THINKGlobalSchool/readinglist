@@ -501,14 +501,15 @@ function readinglist_book_menu_setup($hook, $type, $return, $params) {
 			}
 		}
 
-
-		$options = array(
-			'name' => 'book-rating',
-			'href' => FALSE,
-			'text' => $rating,
-			'priority' => 25,
-		);
-		$return[] = ElggMenuItem::factory($options);
+		if ($rating) {
+			$options = array(
+				'name' => 'book-rating',
+				'href' => FALSE,
+				'text' => $rating,
+				'priority' => 25,
+			);
+			$return[] = ElggMenuItem::factory($options);
+		}
 	}
 
 	return $return;
