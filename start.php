@@ -104,6 +104,18 @@ function readinglist_init() {
 	// Extend public dashboard sidebar
 	elgg_extend_view('publicdashboard/sidebar', 'readinglist/publicreading', 500);
 
+	// Whitelist ajax views
+	elgg_register_ajax_view('books/existing');
+	elgg_register_ajax_view('books/duplicate');
+	elgg_register_ajax_view('readinglist/status'); 
+	elgg_register_ajax_view('readinglist/completed');
+
+	// Genricmodule views (ugh)
+	elgg_register_ajax_view('books/modules/list');
+	elgg_register_ajax_view('books/modules/readinglist');
+	elgg_register_ajax_view('books/modules/groupreadinglist');
+	elgg_register_ajax_view('books/modules/reading');
+
 	// Register actions
 	$action_base = elgg_get_plugins_path() . 'readinglist/actions';
 	elgg_register_action('books/save', "$action_base/books/save.php");
