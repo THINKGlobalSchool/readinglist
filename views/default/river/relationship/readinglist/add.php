@@ -13,6 +13,6 @@ $subject = $vars['item']->getSubjectEntity();
 $object = $vars['item']->getObjectEntity();
 
 
-echo elgg_view('river/item', array(
+echo elgg_view('river/elements/layout', array(
 	'item' => $vars['item'],
 ));

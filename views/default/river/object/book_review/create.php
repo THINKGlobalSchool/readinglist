@@ -40,7 +40,7 @@ $excerpt = strip_tags($object->description);
 $excerpt = elgg_get_excerpt($excerpt);
 
 
-echo elgg_view('river/item', array(
+echo elgg_view('river/elements/layout', array(
 	'item' => $vars['item'],
 	'image' => $image,
 	'summary' => elgg_echo('river:create:object:book_review', array($subject_link, $book_link)),

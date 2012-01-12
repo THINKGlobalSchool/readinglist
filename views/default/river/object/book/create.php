@@ -33,7 +33,7 @@ if ($object->authors) {
 	$authors = "<span class='author-subtext'>". $author_label . "<strong>" . $authors . "</strong><br /></span>";
 }
 
-echo elgg_view('river/item', array(
+echo elgg_view('river/elements/layout', array(
 	'item' => $vars['item'],
 	'image' => $image,
 	'message' => $image . $authors . $excerpt,
