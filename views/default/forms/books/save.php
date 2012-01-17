@@ -67,52 +67,85 @@ $readinglist_input = elgg_view('input/checkbox', array(
 	'class' => 'left',
 ));
 
-$save_input = elgg_view('input/submit', array(
-	'id' => 'book-save-input',
-	'name' => 'book_save_input',
-	'value' => elgg_echo('readinglist:label:save'),
-	'disabled' => 'DISABLED',
-	'class' => 'elgg-state-disabled elgg-button elgg-button-submit',
-));
 
-$content = <<<HTML
-	<div class='book-form'>
-		<div>
-			<table class='book-search-table'>
-				<tbody>
-					<tr>
-						<td class='book-search-left'>
-							$title_input
-						</td>
-						<td class='book-search-right'>
-							$search_input
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div><br />
-		<div id='books-selected-item'></div>
-		<div style='display:none;'>
-			<a href='#books-search-results' id='trigger-book-results'></a>
-			<div id='books-search-results'>
+// Form differs quite a bit when editing/adding a book
+if ($guid) {
+	$save_input = elgg_view('input/submit', array(
+		'id' => 'book-save-input',
+		'name' => 'book_save_input',
+		'value' => elgg_echo('readinglist:label:save'),
+		'class' => 'elgg-button elgg-button-submit',
+	));
+
+	elgg_push_context('book_existing');
+	$book_info = elgg_view_entity($book, array('full_view' => FALSE));
+	elgg_pop_context();
+
+	$content = <<<HTML
+		<div class='book-form'>
+			<div class='book-listing'>
+				$book_info
 			</div>
-		</div><br />
-		<div id='book-form-hidden'>
+			<br />
 			<div>
 				<label>$tags_label</label>
 				$tags_input
 			</div><br />
-			<div>
-				<label>$readinglist_label</label>
-				$readinglist_input
-			</div><br />
 			<div class="elgg-foot">
 				$save_input
 			</div>
+			$container_guid_input
+			$book_guid
 		</div>
-		$container_guid_input
-		$book_guid
-	</div>
 HTML;
+} else {
+	$save_input = elgg_view('input/submit', array(
+		'id' => 'book-save-input',
+		'name' => 'book_save_input',
+		'value' => elgg_echo('readinglist:label:addbook'),
+		'disabled' => 'DISABLED',
+		'class' => 'elgg-state-disabled elgg-button elgg-button-submit',
+	));
+
+	$content = <<<HTML
+		<div class='book-form'>
+			<div>
+				<table class='book-search-table'>
+					<tbody>
+						<tr>
+							<td class='book-search-left'>
+								$title_input
+							</td>
+							<td class='book-search-right'>
+								$search_input
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div><br />
+			<div id='books-selected-item'></div>
+			<div style='display:none;'>
+				<a href='#books-search-results' id='trigger-book-results'></a>
+				<div id='books-search-results'>
+				</div>
+			</div><br />
+			<div id='book-form-hidden'>
+				<div>
+					<label>$tags_label</label>
+					$tags_input
+				</div><br />
+				<div>
+					<label>$readinglist_label</label>
+					$readinglist_input
+				</div><br />
+				<div class="elgg-foot">
+					$save_input
+				</div>
+			</div>
+			$container_guid_input
+		</div>
+HTML;
+}
+
 
 echo $content;

@@ -33,10 +33,6 @@ $simple_fields = array(
 
 // Sticky form
 elgg_make_sticky_form('book-save-form');
-if (!$title) {
-	register_error(elgg_echo('readinglist:error:requiredfields'));
-	forward(REFERER);
-}
 
 // Editing
 if ($guid) {
@@ -47,38 +43,46 @@ if ($guid) {
 		register_error(elgg_echo('readinglist:error:savebook'));
 		forward(REFERER);
 	}
+
+	// Not saving anything other than tags
+	$book->tags = $tags;
+
 } else { // New 
+	if (!$title) {
+		register_error(elgg_echo('readinglist:error:requiredfields'));
+		forward(REFERER);
+	}
+
 	$book = new ElggObject();
 	$book->subtype = 'book';
 	$book->container_guid = $container_guid;
-}
+	$book->tags = $tags;
+	$book->access_id = ACCESS_LOGGED_IN; // All books are set to logged in users
+	$book->title = $title;
+	$book->google_id = $google_id;
+	$book->small_thumbnail = $small_thumbnail;
+	$book->large_thumbnail = $large_thumbnail;
+	$book->identifiers = $identifiers;
 
-$book->tags = $tags;
-$book->access_id = ACCESS_LOGGED_IN; // All books are set to logged in users
-$book->title = $title;
-$book->google_id = $google_id;
-$book->small_thumbnail = $small_thumbnail;
-$book->large_thumbnail = $large_thumbnail;
-$book->identifiers = $identifiers;
+	// These two sets of metadata will help to 'de-normalize' the books so to speak..
+	$book->average_rating = 0; // Maintain a tally of the average book rating
+	$book->popularity = 0;     // Intended to count the number of reading list this book appears in
 
-// These two sets of metadata will help to 'de-normalize' the books so to speak..
-$book->average_rating = 0; // Maintain a tally of the average book rating
-$book->popularity = 0;     // Intended to count the number of reading list this book appears in
+	// Set the rest of the book fields
+	foreach ($simple_fields as $field) {
+		$book->$field = get_input($field);
+	}
 
-// Set the rest of the book fields
-foreach ($simple_fields as $field) {
-	$book->$field = get_input($field);
-}
+	// Try and set full description (need a seperate api call for this, boooo)
+	$description = google_books_get_volume_full_description($book->google_id);
 
-// Try and set full description (need a seperate api call for this, boooo)
-$description = google_books_get_volume_full_description($book->google_id);
-
-// If we've got it, set it
-if ($description) {
-	$book->description = $description;
-} else {
-	// Otherwise use whatever was passed in from the volume info list
-	$book->description = get_input('description', '');
+	// If we've got it, set it
+	if ($description) {
+		$book->description = $description;
+	} else {
+		// Otherwise use whatever was passed in from the volume info list
+		$book->description = get_input('description', '');
+	}
 }
 
 // If error saving, register error and return

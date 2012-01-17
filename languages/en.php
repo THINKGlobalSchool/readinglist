@@ -31,7 +31,8 @@ $english = array(
 	// Labels
 	'readinglist:label:readinglist' => 'Reading List',
 	'readinglist:label:noresults' => 'No Results',
-	'readinglist:label:save' => 'Add Book to Spot',
+	'readinglist:label:addbook' => 'Add Book to Spot',
+	'readinglist:label:save' => 'Save',
 	'readinglist:label:addedby' => 'Added by %s',
 	'readinglist:label:author' => 'By: ',
 	'readinglist:label:googlelink' => 'View on Google Books',
