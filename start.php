@@ -53,7 +53,7 @@ function readinglist_init() {
 	elgg_register_simplecache_view('js/tiptip');
 	elgg_register_simplecache_view('css/tiptip');
 
-	elgg_register_js('jquery.tiptip', $t_js);
+	elgg_register_js('jquery.tiptip', $t_js, 'head', 501);
 	elgg_register_css('jquery.tiptip', $t_css);
 
 	// Register CSS
@@ -209,6 +209,10 @@ function reading_list_page_handler($page) {
 				gatekeeper();
 				elgg_load_css('lightbox');
 				elgg_load_js('lightbox');
+				$params = readinglist_get_page_content_edit($page[0], $page[1]);
+				break;
+			case 'edit':
+				gatekeeper();
 				$params = readinglist_get_page_content_edit($page[0], $page[1]);
 				break;
 			case 'group':
@@ -430,7 +434,7 @@ function readinglist_book_menu_setup($hook, $type, $return, $params) {
 
 	if (elgg_instanceof($entity, 'object', 'book') && elgg_is_logged_in()) {
 		// Will remove these items
-		$remove = array('access', 'likes', 'edit', 'delete');
+		$remove = array('access', 'likes', 'delete');
 
 		// Remove items from entity menu
 		foreach ($return as $idx => $item) {
