@@ -72,4 +72,3 @@ elgg.readinglist.bookrating.submitRating = function(value, entity_guid) {
 }
 
 elgg.register_hook_handler('init', 'system', elgg.readinglist.bookrating.init);
-//</script>

@@ -511,6 +511,7 @@ function readinglist_book_menu_setup($hook, $type, $return, $params) {
 				'href' => FALSE,
 				'text' => $rating,
 				'priority' => 25,
+				'section' => 'info',
 			);
 			$return[] = ElggMenuItem::factory($options);
 		}

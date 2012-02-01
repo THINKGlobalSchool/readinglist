@@ -674,4 +674,3 @@ elgg.readinglist.loadDuplicateResult = function(guid, container, callback) {
 }
 
 elgg.register_hook_handler('init', 'system', elgg.readinglist.init);
-//</script>
