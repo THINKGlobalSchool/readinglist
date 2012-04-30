@@ -29,9 +29,11 @@ function readinglist_init() {
 	define(BOOK_READING_STATUS_READING, 0);
 	define(BOOK_READING_STATUS_COMPLETE, 1);
 
-	// Add a site navigation item
-	$item = new ElggMenuItem('books', elgg_echo('books'), 'books/all');
-	elgg_register_menu_item('site', $item);
+	// Add a site navigation item for logged in users 
+	if (elgg_is_logged_in()) {
+		$item = new ElggMenuItem('books', elgg_echo('books'), 'books/all');
+		elgg_register_menu_item('site', $item);
+	}
 
 	// Register and load library
 	elgg_register_library('elgg:readinglist', elgg_get_plugins_path() . 'readinglist/lib/readinglist.php');
