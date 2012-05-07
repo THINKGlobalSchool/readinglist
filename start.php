@@ -33,6 +33,9 @@ function readinglist_init() {
 	if (elgg_is_logged_in()) {
 		$item = new ElggMenuItem('books', elgg_echo('books'), 'books/all');
 		elgg_register_menu_item('site', $item);
+	} else {
+		$item = new ElggMenuItem('books', elgg_echo('books'), 'books/reading');
+		elgg_register_menu_item('site', $item);
 	}
 
 	// Register and load library
