@@ -18,56 +18,47 @@ class ReadinglistPagesAchievement extends AchievementBase {
 	const BOOK_PAGES_5000 = 'BOOK_PAGES_5000';
 	const BOOK_PAGES_15000 = 'BOOK_PAGES_15000';
 	const BOOK_PAGES_30000 = 'BOOK_PAGES_30000';
+	
+	/**
+	 * Construct the Achievement
+	 * 
+	 * @param ElggUser $user
+	 */
+	public function __construct($user = NULL) {
+		parent::__construct($user);
+		
+		$this->awards = array(
+			self::BOOK_PAGES_500,
+			self::BOOK_PAGES_2000,
+			self::BOOK_PAGES_5000,
+			self::BOOK_PAGES_15000,
+			self::BOOK_PAGES_30000
+		);
+		
+		$this->event_type = "create";
+		$this->object_type = "relationship";
+		$this->object_subtype = READING_LIST_RELATIONSHIP_COMPLETE;
+	}
 
-	// Points
-	protected static $awards = array(
-		BOOK_PAGES_500 => '10',
-		BOOK_PAGES_2000 => '10',
-		BOOK_PAGES_5000 => '15',
-		BOOK_PAGES_15000 => '20',
-		BOOK_PAGES_30000 => '30',
-	);
-
-	protected static $event_type = "create";
-	protected static $object_type = 'relationship';
-	protected static $object_subtype = READING_LIST_RELATIONSHIP_COMPLETE;
-
-	public function action($data) {
+	public function execute($data = NULL) {
 		$count = $this->count_book_pages_read();
 		$this->attempt_award($count);
 	}
 
-	public static function getAchievementNames() {
-		return array_keys(self::$awards);
-	}
-
-	public static function getAchievementPoints($name) {
-		return (int)self::$awards[$name];
-	}
-
-	public static function getElggEventType() {
-		return self::$event_type;
-	}
-
-	public static function getElggObjectSubtype() {
-		return self::$object_subtype;
-	}
-
-	public static function getElggObjectType() {
-		return self::$object_type;
-	}
-
 	protected function attempt_award($count) {
-		if ($count >= 30000) {
-			$this->award(self::BOOK_PAGES_30000, self::getAchievementPoints(self::BOOK_PAGES_30000));
-		} else if ($count >= 15000) {
-			$this->award(self::BOOK_PAGES_15000, self::getAchievementPoints(self::BOOK_PAGES_15000));
-		} else if ($count >= 5000) {
-			$this->award(self::BOOK_PAGES_5000, self::getAchievementPoints(self::BOOK_PAGES_5000));
-		} else if ($count >= 2000) {
-			$this->award(self::BOOK_PAGES_2000, self::getAchievementPoints(self::BOOK_PAGES_2000));
-		} else if ($count >= 500) {
-			$this->award(self::BOOK_PAGES_500, self::getAchievementPoints(self::BOOK_PAGES_500));
+		$counts = array(
+			self::BOOK_PAGES_30000 => 30000, 
+			self::BOOK_PAGES_15000 => 15000, 
+			self::BOOK_PAGES_5000 => 5000,
+			self::BOOK_PAGES_2000 => 2000,
+			self::BOOK_PAGES_500 => 500,
+		);
+
+		foreach ($counts as $name => $c) {
+			if ($count >= $c) {
+				$result = $this->award($name);
+				$this->shouldNotify = !$result; // Only notify on first occurance
+			}
 		}
 	}
 
