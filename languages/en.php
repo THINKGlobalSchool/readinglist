@@ -123,7 +123,7 @@ $english = array(
 	// Other content
 	'groups:enablebooks' => 'Enable group books',
 
-	// Achievements
+	// Achievement Example
 	'achievements:book_pages_500:title' => 'Read 500 Pages!',
 	'achievements:book_pages_500:description' => 'You have read 500 pages! WOW!',
 
@@ -138,6 +138,10 @@ $english = array(
 
 	'achievements:book_pages_30000:title' => 'Read 30000 Pages!',
 	'achievements:book_pages_30000:description' => 'You have read 30000 pages! WOW!',
+	
+	// Achievements
+	'achievements:top_reader_2011_2012:title' => 'Top Reader 2011-2012',
+	'achievements:top_reader_2011_2012:description' => 'You are the top reader for the 2011-2012 school year!',
 );
 
 add_translation('en',$english);
