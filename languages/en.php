@@ -142,6 +142,9 @@ $english = array(
 	// Achievements
 	'achievements:top_reader_2011_2012:title' => 'Top Reader 2011-2012',
 	'achievements:top_reader_2011_2012:description' => 'You are the top reader for the 2011-2012 school year!',
+	
+	// Achievements labels
+	'achievements:subtype:reading_list_complete' => 'Reading List Achievements',
 );
 
 add_translation('en',$english);
