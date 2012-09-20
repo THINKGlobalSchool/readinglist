@@ -67,11 +67,12 @@ class TopReaderAchievement2011_2012 extends AchievementBase {
 	 * Determine if user is the top reader (most complete books)
 	 */
 	private function is_top_reader_2011_2012() {
-		return achievements_user_has_most_relationships(array(
+		return achievements_user_has_most_annotations(array(
 			'user' => $this->user, 
-			'relationship' => READING_LIST_RELATIONSHIP_COMPLETE,
-			'relationship_created_time_lower' => TopReaderAchievement2011_2012::TOP_READER_2011_2012_CREATED_TIME_LOWER,
-			'relationship_created_time_upper' => TopReaderAchievement2011_2012::TOP_READER_2011_2012_CREATED_TIME_UPPER,
+			'annotation_name' => 'book_complete_date',
+			'annotation_value_where_sql' => "
+				AND v.string > " . self::TOP_READER_2011_2012_CREATED_TIME_LOWER . "
+				AND v.string < " . self::TOP_READER_2011_2012_CREATED_TIME_UPPER,
 		));
 	}
 
@@ -81,12 +82,13 @@ class TopReaderAchievement2011_2012 extends AchievementBase {
 	public function get_leaderboard() {
 		return array(
 			'count_column_title' => 'Books Completed',
-			'count_column_field' => 'total',
-			'relationship' => READING_LIST_RELATIONSHIP_COMPLETE,
-			'relationship_created_time_lower' => TopReaderAchievement2011_2012::TOP_READER_2011_2012_CREATED_TIME_LOWER,
-			'relationship_created_time_upper' => TopReaderAchievement2011_2012::TOP_READER_2011_2012_CREATED_TIME_UPPER,
+			'count_column_field' => 'a_count',
+			'annotation_name' => 'book_complete_date',
+			'annotation_value_where_sql' => "
+				AND v.string > " . self::TOP_READER_2011_2012_CREATED_TIME_LOWER . "
+				AND v.string < " . self::TOP_READER_2011_2012_CREATED_TIME_UPPER,
 			'achievement_name' => TOP_READER_2011_2012,
-			'getter' => 'achievements_get_users_order_by_relationship_count',
+			'getter' => 'achievements_get_users_order_by_annotation_count',
 		);
 	}
 }
