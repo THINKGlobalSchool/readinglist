@@ -138,10 +138,6 @@ function readinglist_init() {
 	elgg_register_action('readinglist/removegroup', "$action_base/readinglist/removegroup.php");
 	elgg_register_action('readinglist/status', "$action_base/readinglist/status.php");
 
-	// Load google libs
-	elgg_load_library('gapc:apiClient');       // Main client
- 	elgg_load_library('gapc:apiBooksService'); // Books service
-
 	return TRUE;
 }
 
@@ -165,6 +161,10 @@ function reading_list_page_handler($page) {
 	elgg_load_library('elgg:readinglist');
 	elgg_load_css('elgg.readinglist');
 	elgg_load_js('elgg.readinglist');
+
+	// Load google libs
+	elgg_load_library('gapc:apiClient');       // Main client
+ 	elgg_load_library('gapc:apiBooksService'); // Books service
 
 	if (elgg_is_xhr()) {
 		switch($page[0]) {
