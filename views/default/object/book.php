@@ -16,6 +16,11 @@ if (!$book) {
 	return TRUE;
 }
 
+$ia = elgg_get_ignore_access();
+if (!elgg_is_logged_in()) {
+	elgg_set_ignore_access(TRUE);
+}
+
 $owner = $book->getOwnerEntity();
 $container = $book->getContainerEntity();
 
@@ -146,7 +151,10 @@ if ($full) {
 
 	$book_header = elgg_view_image_block($owner_icon, $list_body);
 	$book_body = elgg_view_image_block($thumbnail, $body);
-	$book_reviews = elgg_view('books/reviews', array('entity' => $book));
+
+	if (elgg_is_logged_in()) {
+		$book_reviews = elgg_view('books/reviews', array('entity' => $book));
+	}
 
 	echo <<<HTML
 <div class='clearfix book book-full-view'>
@@ -155,8 +163,9 @@ if ($full) {
 	$book_reviews
 </div>
 HTML;
-
+	elgg_set_ignore_access($ia);
 } else {
+	elgg_set_ignore_access($ia);
 	// brief view
 	echo "<div class='book'>";
 
@@ -238,3 +247,4 @@ HTML;
 
 	echo "</div>";
 }
+

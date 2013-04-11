@@ -210,7 +210,6 @@ function reading_list_page_handler($page) {
 				$params = readinglist_get_page_content_public_reading();
 				break;
 			case 'view':
-				gatekeeper();
 				$params = readinglist_get_page_content_view($page[1]);
 			 	break;
 			case 'add':
@@ -534,8 +533,8 @@ function readinglist_book_menu_setup($hook, $type, $return, $params) {
 function readinglist_profile_tab_hander($hook, $type, $value, $params) {
 	if (elgg_is_logged_in()) {
 		$value[] = 'readinglist';
-		return $value;
 	}
+	return $value;
 }
 
 

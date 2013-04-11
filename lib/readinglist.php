@@ -153,11 +153,19 @@ function readinglist_get_page_content_edit($page, $guid) {
  * View a book
  */
 function readinglist_get_page_content_view($guid) {
+	$ia = elgg_get_ignore_access();
+	if (!elgg_is_logged_in()) {
+		elgg_set_ignore_access(TRUE);
+	}
+
 	$book = get_entity($guid);
+
+	elgg_set_ignore_access($ia);
+
 	$container = get_entity($book->container_guid);
 	elgg_set_page_owner_guid($container->guid);
 
-	// No book? Probably permissions related
+
 	if (!$book) {
 		register_error(elgg_echo('readinglist:error:permission'));
 		forward(REFERER);
@@ -169,14 +177,17 @@ function readinglist_get_page_content_view($guid) {
 	$params['content'] .= elgg_view_entity($book, array('full_view' => TRUE));	
 	$params['layout'] = 'one_sidebar';
 
-	// Add a sidebar button to add a new book
-	$params['sidebar'] = elgg_view('output/url', array(
-		'text' => elgg_echo('readinglist:label:findanother'),
-		'class' => 'elgg-button elgg-button-submit',
-		'href' => 'books/add/' . elgg_get_logged_in_user_guid(),
-	)) . "<br /><br />";
 
-	$params['sidebar'] .= elgg_view('readinglist/whosreading', array('guid' => $guid));
+	if (elgg_is_logged_in()) {
+		// Add a sidebar button to add a new book
+		$params['sidebar'] = elgg_view('output/url', array(
+			'text' => elgg_echo('readinglist:label:findanother'),
+			'class' => 'elgg-button elgg-button-submit',
+			'href' => 'books/add/' . elgg_get_logged_in_user_guid(),
+		)) . "<br /><br />";
+
+		$params['sidebar'] .= elgg_view('readinglist/whosreading', array('guid' => $guid));
+	}
 
 	return $params;
 }
