@@ -87,11 +87,11 @@ function readinglist_get_page_content_list($container_guid = null) {
 	$rated_books = elgg_list_entities_from_relationship($options + $rated_options);
 	elgg_pop_context();
 
-	$params['sidebar'] = elgg_view_module('aside', elgg_echo('readinglist:label:mostpopular'), $popular_books, array(
+	$params['sidebar_alt'] = elgg_view_module('aside', elgg_echo('readinglist:label:mostpopular'), $popular_books, array(
 		'class' => 'book-sidebar-module'
 	));
 
-	$params['sidebar'] .= elgg_view_module('aside', elgg_echo('readinglist:label:highestrated'), $rated_books, array(
+	$params['sidebar_alt'] .= elgg_view_module('aside', elgg_echo('readinglist:label:highestrated'), $rated_books, array(
 		'class' => 'book-sidebar-module'
 	));
 
@@ -102,8 +102,8 @@ function readinglist_get_page_content_list($container_guid = null) {
  * Build content for editing/adding a book
  */
 function readinglist_get_page_content_edit($page, $guid) { 
-	$params['filter'] = FALSE;
-	$params['layout'] = 'one_sidebar';
+	$params['filter'] = ' ';
+	$params['layout'] = 'content';
 	
 	// General form vars
 	$form_vars = array(
@@ -175,18 +175,19 @@ function readinglist_get_page_content_view($guid) {
 	elgg_push_breadcrumb($book->title, $book->getURL());
 	$params['title'] = $book->title;
 	$params['content'] .= elgg_view_entity($book, array('full_view' => TRUE));	
-	$params['layout'] = 'one_sidebar';
+	$params['layout'] = 'content';
+	$params['filter'] = ' ';
 
 
 	if (elgg_is_logged_in()) {
 		// Add a sidebar button to add a new book
-		$params['sidebar'] = elgg_view('output/url', array(
-			'text' => elgg_echo('readinglist:label:findanother'),
-			'class' => 'elgg-button elgg-button-submit',
+		elgg_register_menu_item('page', array(
+			'name' => 'find_another',
 			'href' => 'books/add/' . elgg_get_logged_in_user_guid(),
-		)) . "<br /><br />";
+			'text' => elgg_echo('readinglist:label:findanother'),
+		));
 
-		$params['sidebar'] .= elgg_view('readinglist/whosreading', array('guid' => $guid));
+		$params['sidebar_alt'] .= elgg_view('readinglist/whosreading', array('guid' => $guid));
 	}
 
 	return $params;
@@ -201,8 +202,9 @@ function readinglist_get_page_content_readinglist($guid) {
 
 	$title = elgg_echo('readinglist:title:userreadinglist', array($entity->name));
 
-	elgg_push_breadcrumb($entity->name, "books/owner/" . $entity->username);
-	elgg_push_breadcrumb(elgg_echo('readinglist'));
+	// Breadcrumbs are handled by tgstheme/profile
+	// elgg_push_breadcrumb($entity->name, "books/owner/" . $entity->username);
+	// elgg_push_breadcrumb(elgg_echo('readinglist'));
 
 	$params['title'] = $title;
 

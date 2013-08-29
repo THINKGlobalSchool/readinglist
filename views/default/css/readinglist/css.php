@@ -214,17 +214,21 @@
 
 .book-completed-container {
 	text-align: right;
-	margin-top: 5px;
 }
 
 .book-full-status-container .book-completed-container {
-	text-align: left;
-	display: inline;
+    clear: both;
+    margin-left: 10px;
+    text-align: right;
 }
 
 .book-full-status-container {
-	float: left;
-	margin-left: 10px;
+    clear: both;
+    display: block;
+    float: right;
+    margin-left: 10px;
+    margin-top: 10px;
+    text-align: right;
 }
 
 .book-full-status-container .complete-date {
@@ -237,11 +241,12 @@
 }
 
 .book-full-button-container {
-	float: left;
+	float: right;
 }
 
 .book-date-complete {
 	width: 225px;
+	margin-top: 7px;
 }
 
 .readinglist-listing-control label {
