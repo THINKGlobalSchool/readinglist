@@ -24,8 +24,10 @@ $book_link = elgg_view('output/url', array(
 
 // If we have a small thumbnail, use it
 if ($book->small_thumbnail) {
+	$thumbnail_src = elgg_normalize_url('books/secureimg');
+
 	$image = "<div class='book-river-thumbnail book-thumbnail'>
-				<a href='{$book->getURL()}'><img src='{$book->small_thumbnail}' alt='{$book->title}' /></a>
+				<a href='{$book->getURL()}'><img src='{$thumbnail_src}/{$book->guid}?size=small' alt='{$book->title}' /></a>
 			</div>";
 }
 

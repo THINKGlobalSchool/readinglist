@@ -17,8 +17,10 @@ $excerpt = elgg_get_excerpt($excerpt);
 
 // If we have a small thumbnail, use it
 if ($object->small_thumbnail) {
+	$thumbnail_src = elgg_normalize_url('books/secureimg');
+
 	$image = "<div class='book-river-thumbnail book-thumbnail'>
-				<a href='{$object->getURL()}'><img src='{$object->small_thumbnail}' alt='{$object->title}' /></a>
+				<a href='{$object->getURL()}'><img src='{$thumbnail_src}/{$object->guid}?size=small' alt='{$object->title}' /></a>
 			</div>";
 }
 
