@@ -244,7 +244,11 @@ function reading_list_page_handler($page) {
 			// Super simple image proxy
 			case 'secureimg':
 				header('Content-type: image/jpeg;');
-				
+			
+				// Ignore access for public view, this is iffy but safe by obscurity	
+				$ia = elgg_get_ignore_access();
+				elgg_set_ignore_access(TRUE);
+
 				$book = get_entity($page[1]);
 
 				if (elgg_instanceof($book, 'object', 'book')) {
@@ -259,10 +263,11 @@ function reading_list_page_handler($page) {
 					$thumb = $book->$thumb_size;
 
 					readfile(html_entity_decode($thumb));
-			
+					
+					elgg_set_ignore_access($ia);
 					return TRUE;
-
 				} else {
+					elgg_set_ignore_access($ia);
 					return FALSE;
 				}
 
