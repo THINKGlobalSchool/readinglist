@@ -163,8 +163,8 @@ function reading_list_page_handler($page) {
 	elgg_load_js('elgg.readinglist');
 
 	// Load google libs
-	elgg_load_library('gapc:apiClient');       // Main client
- 	elgg_load_library('gapc:apiBooksService'); // Books service
+	elgg_load_library('gapc:Client'); // Main client
+	elgg_load_library('gapc:Books');  // Books service
 
 	if (elgg_is_xhr()) {
 		switch($page[0]) {
@@ -240,6 +240,32 @@ function reading_list_page_handler($page) {
 						forward();
 					}
 				}
+				break;
+			// Super simple image proxy
+			case 'secureimg':
+				header('Content-type: image/jpeg;');
+				
+				$book = get_entity($page[1]);
+
+				if (elgg_instanceof($book, 'object', 'book')) {
+					header('Content-type: image/jpeg;');
+					header("Content-type: image/jpeg");
+					header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', strtotime("+6 months")), true);
+					header("Pragma: public");
+					header("Cache-Control: public");
+
+					$thumb_size = get_input('size', 'small') . "_thumbnail";
+				
+					$thumb = $book->$thumb_size;
+
+					readfile(html_entity_decode($thumb));
+			
+					return TRUE;
+
+				} else {
+					return FALSE;
+				}
+
 				break;
 		}
 

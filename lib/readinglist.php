@@ -431,12 +431,12 @@ function google_books_title_search($search = '', $limit = 10, $offset = 0) {
 	}
 
 	// Create client
-	$client = new apiClient();
+	$client = new Google_Client();
 	$client->setDeveloperKey(GOOGLE_DEV_KEY);
 	$client->setApplicationName(GOOGLE_APP_NAME);
 
 	// Create books service
-	$service = new apiBooksService($client);
+	$service = new Google_Service_Books($client);
 
 	// Set volumes
 	$volumes = $service->volumes;
@@ -446,7 +446,7 @@ function google_books_title_search($search = '', $limit = 10, $offset = 0) {
 		'maxResults' => $limit,
 		'startIndex' => $offset,
 		'printType' => 'books',
-		'country' => 'us', // override IP location
+		//'country' => 'us', // override IP location
 	);
 
 	$results = $volumes->listVolumes($search, $options);
@@ -467,19 +467,19 @@ function google_books_get_volume_full_description($volume_id) {
 	}
 
 	// Create client
-	$client = new apiClient();
+	$client = new Google_Client();
 	$client->setDeveloperKey(GOOGLE_DEV_KEY);
 	$client->setApplicationName(GOOGLE_APP_NAME);
 
 	// Create books service
-	$service = new apiBooksService($client);
+	$service = new Google_Service_Books($client);
 
 	// Set volumes
 	$volumes = $service->volumes;
 
 	// Get params (override IP location)
 	$options = array(
-		'country' => 'us',
+		//'country' => 'us',
 	);
 
 	// Get the specified volume

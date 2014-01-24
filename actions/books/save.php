@@ -11,8 +11,8 @@
  */
 
 // Load google libs
-elgg_load_library('gapc:apiClient');       // Main client
-elgg_load_library('gapc:apiBooksService'); // Books service
+elgg_load_library('gapc:Client');       // Main client
+elgg_load_library('gapc:Books'); // Books service
 
 // Load readinglist lib
 elgg_load_library('elgg:readinglist');

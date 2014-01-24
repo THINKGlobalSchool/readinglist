@@ -59,6 +59,8 @@ if ($book->authors) {
 // Page count string
 $page_count = $book->pageCount ? $book->pageCount . ' pages' : '';
 
+$thumbnail_src = elgg_normalize_url('books/secureimg');
+
 if ($full) {
 	$categories = elgg_view('output/bookcategories', array('book' => $book));
 
@@ -67,7 +69,7 @@ if ($full) {
 	// If we have a thumbnail, use it
 	if ($book->large_thumbnail) {
 		$thumbnail = "<div class='book-thumbnail'>
-					<img src='{$book->large_thumbnail}' alt='{$book->title}' /></a>
+					<img src='{$thumbnail_src}/{$book->guid}?size=large' alt='{$book->title}' /></a>
 				</div>";
 	}
 
@@ -188,7 +190,7 @@ HTML;
 	// If we have a small thumbnail, use it
 	if ($book->small_thumbnail) {
 		$icon = "<span class='book-thumbnail'>
-					<a href='{$book->getURL()}'><img src='{$book->small_thumbnail}' alt='{$book->title}' /></a>
+					<a href='{$book->getURL()}'><img src='{$thumbnail_src}/{$book->guid}?size=small' alt='{$book->title}' /></a>
 				</span>";
 	}
 
