@@ -5,7 +5,7 @@
  * @package ReadingList
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010
+ * @copyright THINK Global School 2010 - 2014
  * @link http://www.thinkglobalschool.com/
  * 
  */
@@ -50,16 +50,6 @@ function readinglist_init() {
 
 	elgg_register_js('jquery.starrating', $sr_js);
 	elgg_register_css('jquery.starrating', $sr_css);
-
-	// Register tiptip JS/CSS
-	$t_js = elgg_get_simplecache_url('js', 'tiptip');
-	$t_css = elgg_get_simplecache_url('css', 'tiptip');
-
-	elgg_register_simplecache_view('js/tiptip');
-	elgg_register_simplecache_view('css/tiptip');
-
-	elgg_register_js('jquery.tiptip', $t_js, 'head', 501);
-	elgg_register_css('jquery.tiptip', $t_css);
 
 	// Register CSS
 	$r_css = elgg_get_simplecache_url('css', 'readinglist/css');
