@@ -45,9 +45,6 @@ function readinglist_init() {
 	$sr_js = elgg_get_simplecache_url('js', 'starrating');
 	$sr_css = elgg_get_simplecache_url('css', 'starrating');
 
-	elgg_register_simplecache_view('js/starrating');
-	elgg_register_simplecache_view('css/starrating');
-
 	elgg_register_js('jquery.starrating', $sr_js);
 	elgg_register_css('jquery.starrating', $sr_css);
 
@@ -55,23 +52,16 @@ function readinglist_init() {
 	$t_js = elgg_get_simplecache_url('js', 'tiptip');
 	$t_css = elgg_get_simplecache_url('css', 'tiptip');
 
-	elgg_register_simplecache_view('js/tiptip');
-	elgg_register_simplecache_view('css/tiptip');
-
 	elgg_register_js('jquery.tiptip', $t_js, 'head', 501);
 	elgg_register_css('jquery.tiptip', $t_css);
 
 	// Register CSS
 	$r_css = elgg_get_simplecache_url('css', 'readinglist/css');
-	elgg_register_simplecache_view('css/readinglist/css');
 	elgg_register_css('elgg.readinglist', $r_css);
 
 	// Register JS libraries
 	$r_js = elgg_get_simplecache_url('js', 'readinglist/readinglist');
 	$b_js = elgg_get_simplecache_url('js', 'readinglist/bookrating');
-
-	elgg_register_simplecache_view('js/readinglist/readinglist');
-	elgg_register_simplecache_view('js/readinglist/bookrating');
 
 	elgg_register_js('elgg.readinglist', $r_js);
 	elgg_register_js('elgg.readinglist.bookrating', $b_js);
