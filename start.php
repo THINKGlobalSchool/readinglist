@@ -66,6 +66,14 @@ function readinglist_init() {
 	elgg_register_js('elgg.readinglist', $r_js);
 	elgg_register_js('elgg.readinglist.bookrating', $b_js);
 
+	elgg_load_js('jquery.starrating');
+	elgg_load_js('jquery.tiptip');
+	elgg_load_css('jquery.tiptip');
+	elgg_load_js('elgg.readinglist.bookrating');
+	elgg_load_css('jquery.starrating');
+	elgg_load_css('elgg.readinglist');
+	elgg_load_js('elgg.readinglist');
+
 	// Register page handler
 	elgg_register_page_handler('books','reading_list_page_handler');
 
@@ -149,8 +157,6 @@ function readinglist_init() {
  */
 function reading_list_page_handler($page) {
 	elgg_load_library('elgg:readinglist');
-	elgg_load_css('elgg.readinglist');
-	elgg_load_js('elgg.readinglist');
 
 	// Load google libs
 	elgg_load_library('gapc:Client'); // Main client
@@ -175,12 +181,6 @@ function reading_list_page_handler($page) {
 				break;
 		}
 	} else {
-		elgg_load_js('jquery.starrating');
-		elgg_load_js('jquery.tiptip');
-		elgg_load_css('jquery.tiptip');
-		elgg_load_js('elgg.readinglist.bookrating');
-		elgg_load_css('jquery.starrating');
-
 		elgg_push_breadcrumb(elgg_echo('books'), 'books/all');
 		switch($page[0]) {
 			case 'all':
