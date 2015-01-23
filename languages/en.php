@@ -117,6 +117,10 @@ $english = array(
 	'river:comment:object:book_review' => '%s commented on a review for the book %s',
 	'river:readinglist:object:book' => '%s added the book %s to their reading list',
 
+	// Widgets
+	'readinglist:widget:books' => 'User\'s reading list',
+	'readinglist:widget:user_books' => '%s\'s Reading List',
+	'readinglist:widget:books_desc' => 'Display user\'s reading list',
 
 	// Notifications
 
