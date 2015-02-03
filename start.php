@@ -5,7 +5,7 @@
  * @package ReadingList
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010 - 2014
+ * @copyright THINK Global School 2010 - 2015
  * @link http://www.thinkglobalschool.com/
  * 
  */
@@ -104,11 +104,8 @@ function readinglist_init() {
 	// Add the group books tool option
 	add_group_tool_option('books', elgg_echo('groups:enablebooks'), TRUE);
 
-	// Entity url handler for books
-	elgg_register_entity_url_handler('object', 'book', 'readinglist_book_url_handler');
-
-	// Entiry url handler for book reviews
-	elgg_register_entity_url_handler('object', 'book_review', 'readinglist_review_url_handler');
+	// Register URL handler (for all book related entities)
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'readinglist_url_handler');
 
 	// Extend public dashboard sidebar
 	elgg_extend_view('publicdashboard/sidebar', 'readinglist/publicreading', 500);
@@ -326,23 +323,25 @@ function readinglist_river_menu_setup($hook, $type, $value, $params) {
 }
 
 /**
- * Populates the ->getUrl() method for a book
+ * Returns the URL from reading list entities
  *
- * @param ElggEntity entity
- * @return string request url
+ * @param string $hook   'entity:url'
+ * @param string $type   'object'
+ * @param string $url    The current URL
+ * @param array  $params Hook parameters
+ * @return string
  */
-function readinglist_book_url_handler($entity) {
-	return elgg_get_site_url() . "books/view/{$entity->guid}/";
-}
+function readinglist_url_handler($hook, $type, $url, $params) {
+	$entity = $params['entity'];
 
-/**
- * Populates the ->getUrl() method for a book
- *
- * @param ElggEntity entity
- * @return string request url
- */
-function readinglist_review_url_handler($entity) {
-	return elgg_get_site_url() . "books/view/{$entity->book_guid}/";
+	// Check for readinglist/book related objects
+	if (elgg_instanceof($entity, 'object', 'book_review')) {
+		return "books/view/{$entity->book_guid}/";
+	} else if (elgg_instanceof($entity, 'object', 'book')) {
+		return "books/view/{$entity->guid}/";
+	} else {
+		return;
+	}
 }
 
 

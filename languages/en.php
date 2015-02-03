@@ -5,12 +5,12 @@
  * @package ReadingList
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010
+ * @copyright THINK Global School 2010 - 2015
  * @link http://www.thinkglobalschool.com/
  *
  */
 
-$english = array(
+return array(
 	// Generic
 	'books' => 'Books',
 	'item:object:book' => 'Books',
@@ -154,5 +154,3 @@ $english = array(
 	// Achievements labels
 	'achievements:subtype:reading_list_complete' => 'Reading List Achievements',
 );
-
-add_translation('en',$english);
