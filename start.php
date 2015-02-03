@@ -66,6 +66,14 @@ function readinglist_init() {
 	elgg_register_js('elgg.readinglist', $r_js);
 	elgg_register_js('elgg.readinglist.bookrating', $b_js);
 
+	elgg_load_js('jquery.starrating');
+	elgg_load_js('jquery.tiptip');
+	elgg_load_css('jquery.tiptip');
+	elgg_load_js('elgg.readinglist.bookrating');
+	elgg_load_css('jquery.starrating');
+	elgg_load_css('elgg.readinglist');
+	elgg_load_js('elgg.readinglist');
+
 	// Register page handler
 	elgg_register_page_handler('books','reading_list_page_handler');
 
@@ -90,6 +98,9 @@ function readinglist_init() {
 	// EXPERIMENTAL: Register readinglist achievement class path
 	elgg_register_plugin_hook_handler('get_achievement_class_paths', 'achievement', 'readinglist_achievement_hook');
 
+	// Role profile widget integration
+	elgg_register_plugin_hook_handler('get_dynamic_handlers', 'role_widgets', 'readinglist_register_dynamic_widget_handlers');
+
 	// Add the group books tool option
 	add_group_tool_option('books', elgg_echo('groups:enablebooks'), TRUE);
 
@@ -101,6 +112,11 @@ function readinglist_init() {
 
 	// Extend public dashboard sidebar
 	elgg_extend_view('publicdashboard/sidebar', 'readinglist/publicreading', 500);
+
+	// Roles profile widgets
+	if (elgg_is_active_plugin('roles')) {
+		elgg_register_widget_type('profile_books', elgg_echo('readinglist:widget:books'), elgg_echo('readinglist:widget:books_desc'), 'roleprofilewidget');
+	}
 
 	// Whitelist ajax views
 	elgg_register_ajax_view('books/existing');
@@ -149,8 +165,6 @@ function readinglist_init() {
  */
 function reading_list_page_handler($page) {
 	elgg_load_library('elgg:readinglist');
-	elgg_load_css('elgg.readinglist');
-	elgg_load_js('elgg.readinglist');
 
 	// Load google libs
 	elgg_load_library('gapc:Client'); // Main client
@@ -175,12 +189,6 @@ function reading_list_page_handler($page) {
 				break;
 		}
 	} else {
-		elgg_load_js('jquery.starrating');
-		elgg_load_js('jquery.tiptip');
-		elgg_load_css('jquery.tiptip');
-		elgg_load_js('elgg.readinglist.bookrating');
-		elgg_load_css('jquery.starrating');
-
 		elgg_push_breadcrumb(elgg_echo('books'), 'books/all');
 		switch($page[0]) {
 			case 'all':
@@ -591,4 +599,20 @@ function readinglist_owner_block_menu($hook, $type, $value, $params) {
 function readinglist_achievement_hook($hook, $type, $value, $params) {
 	$value[] = elgg_get_plugins_path() . 'readinglist/classes/';
 	return $value;
+}
+
+/**
+ * Register roleprofilewidgets as dynamic handlers to provide individual titles
+ * for user widgets
+ *
+ * @param string $hook
+ * @param string $type
+ * @param bool   $return
+ * @param array  $params
+ * @return mixed
+ */
+function readinglist_register_dynamic_widget_handlers($hook, $type, $return, $params) {
+	$user = $params['user'];
+	$return['profile_books'] = elgg_echo('readinglist:widget:user_books', array($user->name));
+	return $return;
 }

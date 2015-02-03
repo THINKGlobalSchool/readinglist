@@ -28,9 +28,11 @@ function readinglist_get_page_content_list($container_guid = null) {
 
 		elgg_push_breadcrumb($params['title']);
 	} else {
+		$owner_guid = elgg_get_page_owner_guid() ? elgg_get_page_owner_guid() : elgg_get_logged_in_user_guid(); 
+
 		elgg_register_menu_item('title', array(
 			'name' => 'add',
-			'href' => "books/add/" . elgg_get_logged_in_user_guid(),
+			'href' => "books/add/" . $owner_guid,
 			'text' => elgg_echo("books:add"),
 			'link_class' => 'elgg-button elgg-button-action',
 		));

@@ -152,10 +152,6 @@
 	margin-left: auto;
 }
 
-#fancybox-wrap {
-	top: 100px !important;
-}
-
 .bookrating-input, .bookrating-output {
 	margin-top: 5px;
 }

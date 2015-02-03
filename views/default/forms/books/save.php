@@ -108,6 +108,11 @@ HTML;
 	));
 
 	$content = <<<HTML
+		<style type="text/css">
+			#fancybox-wrap {
+				top: 100px !important;
+			}
+		</style>
 		<div class='book-form'>
 			<div>
 				<table class='book-search-table'>
