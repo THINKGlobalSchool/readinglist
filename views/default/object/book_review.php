@@ -38,7 +38,7 @@ $menu = elgg_view_menu('book-review', array(
 	'review' => $review,
 	'reviewer' => $reviewer,
 	'sort_by' => 'priority',
-	'class' => 'elgg-menu-hz right',
+	'class' => 'elgg-menu-hz float-right',
 ));
 
 $review_text = elgg_view("output/longtext", array("value" => $review->description));
@@ -54,7 +54,7 @@ $comment_toggle .= elgg_view('output/url', array(
 $comments = elgg_view_comments($review, FALSE, array('class' => 'book-review-comments'));
 
 $form_vars = array('name' => 'elgg_add_comment');
-$comment_form = elgg_view_form('comments/add', $form_vars, $vars);
+$comment_form = elgg_view_form('comment/save', $form_vars, $vars);
 
 $body = <<<HTML
 	<div class="mbn">

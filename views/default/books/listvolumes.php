@@ -7,8 +7,8 @@
  * @package ReadingList
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010
- * @link http://www.thinkglobalschool.com/
+ * @copyright THINK Global School 2010 - 2015
+ * @link http://www.thinkglobalschool.org/
  * 
  * Volume resource reference: 
  *   http://code.google.com/apis/books/docs/v1/reference.html#collection_volumes
@@ -24,6 +24,7 @@ $limit = elgg_extract('limit', $vars);
 $offset = elgg_extract('offset', $vars);
 $term = elgg_extract('term', $vars);
 $count = $books['totalItems'];
+$base_url = elgg_extract('base_url', $vars);
 
 if (!$count) {
 	echo "<h3 class='books-no-results'>" . elgg_echo('readinglist:label:noresults') . "</h3>";
@@ -123,7 +124,7 @@ HTML;
 		'id' => $google_id,
 		'class' => 'book-select-submit elgg-button elgg-button-submit',
 		'name' => 'book_select',
-		'value' => elgg_echo('select'),
+		'value' => elgg_echo('readinglist:label:select'),
 	));
 
 	$content .= <<<HTML
@@ -141,7 +142,7 @@ HTML;
 $content .= "<div class='clearfix'></div>";
 
 $nav = elgg_view('navigation/pagination', array(
-	'baseurl' => $base_url,
+	'base_url' => $base_url,
 	'offset' => $offset,
 	'count' => $count,
 	'limit' => $limit,

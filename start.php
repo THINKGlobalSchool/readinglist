@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
  * @copyright THINK Global School 2010 - 2015
- * @link http://www.thinkglobalschool.com/
+ * @link http://www.thinkglobalschool.org/
  * 
  */
 elgg_register_event_handler('init', 'system', 'readinglist_init');
@@ -47,13 +47,6 @@ function readinglist_init() {
 
 	elgg_register_js('jquery.starrating', $sr_js);
 	elgg_register_css('jquery.starrating', $sr_css);
-
-	// Register tiptip JS/CSS
-	$t_js = elgg_get_simplecache_url('js', 'tiptip');
-	$t_css = elgg_get_simplecache_url('css', 'tiptip');
-
-	elgg_register_js('jquery.tiptip', $t_js, 'head', 501);
-	elgg_register_css('jquery.tiptip', $t_css);
 
 	// Register CSS
 	$r_css = elgg_get_simplecache_url('css', 'readinglist/css');
@@ -112,7 +105,7 @@ function readinglist_init() {
 
 	// Roles profile widgets
 	if (elgg_is_active_plugin('roles')) {
-		elgg_register_widget_type('profile_books', elgg_echo('readinglist:widget:books'), elgg_echo('readinglist:widget:books_desc'), 'roleprofilewidget');
+		elgg_register_widget_type('profile_books', elgg_echo('readinglist:widget:books'), elgg_echo('readinglist:widget:books_desc'), array('roleprofilewidget'));
 	}
 
 	// Whitelist ajax views
@@ -179,6 +172,7 @@ function reading_list_page_handler($page) {
 					'limit' => $limit,
 					'offset' => $offset,
 					'term' => $term,
+					'base_url' => "books/search?term={$term}&limit={$limit}&offset={$offset}"
 				));
 				break;
 			default:
@@ -424,7 +418,7 @@ function readinglist_book_review_menu_setup($hook, $type, $return, $params) {
 		if (elgg_instanceof($book, 'object', 'book')) {
 			$rating = elgg_view('output/bookrating', array(
 				'entity' => $book,
-				'user' => $reviewer,
+				'reviewer' => $reviewer,
 			));
 
 			$options = array(
@@ -496,7 +490,7 @@ function readinglist_book_menu_setup($hook, $type, $return, $params) {
 			$page_owner = elgg_get_page_owner_entity();
 			$rating = elgg_view('output/bookrating', array(
 				'entity' => $entity,
-				'user' => $page_owner,
+				'reviewer' => $page_owner,
 			));
 
 			if (elgg_get_logged_in_user_guid() != $page_owner->guid) {

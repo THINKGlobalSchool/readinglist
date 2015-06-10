@@ -50,7 +50,7 @@ if (!$content) {
 }
 
 if ($count > 5) {
-	$content .= "<div class='elgg-subtext right'>" . elgg_view('output/url', array(
+	$content .= "<div class='elgg-subtext float-right'>" . elgg_view('output/url', array(
 		'text' => elgg_echo('readinglist:label:viewall'), 
 		'href'=> 'books/reading',
 	)) . "</div>";

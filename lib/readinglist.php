@@ -417,7 +417,12 @@ function add_to_user_readinglist($book_guid, $user_guid) {
 	);
 
 	// Add a river entry (not sure what action type to go with here, so using a new one called 'readinglist')
-	add_to_river('river/relationship/readinglist/add', 'readinglist', $user_guid, $book_guid);
+	elgg_create_river_item(array(
+		'view' => 'river/relationship/readinglist/add',
+		'action_type' => 'readinglist',
+		'subject_guid' => $user_guid,
+		'object_guid' => $book_guid
+	));
 }
 
 /**

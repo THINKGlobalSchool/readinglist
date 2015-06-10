@@ -5,11 +5,11 @@
  * @package ReadingList
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010
- * @link http://www.thinkglobalschool.com/
+ * @copyright THINK Global School 2015
+ * @link http://www.thinkglobalschool.org/
  *
  * @uses $vars['name']   Name of inputs
- * @uses $vars['user']   User to display reviews for
+ * @uses $vars['reviewer']   User to display reviews for
  * @uses $vars['class']  Classname of inputs (important!)
  * @uses $vars['entity'] Book entity
  */
@@ -21,8 +21,8 @@ $inputs = '';
 
 $name = $vars['name'];
 
-if (isset($vars['user'])) {
-	$user = $vars['user'];
+if (isset($vars['reviewer'])) {
+	$user = $vars['reviewer'];
 } else {
 	$user = elgg_get_logged_in_user_entity();
 }

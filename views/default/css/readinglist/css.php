@@ -5,8 +5,8 @@
  * @package ReadingList
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010
- * @link http://www.thinkglobalschool.com/
+ * @copyright THINK Global School 2010 - 2015
+ * @link http://www.thinkglobalschool.org/
  *
  */
 ?>
@@ -134,6 +134,10 @@
 	margin-right: 6px;
 }
 
+.elgg-list-entity .book-thumbnail img, .book-listing .book-thumbnail img {
+	max-width: 50px;
+}
+
 .book-select-input {
 	margin-top: 10px;
 }
@@ -165,38 +169,7 @@
 	padding-top: 10px;
 }
 
-.book-review-comments {
 
-}
-
-.book-review-comments h3 {
-	background-color: #EEEEEE;
-	border-radius: 5px 5px 0 0;
-	color: #91131E;
-	display: block;
-	float: right;
-	font-size: 90%;
-	margin-top: 5px;
-	padding: 1px 7px;
-	width: auto;
-	text-transform: none !important;
-	font-family: inherit !important;
-}
-
-.book-review-comments .elgg-list {
-	border-top: medium none !important;
-}
-
-.book-review-comments .elgg-list > li {
-	background: #EEEEEE;
-	border-bottom: none !important;
-	padding: 4px;
-	margin-bottom: 2px;
-}
-
-.book-review-comments .elgg-list > li:first-child {
-	border-radius: 5px 0 0 0;
-}
 
 #review-form-container {
 	display: none;
@@ -260,6 +233,11 @@
 	float: right;
 }
 
+.review-comment-button .elgg-icon {
+	margin-right: 5px;
+	top: 3px;
+}
+
 .whos-reading-show {
 	color: #555555;
 	font-size: 90%;
@@ -281,35 +259,37 @@
 	margin-top: -60px;
 }
 
+#readinglist-books-readinglist-module .readinglist-listing-control {
+	float: none;
+	margin-top: 0;
+	margin-bottom: 10px;
+}
+
 .book-regular-listing.readinglist-listing-control {
 	margin-top: -50px;
 }
 
 .readinglist-button {
-	font-size: 90%;
-	height: 17px;
 	position: relative;
-	width: 104px;
+	width: 128px;
+}
+
+.readinglist-button .elgg-icon {
+	margin-left: 0;
+	margin-top: 1px;
 }
 
 .readinglist-remove-button, .group-readinglist-remove-button {
 	color: white;
 	text-decoration: none;
-	border:1px solid #85161D;
-	background:url(<?php echo elgg_get_site_url(); ?>mod/tgstheme/_graphics/button-red.png) repeat-x bottom left #E72139;
 }
 
-.readinglist-remove-button:hover, .group-readinglist-remove-button:hover {
-	border:1px solid #85161D;
-	text-decoration: none;
-	color: #CCCCCC;
-	background:url(<?php echo elgg_get_site_url(); ?>mod/tgstheme/_graphics/button-red.png) repeat-x bottom left #BD1429;
-}
+.readinglist-remove-button:hover, .group-readinglist-remove-button:hover {}
 
 
 .readinglist-button span.readinglist-button-text {
 	position: absolute;
-	right: 8px;
+	right: 10px;
 }
 
 .average-bookrating-tooltip {

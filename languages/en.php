@@ -87,6 +87,7 @@ return array(
 	'readinglist:label:devkey' => 'Google Developer Key',
 	'readinglist:label:appname' => 'Application Name',
 	'readinglist:label:deleteconfirm' => '!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!! Deleting this book will remove it from all reading lists! Proceed?',
+	'readinglist:label:select' => 'Select',
 
 	// Messages
 	'readinglist:error:savebook' => 'There was an error saving the book',

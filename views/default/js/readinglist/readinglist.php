@@ -5,8 +5,8 @@
  * @package ReadingList
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010
- * @link http://www.thinkglobalschool.com/
+ * @copyright THINK Global School 2010 - 2015
+ * @link http://www.thinkglobalschool.org/
  *
  */
 
@@ -27,68 +27,67 @@ elgg.readinglist.BOOK_READING_STATUS_COMPLETE = <?php echo BOOK_READING_STATUS_C
 // Init function
 elgg.readinglist.init = function() {
 	// Click handler for book search
-	$('#book-search-submit').live('click', elgg.readinglist.bookSearchSubmit);
+	$(document).on('click', '#book-search-submit', elgg.readinglist.bookSearchSubmit);
 
 	// Click handler for search pagination
-	$('#books-search-results .elgg-pagination a').live('click', elgg.readinglist.searchPaginationClick);
+	$(document).on('click', '#books-search-results .elgg-pagination a', elgg.readinglist.searchPaginationClick);
 
 	// Click handler for book select submit
-	$('.book-select-submit').live('click', elgg.readinglist.bookSelectSubmitClick);
+	$(document).on('click', '.book-select-submit', elgg.readinglist.bookSelectSubmitClick);
 
 	// Click handler for search anyway
-	$('#book-search-anyway').live('click', elgg.readinglist.searchAnywayClick);
+	$(document).on('click', '#book-search-anyway', elgg.readinglist.searchAnywayClick);
 
 	// Click handler for cancel search
-	$('#book-search-cancel').live('click', elgg.readinglist.searchCancelClick);
+	$(document).on('click', '#book-search-cancel', elgg.readinglist.searchCancelClick);
 
 	// Click handler for readinglist add button
-	$('.readinglist-add-button').live('click', elgg.readinglist.readinglistAddClick);
+	$(document).on('click', '.readinglist-add-button', elgg.readinglist.readinglistAddClick);
 
 	// Click handler for readinglist remove button
-	$('.readinglist-remove-button').live('click', elgg.readinglist.readinglistRemoveClick);
+	$(document).on('click', '.readinglist-remove-button', elgg.readinglist.readinglistRemoveClick);
 
 	// Click handler for group readinglist add button
-	$('.group-readinglist-add-button').live('click', elgg.readinglist.groupReadinglistAddClick);
+	$(document).on('click', '.group-readinglist-add-button', elgg.readinglist.groupReadinglistAddClick);
 
 	// Click handler for group readinglist remove button
-	$('.group-readinglist-remove-button').live('click', elgg.readinglist.groupReadinglistRemoveClick);
-
+	$(document).on('click', '.group-readinglist-remove-button', elgg.readinglist.groupReadinglistRemoveClick);
 
 	// Click handler for add to reading list button (on the book existing form)
-	$('.book-add-to-readinglist').live('click', elgg.readinglist.readinglistExistingAddClick);
+	$(document).on('click', '.book-add-to-readinglist', elgg.readinglist.readinglistExistingAddClick);
 
 	// Change handler for book status
-	$('.book-reading-status').live('change', elgg.readinglist.readinglistStatusChange);
+	$(document).on('change', '.book-reading-status', elgg.readinglist.readinglistStatusChange);
 
 	// Change handler for book category filter
-	$('#readinglist-filter-category').live('change', elgg.readinglist.filterCategoryChange);
+	$(document).on('change', '#readinglist-filter-category', elgg.readinglist.filterCategoryChange);
 
 	// Change handler for book status filter
-	$('#readinglist-filter-status').live('change', elgg.readinglist.filterStatusChange);
+	$(document).on('change', '#readinglist-filter-status', elgg.readinglist.filterStatusChange);
 
 	// Change handler for book order filter
-	$('#readinglist-filter-orderby').live('change', elgg.readinglist.filterOrderbyChange);
+	$(document).on('change', '#readinglist-filter-orderby', elgg.readinglist.filterOrderbyChange);
 
 	// Click handler for sort order filter
-	$('#readinglist-filter-sort-order').live('click', elgg.readinglist.filterSortOrderClick);
+	$(document).on('click', '#readinglist-filter-sort-order', elgg.readinglist.filterSortOrderClick);
 
 	// Change handler for whos reading status filter (uses the same handler as the regular status change)
-	$('#readinglist-filter-user-status').live('change', elgg.readinglist.filterStatusChange);
+	$(document).on('change', '#readinglist-filter-user-status', elgg.readinglist.filterStatusChange);
 
 	// Click handler for category link
-	$('.readinglist-category-link').live('click', elgg.readinglist.categoryLinkClick);
+	$(document).on('click', '.readinglist-category-link', elgg.readinglist.categoryLinkClick);
 
 	// Click handler for review form toggle link
-	$('#review-form-toggle').live('click', elgg.readinglist.reviewToggleClick);
+	$(document).on('click', '#review-form-toggle', elgg.readinglist.reviewToggleClick);
 
 	// Click handler for review submit button
-	$('#review-submit').live('click', elgg.readinglist.reviewSubmitClick);
+	$(document).on('click', '#review-submit', elgg.readinglist.reviewSubmitClick);
 
 	// Click handler for description show less link
-	$('#book-description-showless').live('click', elgg.readinglist.showLessClick);
+	$(document).on('click', '#book-description-showless', elgg.readinglist.showLessClick);
 
 	// Click handler for description show more link
-	$('#book-description-showmore').live('click', elgg.readinglist.showMoreClick);
+	$(document).on('click', '#book-description-showmore', elgg.readinglist.showMoreClick);
 }
 
 // Click handler for book search
@@ -129,7 +128,7 @@ elgg.readinglist.bookSearchSubmit = function(event) {
 // Init and trigger search results lightbox
 elgg.readinglist.triggerLightbox = function() {
 	// Create and trigger fancybox
-	$('#trigger-book-results').fancybox().trigger('click');
+	$('#trigger-book-results').colorbox({inline:true, href:"#books-search-results"}).trigger('click');
 }
 
 // Click handler for book select submit
@@ -171,7 +170,7 @@ elgg.readinglist.bookSelectSubmitClick = function(event) {
 					$('#book-save-input').removeAttr('disabled').removeClass('elgg-state-disabled');
 
 					// Close lightbox
-					$.fancybox.close();
+					$.colorbox.close();
 
 					// Show the rest of the save form
 					$('#book-form-hidden').fadeIn();
@@ -230,7 +229,7 @@ elgg.readinglist.searchAnywayClick = function(event) {
  * Click handler for search cancel
  */
 elgg.readinglist.searchCancelClick = function(event) {
-	$.fancybox.close();
+	$.colorbox.close();
 }
 
 // Click handler for readinglist add button
@@ -246,7 +245,8 @@ elgg.readinglist.readinglistAddClick = function(event) {
 		},
 		success: function(data) {
 			if (data.status != -1) {
-				$_this.removeClass('readinglist-add-button').addClass('readinglist-remove-button');
+				$_this.toggleClass('readinglist-add-button').toggleClass('readinglist-remove-button');
+				$_this.toggleClass('elgg-button-submit').toggleClass('elgg-button-delete');
 				$_this.find('.elgg-icon-round-plus').removeClass('elgg-icon-round-plus').addClass('elgg-icon-round-minus');
 			}
 
@@ -305,7 +305,8 @@ elgg.readinglist.readinglistRemoveClick = function(event) {
 		},
 		success: function(data) {
 			if (data.status != -1) {
-				$_this.removeClass('readinglist-remove-button').addClass('readinglist-add-button');
+				$_this.toggleClass('readinglist-remove-button').toggleClass('readinglist-add-button');
+				$_this.toggleClass('elgg-button-submit').toggleClass('elgg-button-delete');
 				$_this.find('.elgg-icon-round-minus').removeClass('elgg-icon-round-minus').addClass('elgg-icon-round-plus');
 
 				// Nuke listing, check for fade class
@@ -339,7 +340,7 @@ elgg.readinglist.groupReadinglistAddClick = function(event) {
 		},
 		success: function(data) {
 			if (data.status != -1) {
-				$_this.removeClass('group-readinglist-add-button').addClass('group-readinglist-remove-button');
+				$_this.toggleClass('group-readinglist-add-button').toggleClass('group-readinglist-remove-button');
 				$_this.find('.elgg-icon-round-plus').removeClass('elgg-icon-round-plus').addClass('elgg-icon-round-minus');
 			}
 		}
@@ -363,7 +364,7 @@ elgg.readinglist.groupReadinglistRemoveClick = function(event) {
 		},
 		success: function(data) {
 			if (data.status != -1) {
-				$_this.removeClass('group-readinglist-remove-button').addClass('group-readinglist-add-button');
+				$_this.toggleClass('group-readinglist-remove-button').toggleClass('group-readinglist-add-button');
 				$_this.find('.elgg-icon-round-minus').removeClass('elgg-icon-round-minus').addClass('elgg-icon-round-plus');
 
 				// Nuke listing, check for fade class

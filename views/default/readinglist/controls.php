@@ -5,10 +5,9 @@
  * @package ReadingList
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jeff Tilson
- * @copyright THINK Global School 2010
- * @link http://www.thinkglobalschool.com/
+ * @copyright THINK Global School 2010 - 2015
+ * @link http://www.thinkglobalschool.org/
  *
- * @uses $vars['user']           User (optional)
  * @uses $vars['user_controls']  Display all user controls (true/false)
  * @uses $vars['book']           The Book
  * @uses $vars['class']          Optional class
@@ -17,11 +16,7 @@
 $book = $vars['book'];
 $class = $vars['class'];
 
-if (isset($vars['user'])) {
-	$user = $vars['user'];
-} else {
-	$user = elgg_get_logged_in_user_entity();
-}
+$user = elgg_get_logged_in_user_entity();
 
 // If book is on user's reading list..
 if (check_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, $user->guid) && $vars['user_controls']) {
@@ -39,13 +34,13 @@ if (check_entity_relationship($book->guid, READING_LIST_RELATIONSHIP, $user->gui
 	));
 }
 
-
 $button = elgg_view('readinglist/button', array('book' => $book));
 
 $content = <<<HTML
+	<div style='clear: both;'></div>
 	<div class='readinglist-listing-control {$class}'>
-		$status_content
 		$button
+		$status_content
 		$completed_info
 	</div>
 HTML;
