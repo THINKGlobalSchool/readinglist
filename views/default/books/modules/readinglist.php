@@ -73,7 +73,7 @@ switch ($order_by) {
 		$options['order_by_metadata'] = array('name' => 'popularity', 'direction' => $sort_order, 'as' => 'integer');
 		break;
 	case 'rated':
-		$suffix = get_access_sql_suffix("rating_table");
+		$suffix = elgg_get_access_sql_suffix("rating_table");
 		$options['joins'][] = "JOIN {$CONFIG->dbprefix}annotations rating_table on e.guid = rating_table.entity_guid";
 		$options['joins'][] = "JOIN {$CONFIG->dbprefix}metastrings rating_name on rating_table.name_id = rating_name.id";
 		$options['joins'][] = "JOIN {$CONFIG->dbprefix}metastrings rating_value on rating_table.value_id = rating_value.id";
