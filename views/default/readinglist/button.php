@@ -19,7 +19,7 @@ $book = $vars['book'];
 
 // Check for a group
 $entity = get_entity(elgg_get_page_owner_guid());
-if (!elgg_instanceof($entity, 'group') || !$entity->canEdit()) {
+if (!elgg_instanceof($entity, 'group') || !$entity->isMember()) {
 	$entity = elgg_get_logged_in_user_entity();
 	$button_text = elgg_echo('readinglist');
 } else {

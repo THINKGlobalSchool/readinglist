@@ -274,7 +274,7 @@
 	  font-size: 95%;
   height: 19px;
   position: relative;
-  width: 104px;
+  width: 110px;
 }
 
 .readinglist-button .elgg-icon {

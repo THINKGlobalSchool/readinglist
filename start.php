@@ -218,7 +218,7 @@ function reading_list_page_handler($page) {
 				} else if ($page[2] == 'browse') {
 					// Browse mode, allows group owners/admins to add books to group list
 					$group = get_entity($page[1]);
-					if ($group->canEdit()) {
+					if ($group->isMember()) {
 						elgg_set_page_owner_guid($page[1]);
 						$title = elgg_echo('readinglist:title:groupbooks', array($group->name));
 						elgg_push_breadcrumb($title);
@@ -349,8 +349,8 @@ function reading_list_filter_menu_setup($hook, $type, $return, $params) {
 
 	if ($user) {
 		if (elgg_instanceof($page_owner, 'group')) {
-			// Group owners/admins can add books to the group list
-			if ($page_owner->canEdit()) {
+			// Group members can add books to group
+			if ($page_owner->isMember()) {
 				$options = array(
 					'name' => 'books-browse',
 					'text' => elgg_echo('readinglist:label:addbooks'),
